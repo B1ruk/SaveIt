@@ -1,0 +1,19 @@
+<resources>
+    <string name="app_name">Save it !</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <string name="open_drawer">open drawer</string>
+    <string name="close_drawer">close drawer</string>
+    <string name="settings">Settings</string>
+    <string name="favorites">favorites</string>
+    <string name="articles">articles</string>
+    <string name="tags">tags</string>
+
+    <string name="nav_title">Save it !</string>
+    <string name="search">Search</string>
+    <string name="tags_input_inst">tags should NOT contain commas(,)</string>
+    <string name="article_info_path">path</string>
+    <string name="saved_date">saved date</string>
+</resources>

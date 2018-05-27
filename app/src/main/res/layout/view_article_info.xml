@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:tools="http://schemas.android.com/tools"
+              android:orientation="horizontal"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="20dp"
+        android:orientation="vertical">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/article_info_path"
+            android:textStyle="bold"
+            android:textAppearance="?android:textAppearance"/>
+
+        <TextView
+            android:id="@+id/article_info_path"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text="storage/emulated/........."
+            android:textAppearance="?android:textAppearance"/>
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="tags"
+            android:textStyle="bold"
+            android:textAppearance="?android:textAppearance"/>
+
+        <TextView
+            android:id="@+id/article_info_tags"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text="data,io,stream"
+            android:textAppearance="?android:textAppearance"/>
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/saved_date"
+            android:textStyle="bold"
+            android:textAppearance="?android:textAppearance"/>
+
+        <TextView
+            android:id="@+id/article_info_save_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text="mar 17,2017"
+            android:textAppearance="?android:textAppearance"/>
+
+
+    </LinearLayout>
+</LinearLayout>
