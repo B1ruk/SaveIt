@@ -22,11 +22,12 @@ import io.start.biruk.saveit.model.db.ArticleModel;
 import io.start.biruk.saveit.view.baseArticleView.BaseArticleFragment;
 import io.start.biruk.saveit.view.listener.ArticleClickListener;
 import io.start.biruk.saveit.view.widget.CircleTransform;
+import io.start.biruk.saveit.view.widget.fastscroller.BubbleTextGetter;
 
 /**
  * Created by biruk on 5/15/2018.
  */
-public class ArticleAdapter extends RecyclerView.Adapter<ArticleAdapter.ArticleViewHolder> {
+public class ArticleAdapter extends RecyclerView.Adapter<ArticleAdapter.ArticleViewHolder> implements BubbleTextGetter{
 
     private List<ArticleModel> articleModels;
     private Context context;
@@ -83,6 +84,18 @@ public class ArticleAdapter extends RecyclerView.Adapter<ArticleAdapter.ArticleV
     @Override
     public int getItemCount() {
         return articleModels.size();
+    }
+
+    @Override
+    public String getTextToShowInBubble(int pos) {
+        if (articleModels.isEmpty()){
+            return "";
+        }
+        else {
+            return String.valueOf(articleModels.get(pos)
+                    .getTitle()
+                    .charAt(0));
+        }
     }
 
     class ArticleViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener {

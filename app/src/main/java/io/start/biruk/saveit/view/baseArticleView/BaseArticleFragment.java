@@ -14,6 +14,8 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.annimon.stream.Stream;
+
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
@@ -36,6 +38,7 @@ import io.start.biruk.saveit.view.articleView.articleOptions.BaseArticleDialog;
 import io.start.biruk.saveit.view.articleView.articleOptions.DeleteArticleDialog;
 import io.start.biruk.saveit.view.displayArticleView.DisplayArticleActivity;
 import io.start.biruk.saveit.view.listener.ArticleClickListener;
+import io.start.biruk.saveit.view.widget.fastscroller.FastScroller;
 
 /**
  * Created by biruk on 5/13/2018.
@@ -45,13 +48,14 @@ public class BaseArticleFragment extends Fragment implements BaseArticleView, Ar
     private static final String TAG = "BaseArticleFragment";
 
     private static final int REQUEST_ARTICLE_OPTION = 0;
-    private static final int REQUEST_EDIT_TITLE_OPTION=7;
-    private static final int DELETE_ARTICLE_OPTION=8;
+    private static final int REQUEST_EDIT_TITLE_OPTION = 7;
+    private static final int DELETE_ARTICLE_OPTION = 8;
 
 
     @Inject ArticlePresenter articlePresenter;
 
     @Bind(R.id.article_recycler_view) RecyclerView articleRecyclerView;
+    @Bind(R.id.article_fast_scroller) FastScroller articleFastScroller;
     @Bind(R.id.empty_article_view) View emptyArticleView;
     @Bind(R.id.empty_article_description) TextView emptyArticleTextView;
     @Bind(R.id.empty_article_image) ImageView emptyArticleImageView;
@@ -102,7 +106,7 @@ public class BaseArticleFragment extends Fragment implements BaseArticleView, Ar
             switch (action) {
                 case "edit title":
                     BaseArticleDialog baseArticleDialog = BaseArticleDialog.newInstance(articleModel);
-                    baseArticleDialog.setTargetFragment(BaseArticleFragment.this,REQUEST_EDIT_TITLE_OPTION);
+                    baseArticleDialog.setTargetFragment(BaseArticleFragment.this, REQUEST_EDIT_TITLE_OPTION);
                     baseArticleDialog.show(getFragmentManager(), TAG);
 
                     break;
@@ -112,17 +116,17 @@ public class BaseArticleFragment extends Fragment implements BaseArticleView, Ar
                     break;
                 case "delete":
                     DeleteArticleDialog deleteArticleDialog = DeleteArticleDialog.newInstance(articleModel);
-                    deleteArticleDialog.setTargetFragment(BaseArticleFragment.this,DELETE_ARTICLE_OPTION);
+                    deleteArticleDialog.setTargetFragment(BaseArticleFragment.this, DELETE_ARTICLE_OPTION);
                     deleteArticleDialog.show(getFragmentManager(), TAG);
                     break;
             }
         }
-        if (requestCode==REQUEST_EDIT_TITLE_OPTION){
+        if (requestCode == REQUEST_EDIT_TITLE_OPTION) {
             ArticleModel articleModel = (ArticleModel) data.getSerializableExtra(BaseArticleDialog.ARTICLE_MODEL_DATA);
             articlePresenter.updateArticle(articleModel);
         }
 
-        if (requestCode==DELETE_ARTICLE_OPTION){
+        if (requestCode == DELETE_ARTICLE_OPTION) {
             ArticleModel articleModel = (ArticleModel) data.getSerializableExtra(BaseArticleDialog.ARTICLE_MODEL_DATA);
             articlePresenter.deleteArticle(articleModel);
         }
@@ -142,11 +146,19 @@ public class BaseArticleFragment extends Fragment implements BaseArticleView, Ar
 
 
     private void initRecyclerView(List<ArticleModel> articleModels) {
+        List<ArticleModel> sortedArticles = Stream.of(articleModels)
+                .sortBy(ArticleModel::getTitle)
+                .toList();
+
+
         ArticleAdapter articleAdapter = new ArticleAdapter(getContext(), this);
 
         articleRecyclerView.setAdapter(articleAdapter);
-        articleAdapter.setArticleData(articleModels);
+        articleAdapter.setArticleData(sortedArticles);
         articleRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+
+        articleFastScroller.setRecyclerView(articleRecyclerView);
+
     }
 
     @Override
@@ -164,10 +176,12 @@ public class BaseArticleFragment extends Fragment implements BaseArticleView, Ar
             case 0:
                 emptyArticleView.setVisibility(View.VISIBLE);
                 articleRecyclerView.setVisibility(View.GONE);
+                articleFastScroller.setVisibility(View.GONE);
                 break;
             case 1:
                 emptyArticleView.setVisibility(View.GONE);
                 articleRecyclerView.setVisibility(View.VISIBLE);
+                articleFastScroller.setVisibility(View.VISIBLE);
                 break;
         }
     }
@@ -198,7 +212,7 @@ public class BaseArticleFragment extends Fragment implements BaseArticleView, Ar
 
     @Override
     public void displayUpdateView(String msg) {
-        Snackbar snackbar=Snackbar.make(getView(),msg,Snackbar.LENGTH_LONG);
+        Snackbar snackbar = Snackbar.make(getView(), msg, Snackbar.LENGTH_LONG);
         snackbar.show();
     }
 
