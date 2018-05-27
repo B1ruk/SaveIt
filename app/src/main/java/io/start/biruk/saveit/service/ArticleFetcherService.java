@@ -15,10 +15,13 @@ import org.jsoup.nodes.Document;
 import java.util.Date;
 import java.util.List;
 
+import javax.inject.Inject;
+
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.annotations.NonNull;
 import io.reactivex.observers.DisposableSingleObserver;
 import io.reactivex.schedulers.Schedulers;
+import io.start.biruk.saveit.App;
 import io.start.biruk.saveit.events.ArticleFetchCompletedEvent;
 import io.start.biruk.saveit.events.FetchArticleEvent;
 import io.start.biruk.saveit.events.SaveArticleEvent;
@@ -41,22 +44,12 @@ public class ArticleFetcherService extends Service implements ArticleMainSaver.C
 
     private static final String TAG = "ArticleFetcherService";
 
-
+    @Inject ArticleMainSaver articleMainSaver;
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void fetchArticleEvent(FetchArticleEvent fetchArticleEvent) {
         String url = fetchArticleEvent.getUrl();
-//        fetchArticle(url);
-    }
-
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    public void articleFetchCompleted(ArticleFetchCompletedEvent articleFetchCompletedEvent){
-        String url = articleFetchCompletedEvent.getUrl();
-        buildNotification(url);
-    }
-
-    private void buildNotification(String url) {
-
+        articleMainSaver.fetchArticle(url);
     }
 
     @Override
@@ -64,13 +57,16 @@ public class ArticleFetcherService extends Service implements ArticleMainSaver.C
         Log.d(TAG, "service started");
         super.onCreate();
 
+        App.getAppComponent().inject(this);
         EventBus.getDefault().register(this);
+        articleMainSaver.addCallBack(this);
     }
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         return START_STICKY;
     }
+
 
     @Nullable
     @Override
