@@ -11,7 +11,7 @@ import static org.junit.Assert.*;
 /**
  * Created by biruk on 5/17/2018.
  */
-public class BaseArticlePresenterTest {
+public class ArticlePresenterTest {
 
     @Test
     public void testHttpParse(){

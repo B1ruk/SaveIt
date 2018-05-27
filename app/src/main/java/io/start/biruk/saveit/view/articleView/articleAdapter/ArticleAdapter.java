@@ -19,6 +19,7 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import io.start.biruk.saveit.R;
 import io.start.biruk.saveit.model.db.ArticleModel;
+import io.start.biruk.saveit.view.baseArticleView.BaseArticleFragment;
 import io.start.biruk.saveit.view.listener.ArticleClickListener;
 import io.start.biruk.saveit.view.widget.CircleTransform;
 
@@ -32,7 +33,7 @@ public class ArticleAdapter extends RecyclerView.Adapter<ArticleAdapter.ArticleV
     private ArticleClickListener articleClickListener;
 
 
-    public ArticleAdapter(Context context,ArticleClickListener articleClickListener) {
+    public ArticleAdapter(Context context, ArticleClickListener articleClickListener) {
         this.context = context;
         this.articleClickListener = articleClickListener;
         this.articleModels = new ArrayList<>();
@@ -61,7 +62,7 @@ public class ArticleAdapter extends RecyclerView.Adapter<ArticleAdapter.ArticleV
         holder.tagBtnView.setText(articleModel.getTags());
 
         holder.articleFavoriteView.setOnClickListener(v -> articleClickListener.onArticleFavoriteToggleSelected(articleModel));
-        holder.tagBtnView.setOnClickListener(v -> articleClickListener.onArticleTagSelected(articleModel));
+//        holder.tagBtnView.setOnClickListener(v -> articleClickListener.onArticleTagSelected(articleModel));
 
         Picasso.with(context)
                 .load(new File(imgPath))

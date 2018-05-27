@@ -7,7 +7,6 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,18 +19,15 @@ import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.List;
 
+import javax.inject.Inject;
+
 import butterknife.Bind;
 import butterknife.ButterKnife;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.annotations.NonNull;
-import io.reactivex.observers.DisposableSingleObserver;
-import io.reactivex.schedulers.Schedulers;
+import io.start.biruk.saveit.App;
 import io.start.biruk.saveit.R;
 import io.start.biruk.saveit.events.ArticleFetchCompletedEvent;
-import io.start.biruk.saveit.model.dao.ArticleDbRepository;
-import io.start.biruk.saveit.model.dao.ArticleRepository;
 import io.start.biruk.saveit.model.db.ArticleModel;
-import io.start.biruk.saveit.presenter.BaseArticlePresenter;
+import io.start.biruk.saveit.presenter.ArticlePresenter;
 import io.start.biruk.saveit.view.articleView.articleAdapter.ArticleAdapter;
 import io.start.biruk.saveit.view.articleView.articleOptions.ArticleInfoDialog;
 import io.start.biruk.saveit.view.articleView.articleOptions.ArticleOptionDialog;
@@ -43,40 +39,18 @@ import io.start.biruk.saveit.view.listener.ArticleClickListener;
 /**
  * Created by biruk on 5/13/2018.
  */
-public class BaseArticleFragment extends Fragment implements BaseArticleView {
+public class BaseArticleFragment extends Fragment implements BaseArticleView,ArticleClickListener {
 
     private static final String TAG = "BaseArticleFragment";
     private static final int REQUEST_ARTICLE_OPTION=0;
+
+
+    @Inject ArticlePresenter articlePresenter;
 
     @Bind(R.id.article_recycler_view) RecyclerView articleRecyclerView;
     @Bind(R.id.empty_article_view) View emptyArticleView;
     @Bind(R.id.empty_article_description) TextView emptyArticleTextView;
     @Bind(R.id.empty_article_image) ImageView emptyArticleImageView;
-
-    private ArticleRepository articleRepository;
-    private BaseArticlePresenter baseArticlePresenter;
-
-    private ArticleClickListener articleClickListener = new ArticleClickListener() {
-        @Override
-        public void onArticleSelected(ArticleModel articleModel) {
-            baseArticlePresenter.onArticleSelected(articleModel);
-        }
-
-        @Override
-        public void onArticleOptionsSelected(ArticleModel articleModel) {
-            baseArticlePresenter.onArticleOptionsSelected(articleModel);
-        }
-
-        @Override
-        public void onArticleFavoriteToggleSelected(ArticleModel articleModel) {
-            baseArticlePresenter.onArticleFavoriteToggleSelected(articleModel);
-        }
-
-        @Override
-        public void onArticleTagSelected(ArticleModel articleModel) {
-            baseArticlePresenter.onArticleTagSelected(articleModel);
-        }
-    };
 
 
     @Subscribe(threadMode = ThreadMode.MAIN)
@@ -94,8 +68,8 @@ public class BaseArticleFragment extends Fragment implements BaseArticleView {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        this.articleRepository = new ArticleDbRepository(getContext());
-        this.baseArticlePresenter = new BaseArticlePresenter(this);
+        App.getAppComponent().inject(this);
+
 
     }
 
@@ -113,7 +87,9 @@ public class BaseArticleFragment extends Fragment implements BaseArticleView {
         super.onResume();
 
         EventBus.getDefault().register(this);
-        updateView();
+
+        articlePresenter.attachView(this);
+        articlePresenter.loadAllArticles();
     }
 
     @Override
@@ -138,26 +114,10 @@ public class BaseArticleFragment extends Fragment implements BaseArticleView {
         }
     }
 
+
+
     private void updateView() {
-        articleRepository.getAllArticles()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribeWith(new DisposableSingleObserver<List<ArticleModel>>() {
-                    @Override
-                    public void onSuccess(@NonNull List<ArticleModel> articleModels) {
-                        if (!articleModels.isEmpty()) {
-                            displayArticle(articleModels);
-                        } else {
-                            displayEmptyArticlesView("empty articles");
-                        }
-                    }
-
-                    @Override
-                    public void onError(@NonNull Throwable e) {
-                        Log.e(TAG, "something went wrong", e);
-                    }
-                });
-
+        articlePresenter.loadAllArticles();
     }
 
 
@@ -170,7 +130,7 @@ public class BaseArticleFragment extends Fragment implements BaseArticleView {
 
 
     private void initRecyclerView(List<ArticleModel> articleModels) {
-        ArticleAdapter articleAdapter = new ArticleAdapter(getContext(),articleClickListener);
+        ArticleAdapter articleAdapter = new ArticleAdapter(getContext(),this);
 
         articleRecyclerView.setAdapter(articleAdapter);
         articleAdapter.setArticleData(articleModels);
@@ -229,9 +189,23 @@ public class BaseArticleFragment extends Fragment implements BaseArticleView {
     @Override
     public void onStop() {
         super.onStop();
+        articlePresenter.dettachView();
         EventBus.getDefault().unregister(this);
     }
 
 
+    @Override
+    public void onArticleSelected(ArticleModel articleModel) {
 
+    }
+
+    @Override
+    public void onArticleOptionsSelected(ArticleModel articleModel) {
+
+    }
+
+    @Override
+    public void onArticleFavoriteToggleSelected(ArticleModel articleModel) {
+
+    }
 }

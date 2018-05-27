@@ -31,6 +31,8 @@ import static io.start.biruk.saveit.model.data.ResourceType.*;
 
 /**
  * Created by biruk on 5/14/2018.
+ * fetches resources(css,js,img)
+ * and saves it on the storage
  */
 public class ResourceFetcher {
 
@@ -50,6 +52,12 @@ public class ResourceFetcher {
                 .toList()
                 .map(resourceLinks -> replaceIndexPage(resourceLinks));
 
+    }
+
+    private void init(String url, Document responseDoc, String articlePath) {
+        this.url = url;
+        this.responseDoc = responseDoc;
+        this.path = articlePath;
     }
 
     private boolean replaceIndexPage(List<ResourceLink> resourceLinks) throws IOException {
@@ -75,12 +83,6 @@ public class ResourceFetcher {
             bufferedSink.close();
         }
         return indexPage.exists();
-    }
-
-    private void init(String url, Document responseDoc, String articlePath) {
-        this.url = url;
-        this.responseDoc = responseDoc;
-        this.path = articlePath;
     }
 
     private Observable<ResourceLink> saveJs() {

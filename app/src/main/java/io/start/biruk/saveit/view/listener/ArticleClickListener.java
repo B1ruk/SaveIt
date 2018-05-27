@@ -12,5 +12,4 @@ public interface ArticleClickListener {
 
     void onArticleFavoriteToggleSelected(ArticleModel articleModel);
 
-    void onArticleTagSelected(ArticleModel articleModel);
 }

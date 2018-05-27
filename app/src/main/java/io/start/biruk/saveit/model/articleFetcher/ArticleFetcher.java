@@ -17,6 +17,7 @@ import okhttp3.Response;
 
 /**
  * Created by biruk on 5/12/2018.
+ * Fetches the index page
  */
 public class ArticleFetcher {
 
