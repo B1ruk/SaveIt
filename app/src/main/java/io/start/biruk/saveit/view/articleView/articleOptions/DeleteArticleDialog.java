@@ -1,7 +1,9 @@
 package io.start.biruk.saveit.view.articleView.articleOptions;
 
+import android.app.Activity;
 import android.app.Dialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -55,10 +57,20 @@ public class DeleteArticleDialog extends DialogFragment {
                 .setTitle("Delete")
                 .setView(linearLayout)
                 .setPositiveButton(android.R.string.ok, (dialog, which) -> {
-
+                    sendResult(Activity.RESULT_OK,articleModel);
                 })
                 .create();
     }
+
+    private void sendResult(int resultCode,ArticleModel articleModel){
+        if (getTargetFragment()==null){
+            return;
+        }
+        Intent intent=new Intent();
+        intent.putExtra(ARTICLE_MODEL_DATA,articleModel);
+        getTargetFragment().onActivityResult(getTargetRequestCode(),resultCode,intent);
+    }
+
 
 
 }

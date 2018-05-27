@@ -33,4 +33,13 @@ public class FileUtil {
         return mainDir.getPath();
     }
 
+    public static void deletePath(File path){
+        for (File file:path.listFiles()){
+            if (file.isDirectory())
+                deletePath(file);
+            else
+                file.delete();
+        }
+    }
+
 }

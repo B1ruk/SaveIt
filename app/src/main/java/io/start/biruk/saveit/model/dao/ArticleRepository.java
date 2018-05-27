@@ -17,5 +17,5 @@ public interface ArticleRepository {
 
     Single<Integer> updateArticle(ArticleModel articleModel);
 
-    boolean deleteArticle(ArticleModel articleModel);
+    Single<Integer> deleteArticle(ArticleModel articleModel);
 }

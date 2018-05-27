@@ -1,5 +1,6 @@
 package io.start.biruk.saveit.presenter;
 
+import java.io.File;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -11,6 +12,7 @@ import io.reactivex.observers.DisposableSingleObserver;
 import io.reactivex.schedulers.Schedulers;
 import io.start.biruk.saveit.model.dao.ArticleRepository;
 import io.start.biruk.saveit.model.db.ArticleModel;
+import io.start.biruk.saveit.util.FileUtil;
 import io.start.biruk.saveit.view.baseArticleView.BaseArticleView;
 
 /**
@@ -72,6 +74,28 @@ public class ArticlePresenter {
                 });
     }
 
+
+    public void deleteArticle(ArticleModel articleModel) {
+
+        FileUtil.deletePath(new File(articleModel.getPath()));
+
+        articleRepository.deleteArticle(articleModel)
+                .subscribeOn(Schedulers.io())
+                .observeOn(uiThread)
+                .subscribeWith(new DisposableSingleObserver<Integer>() {
+                    @Override
+                    public void onSuccess(@NonNull Integer integer) {
+                        baseArticleView.displayUpdateView("Article Deleted");
+                        loadAllArticles();
+                    }
+
+                    @Override
+                    public void onError(@NonNull Throwable e) {
+
+                    }
+                });
+
+    }
 
     public void updateArticle(ArticleModel articleModel) {
         articleRepository.updateArticle(articleModel)

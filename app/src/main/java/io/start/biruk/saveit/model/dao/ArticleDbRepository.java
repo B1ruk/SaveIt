@@ -45,7 +45,7 @@ public class ArticleDbRepository implements ArticleRepository {
     }
 
     @Override
-    public boolean deleteArticle(ArticleModel articleModel) {
-        return false;
+    public Single<Integer> deleteArticle(ArticleModel articleModel) {
+        return Single.fromCallable(() -> articleDbHelper.getArticleDao().delete(articleModel));
     }
 }

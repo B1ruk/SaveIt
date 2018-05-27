@@ -46,6 +46,7 @@ public class BaseArticleFragment extends Fragment implements BaseArticleView, Ar
 
     private static final int REQUEST_ARTICLE_OPTION = 0;
     private static final int REQUEST_EDIT_TITLE_OPTION=7;
+    private static final int DELETE_ARTICLE_OPTION=8;
 
 
     @Inject ArticlePresenter articlePresenter;
@@ -111,6 +112,7 @@ public class BaseArticleFragment extends Fragment implements BaseArticleView, Ar
                     break;
                 case "delete":
                     DeleteArticleDialog deleteArticleDialog = DeleteArticleDialog.newInstance(articleModel);
+                    deleteArticleDialog.setTargetFragment(BaseArticleFragment.this,DELETE_ARTICLE_OPTION);
                     deleteArticleDialog.show(getFragmentManager(), TAG);
                     break;
             }
@@ -118,6 +120,11 @@ public class BaseArticleFragment extends Fragment implements BaseArticleView, Ar
         if (requestCode==REQUEST_EDIT_TITLE_OPTION){
             ArticleModel articleModel = (ArticleModel) data.getSerializableExtra(BaseArticleDialog.ARTICLE_MODEL_DATA);
             articlePresenter.updateArticle(articleModel);
+        }
+
+        if (requestCode==DELETE_ARTICLE_OPTION){
+            ArticleModel articleModel = (ArticleModel) data.getSerializableExtra(BaseArticleDialog.ARTICLE_MODEL_DATA);
+            articlePresenter.deleteArticle(articleModel);
         }
     }
 
