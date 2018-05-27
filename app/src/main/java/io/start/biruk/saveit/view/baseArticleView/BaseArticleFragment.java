@@ -43,7 +43,9 @@ import io.start.biruk.saveit.view.listener.ArticleClickListener;
 public class BaseArticleFragment extends Fragment implements BaseArticleView, ArticleClickListener {
 
     private static final String TAG = "BaseArticleFragment";
+
     private static final int REQUEST_ARTICLE_OPTION = 0;
+    private static final int REQUEST_EDIT_TITLE_OPTION=7;
 
 
     @Inject ArticlePresenter articlePresenter;
@@ -99,7 +101,9 @@ public class BaseArticleFragment extends Fragment implements BaseArticleView, Ar
             switch (action) {
                 case "edit title":
                     BaseArticleDialog baseArticleDialog = BaseArticleDialog.newInstance(articleModel);
+                    baseArticleDialog.setTargetFragment(BaseArticleFragment.this,REQUEST_EDIT_TITLE_OPTION);
                     baseArticleDialog.show(getFragmentManager(), TAG);
+
                     break;
                 case "info":
                     ArticleInfoDialog articleInfoDialog = ArticleInfoDialog.newInstance(articleModel);
@@ -110,6 +114,10 @@ public class BaseArticleFragment extends Fragment implements BaseArticleView, Ar
                     deleteArticleDialog.show(getFragmentManager(), TAG);
                     break;
             }
+        }
+        if (requestCode==REQUEST_EDIT_TITLE_OPTION){
+            ArticleModel articleModel = (ArticleModel) data.getSerializableExtra(BaseArticleDialog.ARTICLE_MODEL_DATA);
+            articlePresenter.updateArticle(articleModel);
         }
     }
 

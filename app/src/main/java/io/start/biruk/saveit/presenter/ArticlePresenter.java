@@ -6,7 +6,6 @@ import javax.inject.Inject;
 
 import io.reactivex.Observable;
 import io.reactivex.Scheduler;
-import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.annotations.NonNull;
 import io.reactivex.observers.DisposableSingleObserver;
 import io.reactivex.schedulers.Schedulers;
@@ -48,13 +47,14 @@ public class ArticlePresenter {
                 .url(articleModel.getUrl())
                 .title(articleModel.getTitle())
                 .path(articleModel.getPath())
+                .tags(articleModel.getTags())
                 .savedDate(articleModel.getSavedDate())
                 .isFavorite(!articleModel.isFavorite())
                 .build();
 
         articleRepository.updateArticle(modifiedArticleModel)
                 .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
+                .observeOn(uiThread)
                 .subscribeWith(new DisposableSingleObserver<Integer>() {
                     @Override
                     public void onSuccess(@NonNull Integer updateStatus) {
@@ -64,6 +64,24 @@ public class ArticlePresenter {
                         }else {
                             baseArticleView.displayUpdateView("Article removed from favorite.");
                         }
+                    }
+                    @Override
+                    public void onError(@NonNull Throwable e) {
+
+                    }
+                });
+    }
+
+
+    public void updateArticle(ArticleModel articleModel) {
+        articleRepository.updateArticle(articleModel)
+                .subscribeOn(Schedulers.io())
+                .observeOn(uiThread)
+                .subscribeWith(new DisposableSingleObserver<Integer>() {
+                    @Override
+                    public void onSuccess(@NonNull Integer integer) {
+                        baseArticleView.displayUpdateView("Article updated");
+                        loadAllArticles();      //update the view
                     }
 
                     @Override

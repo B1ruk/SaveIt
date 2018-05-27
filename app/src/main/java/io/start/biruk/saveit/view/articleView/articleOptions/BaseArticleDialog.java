@@ -1,7 +1,9 @@
 package io.start.biruk.saveit.view.articleView.articleOptions;
 
+import android.app.Activity;
 import android.app.Dialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -17,7 +19,7 @@ import io.start.biruk.saveit.model.db.ArticleModel;
  */
 public  class BaseArticleDialog extends DialogFragment {
     protected ArticleModel articleModel;
-    private static final String ARTICLE_MODEL_DATA = "article_data";
+    public static final String ARTICLE_MODEL_DATA = "article_data";
 
 
     public static BaseArticleDialog newInstance(ArticleModel articleModel) {
@@ -52,9 +54,28 @@ public  class BaseArticleDialog extends DialogFragment {
                 .setPositiveButton(android.R.string.ok, (dialog, which) -> {
                     String titleEdtTxt = titleEditText.getText().toString();
                     if (!titleEdtTxt.equals(articleModel.getTitle())){
-                        Log.d(getClass().getSimpleName(),titleEdtTxt+" edited !!!!!!!!!!");
+                        ArticleModel modifiedArticle=new ArticleModel.Builder()
+                                .url(articleModel.getUrl())
+                                .isFavorite(articleModel.isFavorite())
+                                .path(articleModel.getPath())
+                                .savedDate(articleModel.getSavedDate())
+                                .tags(articleModel.getTags())
+                                .title(titleEdtTxt)
+                                .build();
+
+                        sendResult(Activity.RESULT_OK,modifiedArticle);
                     }
                 })
                 .create();
     }
+
+    private void sendResult(int resultCode,ArticleModel articleModel){
+        if (getTargetFragment()==null){
+            return;
+        }
+        Intent intent=new Intent();
+        intent.putExtra(ARTICLE_MODEL_DATA,articleModel);
+        getTargetFragment().onActivityResult(getTargetRequestCode(),resultCode,intent);
+    }
+
 }
