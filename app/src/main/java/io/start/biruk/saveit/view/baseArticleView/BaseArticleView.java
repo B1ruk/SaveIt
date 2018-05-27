@@ -20,4 +20,6 @@ public interface BaseArticleView {
     void launchTagEditorView(ArticleModel articleModel);
 
     void launchArticleOptionsView(ArticleModel articleModel);
+
+    void displayUpdateView(String msg);
 }

@@ -40,8 +40,8 @@ public class ArticleDbRepository implements ArticleRepository {
     }
 
     @Override
-    public boolean updateArticle(ArticleModel articleModel) {
-        return false;
+    public Single<Integer> updateArticle(ArticleModel articleModel) {
+        return Single.fromCallable(() -> articleDbHelper.getArticleDao().update(articleModel));
     }
 
     @Override

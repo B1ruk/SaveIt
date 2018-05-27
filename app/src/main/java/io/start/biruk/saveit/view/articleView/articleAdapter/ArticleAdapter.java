@@ -61,6 +61,14 @@ public class ArticleAdapter extends RecyclerView.Adapter<ArticleAdapter.ArticleV
         holder.articleSavedDateView.setText(articleModel.getSavedDate());
         holder.tagBtnView.setText(articleModel.getTags());
 
+        if (articleModel.isFavorite()){
+            holder.articleFavoriteView.setAlpha(1.0f);
+            holder.articleFavoriteView.setColorFilter(context.getResources().getColor(R.color.colorFav));
+        }else {
+            holder.articleFavoriteView.setColorFilter(context.getResources().getColor(R.color.noFavoriteIcon));
+            holder.articleFavoriteView.setAlpha(0.4f);
+        }
+
         holder.articleFavoriteView.setOnClickListener(v -> articleClickListener.onArticleFavoriteToggleSelected(articleModel));
 //        holder.tagBtnView.setOnClickListener(v -> articleClickListener.onArticleTagSelected(articleModel));
 

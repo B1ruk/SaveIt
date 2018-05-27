@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -39,10 +40,10 @@ import io.start.biruk.saveit.view.listener.ArticleClickListener;
 /**
  * Created by biruk on 5/13/2018.
  */
-public class BaseArticleFragment extends Fragment implements BaseArticleView,ArticleClickListener {
+public class BaseArticleFragment extends Fragment implements BaseArticleView, ArticleClickListener {
 
     private static final String TAG = "BaseArticleFragment";
-    private static final int REQUEST_ARTICLE_OPTION=0;
+    private static final int REQUEST_ARTICLE_OPTION = 0;
 
 
     @Inject ArticlePresenter articlePresenter;
@@ -69,8 +70,6 @@ public class BaseArticleFragment extends Fragment implements BaseArticleView,Art
         super.onCreate(savedInstanceState);
 
         App.getAppComponent().inject(this);
-
-
     }
 
     @Nullable
@@ -94,32 +93,30 @@ public class BaseArticleFragment extends Fragment implements BaseArticleView,Art
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (resultCode== Activity.RESULT_OK && requestCode==REQUEST_ARTICLE_OPTION){
+        if (resultCode == Activity.RESULT_OK && requestCode == REQUEST_ARTICLE_OPTION) {
             String action = data.getAction();
             ArticleModel articleModel = (ArticleModel) data.getSerializableExtra(ArticleOptionDialog.SELECTED_ARTICLE);
-            switch (action){
+            switch (action) {
                 case "edit title":
-                    BaseArticleDialog baseArticleDialog=BaseArticleDialog.newInstance(articleModel);
-                    baseArticleDialog.show(getFragmentManager(),TAG);
+                    BaseArticleDialog baseArticleDialog = BaseArticleDialog.newInstance(articleModel);
+                    baseArticleDialog.show(getFragmentManager(), TAG);
                     break;
                 case "info":
-                    ArticleInfoDialog articleInfoDialog=ArticleInfoDialog.newInstance(articleModel);
-                    articleInfoDialog.show(getFragmentManager(),TAG);
+                    ArticleInfoDialog articleInfoDialog = ArticleInfoDialog.newInstance(articleModel);
+                    articleInfoDialog.show(getFragmentManager(), TAG);
                     break;
                 case "delete":
-                    DeleteArticleDialog deleteArticleDialog=DeleteArticleDialog.newInstance(articleModel);
-                    deleteArticleDialog.show(getFragmentManager(),TAG);
+                    DeleteArticleDialog deleteArticleDialog = DeleteArticleDialog.newInstance(articleModel);
+                    deleteArticleDialog.show(getFragmentManager(), TAG);
                     break;
             }
         }
     }
 
 
-
     private void updateView() {
         articlePresenter.loadAllArticles();
     }
-
 
 
     @Override
@@ -130,7 +127,7 @@ public class BaseArticleFragment extends Fragment implements BaseArticleView,Art
 
 
     private void initRecyclerView(List<ArticleModel> articleModels) {
-        ArticleAdapter articleAdapter = new ArticleAdapter(getContext(),this);
+        ArticleAdapter articleAdapter = new ArticleAdapter(getContext(), this);
 
         articleRecyclerView.setAdapter(articleAdapter);
         articleAdapter.setArticleData(articleModels);
@@ -179,12 +176,31 @@ public class BaseArticleFragment extends Fragment implements BaseArticleView,Art
 
     @Override
     public void launchArticleOptionsView(ArticleModel articleModel) {
-        ArticleOptionDialog articleOptDialog= ArticleOptionDialog.newInstance(articleModel);
-        articleOptDialog.setTargetFragment(BaseArticleFragment.this,REQUEST_ARTICLE_OPTION);
-        articleOptDialog.show(getFragmentManager(),TAG);
+        ArticleOptionDialog articleOptDialog = ArticleOptionDialog.newInstance(articleModel);
+        articleOptDialog.setTargetFragment(BaseArticleFragment.this, REQUEST_ARTICLE_OPTION);
+        articleOptDialog.show(getFragmentManager(), TAG);
     }
 
+    @Override
+    public void displayUpdateView(String msg) {
+        Snackbar snackbar=Snackbar.make(getView(),msg,Snackbar.LENGTH_LONG);
+        snackbar.show();
+    }
 
+    @Override
+    public void onArticleSelected(ArticleModel articleModel) {
+        articlePresenter.onArticleSelected(articleModel);
+    }
+
+    @Override
+    public void onArticleOptionsSelected(ArticleModel articleModel) {
+        articlePresenter.onArticleOptionSelected(articleModel);
+    }
+
+    @Override
+    public void onArticleFavoriteToggleSelected(ArticleModel articleModel) {
+        articlePresenter.onFavoriteToggleSelected(articleModel);
+    }
 
     @Override
     public void onStop() {
@@ -193,19 +209,4 @@ public class BaseArticleFragment extends Fragment implements BaseArticleView,Art
         EventBus.getDefault().unregister(this);
     }
 
-
-    @Override
-    public void onArticleSelected(ArticleModel articleModel) {
-
-    }
-
-    @Override
-    public void onArticleOptionsSelected(ArticleModel articleModel) {
-
-    }
-
-    @Override
-    public void onArticleFavoriteToggleSelected(ArticleModel articleModel) {
-
-    }
 }

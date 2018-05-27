@@ -1,9 +1,5 @@
 package io.start.biruk.saveit.model.db;
 
-import com.annimon.stream.Stream;
-import com.google.common.base.CaseFormat;
-import com.google.common.base.Converter;
-import com.google.common.base.Objects;
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
 
@@ -40,7 +36,7 @@ public class ArticleModel implements Serializable{
     ArticleModel() {
     }
 
-    private ArticleModel(ArticleBuilder articleBuilder) {
+    private ArticleModel(Builder articleBuilder) {
         this.url = articleBuilder.url;
         this.title = articleBuilder.title;
         this.path = articleBuilder.path;
@@ -73,7 +69,7 @@ public class ArticleModel implements Serializable{
         return savedDate;
     }
 
-    public static class ArticleBuilder {
+    public static class Builder {
         private String url;
         private String title;
         private String path;
@@ -82,35 +78,35 @@ public class ArticleModel implements Serializable{
         boolean isFavorite;
 
 
-        public ArticleBuilder url(String url) {
+        public Builder url(String url) {
             this.url = url;
             return this;
         }
 
 
-        public ArticleBuilder path(String path) {
+        public Builder path(String path) {
             this.path = path;
             return this;
         }
 
-        public ArticleBuilder title(String title) {
+        public Builder title(String title) {
             this.title = title;
             return this;
         }
 
-        public ArticleBuilder tags(String tags) {
+        public Builder tags(String tags) {
             this.tags = tags;
             return this;
         }
 
 
-        public ArticleBuilder savedDate(String savedDate) {
+        public Builder savedDate(String savedDate) {
             this.savedDate = savedDate;
             return this;
         }
 
 
-        public ArticleBuilder isFavorite(boolean isFavorite) {
+        public Builder isFavorite(boolean isFavorite) {
             this.isFavorite = isFavorite;
             return this;
         }

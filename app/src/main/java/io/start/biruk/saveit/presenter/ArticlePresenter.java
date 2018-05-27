@@ -6,6 +6,7 @@ import javax.inject.Inject;
 
 import io.reactivex.Observable;
 import io.reactivex.Scheduler;
+import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.annotations.NonNull;
 import io.reactivex.observers.DisposableSingleObserver;
 import io.reactivex.schedulers.Schedulers;
@@ -24,17 +25,56 @@ public class ArticlePresenter {
     private BaseArticleView baseArticleView;
 
     @Inject
-    public ArticlePresenter(ArticleRepository articleRepository,Scheduler uiThread) {
+    public ArticlePresenter(ArticleRepository articleRepository, Scheduler uiThread) {
         this.articleRepository = articleRepository;
-        this.uiThread=uiThread;
+        this.uiThread = uiThread;
     }
 
-    public void attachView(BaseArticleView view){
-        this.baseArticleView=view;
+    public void attachView(BaseArticleView view) {
+        this.baseArticleView = view;
     }
 
-    public void loadAllArticles(){
-                articleRepository.getAllArticles()
+    public void onArticleSelected(ArticleModel articleModel) {
+        baseArticleView.launchArticleView(articleModel);
+    }
+
+    public void onArticleOptionSelected(ArticleModel articleModel) {
+        baseArticleView.launchArticleOptionsView(articleModel);
+    }
+
+
+    public void onFavoriteToggleSelected(ArticleModel articleModel) {
+        ArticleModel modifiedArticleModel = new ArticleModel.Builder()
+                .url(articleModel.getUrl())
+                .title(articleModel.getTitle())
+                .path(articleModel.getPath())
+                .savedDate(articleModel.getSavedDate())
+                .isFavorite(!articleModel.isFavorite())
+                .build();
+
+        articleRepository.updateArticle(modifiedArticleModel)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeWith(new DisposableSingleObserver<Integer>() {
+                    @Override
+                    public void onSuccess(@NonNull Integer updateStatus) {
+                        loadAllArticles();
+                        if (modifiedArticleModel.isFavorite()){
+                            baseArticleView.displayUpdateView("Article added to favorite.");
+                        }else {
+                            baseArticleView.displayUpdateView("Article removed from favorite.");
+                        }
+                    }
+
+                    @Override
+                    public void onError(@NonNull Throwable e) {
+
+                    }
+                });
+    }
+
+    public void loadAllArticles() {
+        articleRepository.getAllArticles()
                 .subscribeOn(Schedulers.io())
                 .observeOn(uiThread)
                 .subscribeWith(new DisposableSingleObserver<List<ArticleModel>>() {
@@ -55,7 +95,7 @@ public class ArticlePresenter {
 
     }
 
-    public void loadFavoriteArticlesView(String query){
+    public void loadFavoriteArticlesView(String query) {
         articleRepository.getAllArticles()
                 .toObservable()
                 .flatMap(articleModels -> Observable.fromIterable(articleModels))
@@ -66,7 +106,7 @@ public class ArticlePresenter {
                 .subscribeWith(new DisposableSingleObserver<List<ArticleModel>>() {
                     @Override
                     public void onSuccess(@NonNull List<ArticleModel> articleModels) {
-                        if (!articleModels.isEmpty()){
+                        if (!articleModels.isEmpty()) {
                             baseArticleView.displayArticle(articleModels);
                         }
                         baseArticleView.displayEmptyArticlesView("empty articles view");
@@ -80,16 +120,16 @@ public class ArticlePresenter {
 
     }
 
-    public void loadArticlesByQuery(String msg){
+    public void loadArticlesByQuery(String msg) {
 
     }
 
-    public void loadArticlesByTag(String tag){
+    public void loadArticlesByTag(String tag) {
 
     }
 
-    public void dettachView(){
-        this.baseArticleView=null;
+    public void dettachView() {
+        this.baseArticleView = null;
     }
 
 

@@ -4,6 +4,9 @@
     <color name="colorPrimaryDark">#424242</color>
     <color name="colorAccent">#ff9800</color>
 
+    <color name="colorFav">#973e3e</color>
+    <color name="noFavoriteIcon">#da000000</color>
+
     <color name="default_background">#B0B0B0</color>
     <color name="text_color_blue">#27699f</color>
 
