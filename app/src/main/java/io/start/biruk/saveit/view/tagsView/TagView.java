@@ -8,11 +8,10 @@ import io.start.biruk.saveit.model.db.ArticleModel;
  * Created by biruk on 5/10/2018.
  */
 public interface TagView {
-    void showTagsView(String tagTitle, List<ArticleModel> articleModels);
+    void displayTags(List<String> tags);
+    void displayEmptyTagView();
 
-    void emptyTagsView();
-
-    void onTagSelected(String tagTitle, List<ArticleModel> articleModels);
-
-    void onTagOptionSelected(String tagTitle, List<ArticleModel> articleModels);
+     interface TagListener{
+        void onTagSelected(String tag);
+    }
 }

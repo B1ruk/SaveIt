@@ -40,7 +40,7 @@ public class ArticleOptionDialog extends DialogFragment {
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
 
-        CharSequence[] articleOptions = {"edit title", "edit tag", "delete", "info"};
+        CharSequence[] articleOptions = {"edit title", "add tag", "delete", "info"};
 
         return new AlertDialog.Builder(getActivity())
                 .setTitle(articleModel.getTitle())

@@ -32,6 +32,7 @@ import io.start.biruk.saveit.events.ArticleFetchCompletedEvent;
 import io.start.biruk.saveit.model.db.ArticleModel;
 import io.start.biruk.saveit.presenter.ArticlePresenter;
 import io.start.biruk.saveit.view.articleView.articleAdapter.ArticleAdapter;
+import io.start.biruk.saveit.view.articleView.articleOptions.AddTagDialog;
 import io.start.biruk.saveit.view.articleView.articleOptions.ArticleInfoDialog;
 import io.start.biruk.saveit.view.articleView.articleOptions.ArticleOptionDialog;
 import io.start.biruk.saveit.view.articleView.articleOptions.BaseArticleDialog;
@@ -50,7 +51,7 @@ public class BaseArticleFragment extends Fragment implements BaseArticleView, Ar
     private static final int REQUEST_ARTICLE_OPTION = 0;
     private static final int REQUEST_EDIT_TITLE_OPTION = 7;
     private static final int DELETE_ARTICLE_OPTION = 8;
-
+    private static final int REQUEST_ADD_TAG = 4;
 
     @Inject ArticlePresenter articlePresenter;
 
@@ -95,7 +96,7 @@ public class BaseArticleFragment extends Fragment implements BaseArticleView, Ar
         EventBus.getDefault().register(this);
 
         articlePresenter.attachView(this);
-        articlePresenter.loadAllArticles();
+        updateView();
     }
 
     @Override
@@ -108,7 +109,12 @@ public class BaseArticleFragment extends Fragment implements BaseArticleView, Ar
                     BaseArticleDialog baseArticleDialog = BaseArticleDialog.newInstance(articleModel);
                     baseArticleDialog.setTargetFragment(BaseArticleFragment.this, REQUEST_EDIT_TITLE_OPTION);
                     baseArticleDialog.show(getFragmentManager(), TAG);
-
+                    break;
+                
+                case "add tag":
+                    AddTagDialog addTagDialog=AddTagDialog.newInstance(articleModel);
+                    addTagDialog.setTargetFragment(BaseArticleFragment.this,REQUEST_ADD_TAG);
+                    addTagDialog.show(getFragmentManager(),TAG);
                     break;
                 case "info":
                     ArticleInfoDialog articleInfoDialog = ArticleInfoDialog.newInstance(articleModel);
@@ -133,7 +139,8 @@ public class BaseArticleFragment extends Fragment implements BaseArticleView, Ar
     }
 
 
-    private void updateView() {
+    @Override
+    public void updateView() {
         articlePresenter.loadAllArticles();
     }
 

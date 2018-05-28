@@ -9,6 +9,8 @@ import io.start.biruk.saveit.model.db.ArticleModel;
  */
 public interface BaseArticleView {
 
+    void updateView();
+
     void displayArticle(List<ArticleModel> articleModels);
 
     void displayEmptyArticlesView(String message);

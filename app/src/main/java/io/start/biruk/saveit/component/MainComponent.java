@@ -8,7 +8,9 @@ import io.start.biruk.saveit.presenter.ArticlePresenter;
 import io.start.biruk.saveit.presenter.TagPresenter;
 import io.start.biruk.saveit.service.ArticleFetcherService;
 import io.start.biruk.saveit.view.MainActivity;
+import io.start.biruk.saveit.view.articleView.articleOptions.AddTagDialog;
 import io.start.biruk.saveit.view.baseArticleView.BaseArticleFragment;
+import io.start.biruk.saveit.view.favoriteView.FavoriteFragment;
 import io.start.biruk.saveit.view.tagsView.TagFragment;
 
 /**
@@ -26,9 +28,12 @@ public interface MainComponent {
 
     void inject(TagFragment tagFragment);
 
+    void inject(FavoriteFragment favoriteFragment);
+
     void inject(BaseArticleFragment baseArticleFragment);
 
 
     void inject(MainActivity mainActivity);
 
+    void inject(AddTagDialog addTagDialog);
 }

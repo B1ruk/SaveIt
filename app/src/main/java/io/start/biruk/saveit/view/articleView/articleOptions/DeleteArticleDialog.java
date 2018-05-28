@@ -71,6 +71,4 @@ public class DeleteArticleDialog extends DialogFragment {
         getTargetFragment().onActivityResult(getTargetRequestCode(),resultCode,intent);
     }
 
-
-
 }

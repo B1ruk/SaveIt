@@ -2,6 +2,8 @@ package io.start.biruk.saveit.di.module;
 
 import android.content.Context;
 
+import com.squareup.picasso.Picasso;
+
 import javax.inject.Singleton;
 
 import dagger.Module;
@@ -29,6 +31,12 @@ public class MainModule {
     @Singleton
     public Context providesAppContext() {
         return appContext;
+    }
+
+    @Provides
+    @Singleton
+    public Picasso providesContext(Context context){
+        return Picasso.with(context);
     }
 
     @Provides

@@ -60,13 +60,14 @@ public class ArticlePresenter {
                 .subscribeWith(new DisposableSingleObserver<Integer>() {
                     @Override
                     public void onSuccess(@NonNull Integer updateStatus) {
-                        loadAllArticles();
-                        if (modifiedArticleModel.isFavorite()){
+                        baseArticleView.updateView();
+                        if (modifiedArticleModel.isFavorite()) {
                             baseArticleView.displayUpdateView("Article added to favorite.");
-                        }else {
+                        } else {
                             baseArticleView.displayUpdateView("Article removed from favorite.");
                         }
                     }
+
                     @Override
                     public void onError(@NonNull Throwable e) {
 
@@ -86,7 +87,7 @@ public class ArticlePresenter {
                     @Override
                     public void onSuccess(@NonNull Integer integer) {
                         baseArticleView.displayUpdateView("Article Deleted");
-                        loadAllArticles();
+                        baseArticleView.updateView();
                     }
 
                     @Override
@@ -105,7 +106,7 @@ public class ArticlePresenter {
                     @Override
                     public void onSuccess(@NonNull Integer integer) {
                         baseArticleView.displayUpdateView("Article updated");
-                        loadAllArticles();      //update the view
+                        baseArticleView.updateView();
                     }
 
                     @Override
@@ -137,11 +138,11 @@ public class ArticlePresenter {
 
     }
 
-    public void loadFavoriteArticlesView(String query) {
+    public void loadFavoriteArticles() {
         articleRepository.getAllArticles()
                 .toObservable()
-                .flatMap(articleModels -> Observable.fromIterable(articleModels))
-                .filter(articleModel -> articleModel.isFavorite())
+                .flatMap(Observable::fromIterable)
+                .filter(ArticleModel::isFavorite)
                 .toList()
                 .subscribeOn(Schedulers.io())
                 .observeOn(uiThread)
@@ -150,8 +151,9 @@ public class ArticlePresenter {
                     public void onSuccess(@NonNull List<ArticleModel> articleModels) {
                         if (!articleModels.isEmpty()) {
                             baseArticleView.displayArticle(articleModels);
+                        } else {
+                            baseArticleView.displayEmptyArticlesView("empty articles view");
                         }
-                        baseArticleView.displayEmptyArticlesView("empty articles view");
                     }
 
                     @Override
