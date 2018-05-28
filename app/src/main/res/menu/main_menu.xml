@@ -6,7 +6,6 @@
         android:id="@+id/main_search_bar"
         android:icon="@drawable/ic_search_24dp"
         android:title="@string/search"
-        app:actionViewClass="android.support.v7.widget.SearchView"
         app:showAsAction="always"
         />
 </menu>

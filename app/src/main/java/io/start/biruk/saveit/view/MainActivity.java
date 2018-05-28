@@ -16,6 +16,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -113,9 +114,10 @@ public class MainActivity extends AppCompatActivity {
         menuInflater.inflate(R.menu.main_menu, menu);
 
         MenuItem searchBar = menu.findItem(R.id.main_search_bar);
-        SearchView searchView = (SearchView) searchBar.getActionView();
-        searchView.setIconified(true);
-        searchView.setOnSearchClickListener(v -> Log.d(TAG, "launch search view"));
+
+//        SearchView searchView = (SearchView) searchBar.getActionView();
+//        searchView.setIconified(true);
+//        searchView.setOnSearchClickListener(v -> Log.d(TAG, "launch search view"));
 
         return super.onCreateOptionsMenu(menu);
     }
