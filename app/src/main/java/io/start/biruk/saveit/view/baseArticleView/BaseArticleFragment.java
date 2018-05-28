@@ -15,6 +15,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.annimon.stream.Stream;
+import com.squareup.picasso.Picasso;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -54,12 +55,13 @@ public class BaseArticleFragment extends Fragment implements BaseArticleView, Ar
     private static final int REQUEST_ADD_TAG = 4;
 
     @Inject ArticlePresenter articlePresenter;
+    @Inject Picasso picasso;
 
-    @Bind(R.id.article_recycler_view) RecyclerView articleRecyclerView;
-    @Bind(R.id.article_fast_scroller) FastScroller articleFastScroller;
-    @Bind(R.id.empty_article_view) View emptyArticleView;
-    @Bind(R.id.empty_article_description) TextView emptyArticleTextView;
-    @Bind(R.id.empty_article_image) ImageView emptyArticleImageView;
+    @Bind(R.id.article_recycler_view) protected RecyclerView articleRecyclerView;
+    @Bind(R.id.article_fast_scroller) protected FastScroller articleFastScroller;
+    @Bind(R.id.empty_article_view) protected View emptyArticleView;
+    @Bind(R.id.empty_article_description) protected TextView emptyArticleTextView;
+    @Bind(R.id.empty_article_image) protected ImageView emptyArticleImageView;
 
 
     @Subscribe(threadMode = ThreadMode.MAIN)
@@ -171,6 +173,13 @@ public class BaseArticleFragment extends Fragment implements BaseArticleView, Ar
     @Override
     public void displayEmptyArticlesView(String message) {
         updateUi(0);
+
+        picasso.load(R.drawable.book_outline)
+                .resize(200,200)
+                .into(emptyArticleImageView);
+
+        emptyArticleTextView.setText("no articles found");
+
     }
 
     /*
@@ -178,7 +187,7 @@ public class BaseArticleFragment extends Fragment implements BaseArticleView, Ar
     *  0-> display emptyview
     *  1-> display articleview
     * */
-    private void updateUi(int status) {
+    protected void updateUi(int status) {
         switch (status) {
             case 0:
                 emptyArticleView.setVisibility(View.VISIBLE);

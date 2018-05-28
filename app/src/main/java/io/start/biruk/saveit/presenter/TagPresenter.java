@@ -39,7 +39,7 @@ public class TagPresenter {
                 .toObservable()
                 .flatMap(Observable::fromIterable)
                 .map(ArticleModel::getTags)
-                .filter(tags->!tags.isEmpty())
+                .filter(tag->!tag.isEmpty())
                 .distinct()
                 .toList()
                 .subscribeOn(Schedulers.io())
@@ -56,7 +56,7 @@ public class TagPresenter {
 
                     @Override
                     public void onError(@NonNull Throwable e) {
-
+                        throw new IllegalStateException("",e);
                     }
                 });
 

@@ -23,7 +23,6 @@
             android:layout_height="wrap_content"
             android:textStyle="bold|italic"
             android:layout_centerHorizontal="true"
-            android:text="no articles found"
             android:layout_below="@+id/empty_article_image"
             />
     </RelativeLayout>

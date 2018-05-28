@@ -86,6 +86,7 @@ public class ArticleMainSaver {
                 .title(responseDoc.title())
                 .savedDate(DateUtil.getFormattedDate(new Date()))
                 .isFavorite(false)
+                .tags("")
                 .build();
 
         articleRepository.addArticle(articleModel)
