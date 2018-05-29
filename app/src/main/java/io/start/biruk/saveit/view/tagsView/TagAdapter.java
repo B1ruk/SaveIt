@@ -20,7 +20,7 @@ public class TagAdapter extends RecyclerView.Adapter<TagAdapter.TagViewHolder> {
     private TagView.TagListener tagListener;
     private List<String> tags;
 
-    public TagAdapter(TagView.TagListener tagListener,List<String> tags) {
+    public TagAdapter(TagView.TagListener tagListener, List<String> tags) {
         this.tagListener = tagListener;
         this.tags = tags;
     }
@@ -43,12 +43,13 @@ public class TagAdapter extends RecyclerView.Adapter<TagAdapter.TagViewHolder> {
         return tags.size();
     }
 
-    class TagViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+    class TagViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         @Bind(R.id.article_option_tag_title) TextView tagTitleView;
 
         public TagViewHolder(View itemView) {
             super(itemView);
-            ButterKnife.bind(this,itemView);
+            ButterKnife.bind(this, itemView);
+            itemView.setOnClickListener(this);
         }
 
         @Override

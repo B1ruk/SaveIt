@@ -19,6 +19,7 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import io.start.biruk.saveit.R;
 import io.start.biruk.saveit.model.db.ArticleModel;
+import io.start.biruk.saveit.util.StringUtil;
 import io.start.biruk.saveit.view.baseArticleView.BaseArticleFragment;
 import io.start.biruk.saveit.view.listener.ArticleClickListener;
 import io.start.biruk.saveit.view.widget.CircleTransform;
@@ -60,7 +61,7 @@ public class ArticleAdapter extends RecyclerView.Adapter<ArticleAdapter.ArticleV
 
         holder.articleTitleView.setText(articleModel.getTitle());
         holder.articleSavedDateView.setText(articleModel.getSavedDate());
-        holder.tagBtnView.setText(articleModel.getTags());
+        holder.tagBtnView.setText(StringUtil.getFormatedTag(articleModel.getTags()));
 
         if (articleModel.isFavorite()){
             holder.articleFavoriteView.setAlpha(1.0f);

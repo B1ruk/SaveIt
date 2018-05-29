@@ -137,6 +137,9 @@ public class AddTagDialog extends DialogFragment implements TagView{
     }
 
     private void sendResult(String tag,ArticleModel articleModel){
+
+        this.getDialog().dismiss();
+
         if (getTargetFragment()==null){
             return;
         }

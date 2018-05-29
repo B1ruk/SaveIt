@@ -7,10 +7,12 @@ import javax.inject.Inject;
 import io.reactivex.Observable;
 import io.reactivex.Scheduler;
 import io.reactivex.annotations.NonNull;
+import io.reactivex.observers.DisposableObserver;
 import io.reactivex.observers.DisposableSingleObserver;
 import io.reactivex.schedulers.Schedulers;
 import io.start.biruk.saveit.model.dao.ArticleRepository;
 import io.start.biruk.saveit.model.db.ArticleModel;
+import io.start.biruk.saveit.util.StringUtil;
 import io.start.biruk.saveit.view.tagsView.TagView;
 
 /**
@@ -29,17 +31,18 @@ public class TagPresenter {
         this.uiThread = uiThread;
     }
 
-    public void attachView(TagView tagView){
-        this.tagView=tagView;
+    public void attachView(TagView tagView) {
+        this.tagView = tagView;
     }
 
 
-    public void loadTags(){
+    public void loadTags() {
         articleRepository.getAllArticles()
                 .toObservable()
                 .flatMap(Observable::fromIterable)
                 .map(ArticleModel::getTags)
-                .filter(tag->!tag.isEmpty())
+                .filter(tag -> !tag.isEmpty())
+                .flatMap(tag -> Observable.fromIterable(StringUtil.getTagList(tag)))
                 .distinct()
                 .toList()
                 .subscribeOn(Schedulers.io())
@@ -47,23 +50,22 @@ public class TagPresenter {
                 .subscribeWith(new DisposableSingleObserver<List<String>>() {
                     @Override
                     public void onSuccess(@NonNull List<String> tags) {
-                        if (!tags.isEmpty()){
+                        if (!tags.isEmpty()) {
                             tagView.displayTags(tags);
-                        }else {
+                        } else {
                             tagView.displayEmptyTagView();
                         }
                     }
 
                     @Override
                     public void onError(@NonNull Throwable e) {
-                        throw new IllegalStateException("",e);
+                        throw new IllegalStateException("", e);
                     }
                 });
-
     }
 
-    public void dettachView(TagView tagView){
-        this.tagView=tagView;
+    public void dettachView(TagView tagView) {
+        this.tagView = tagView;
     }
 
 
