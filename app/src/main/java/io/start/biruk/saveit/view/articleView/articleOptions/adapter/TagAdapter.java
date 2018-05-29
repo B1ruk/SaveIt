@@ -1,4 +1,4 @@
-package io.start.biruk.saveit.view.tagsView;
+package io.start.biruk.saveit.view.articleView.articleOptions.adapter;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -11,6 +11,7 @@ import java.util.List;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import io.start.biruk.saveit.R;
+import io.start.biruk.saveit.view.tagsView.TagView;
 
 /**
  * Created by biruk on 5/28/2018.

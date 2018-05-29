@@ -3,7 +3,6 @@ package io.start.biruk.saveit.view.articleView.articleOptions;
 
 import android.app.Activity;
 import android.app.Dialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -30,7 +29,7 @@ import io.start.biruk.saveit.App;
 import io.start.biruk.saveit.R;
 import io.start.biruk.saveit.model.db.ArticleModel;
 import io.start.biruk.saveit.presenter.TagPresenter;
-import io.start.biruk.saveit.view.tagsView.TagAdapter;
+import io.start.biruk.saveit.view.articleView.articleOptions.adapter.TagAdapter;
 import io.start.biruk.saveit.view.tagsView.TagView;
 
 /**

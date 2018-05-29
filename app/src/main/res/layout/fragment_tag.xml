@@ -1,13 +1,45 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="io.start.biruk.saveit.view.tagsView.TagFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <RelativeLayout
+        android:id="@+id/empty_tag_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone">
+        <ImageView
+            android:id="@+id/empty_tag_image"
+            android:layout_width="200dp"
+            android:layout_height="200dp"
+            android:layout_centerInParent="true"
+            android:alpha="0.6"
+            android:src="@drawable/book_outline"/>
+
+        <TextView
+            android:id="@+id/empty_tag_description"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textStyle="bold|italic"
+            android:layout_centerHorizontal="true"
+            android:layout_below="@+id/empty_tag_image"
+            />
+    </RelativeLayout>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/tag_recycler_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:layout_marginRight="4dp"></android.support.v7.widget.RecyclerView>
 
-</FrameLayout>
+    <io.start.biruk.saveit.view.widget.fastscroller.FastScroller
+        android:id="@+id/tag_fast_scroller"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginLeft="2dp"
+        android:layout_marginRight="2dp"
+        ></io.start.biruk.saveit.view.widget.fastscroller.FastScroller>
+</RelativeLayout>
