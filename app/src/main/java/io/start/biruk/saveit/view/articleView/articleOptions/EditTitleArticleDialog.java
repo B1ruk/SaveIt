@@ -2,14 +2,12 @@ package io.start.biruk.saveit.view.articleView.articleOptions;
 
 import android.app.Activity;
 import android.app.Dialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AlertDialog;
-import android.util.Log;
 import android.widget.EditText;
 
 import io.start.biruk.saveit.model.db.ArticleModel;
@@ -17,16 +15,16 @@ import io.start.biruk.saveit.model.db.ArticleModel;
 /**
  * Created by biruk on 5/19/2018.
  */
-public  class BaseArticleDialog extends DialogFragment {
+public  class EditTitleArticleDialog extends DialogFragment {
     protected ArticleModel articleModel;
     public static final String ARTICLE_MODEL_DATA = "article_data";
 
 
-    public static BaseArticleDialog newInstance(ArticleModel articleModel) {
+    public static EditTitleArticleDialog newInstance(ArticleModel articleModel) {
         Bundle bundle = new Bundle();
         bundle.putSerializable(ARTICLE_MODEL_DATA, articleModel);
 
-        BaseArticleDialog baseInfoDialog = new BaseArticleDialog();
+        EditTitleArticleDialog baseInfoDialog = new EditTitleArticleDialog();
         baseInfoDialog.setArguments(bundle);
 
         return baseInfoDialog;

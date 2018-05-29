@@ -92,7 +92,7 @@ public class AddTagDialog extends DialogFragment implements TagView{
         tagRecyclerView.setVisibility(View.GONE);
 
         picasso.load(R.drawable.ic_tag_file_black_24dp)
-                .resize(200,200)
+                .resize(70,70)
                 .into(tagEmptyImageView);
 
         tagEmptyTextView.setText("no tags found");
@@ -111,6 +111,7 @@ public class AddTagDialog extends DialogFragment implements TagView{
         return new AlertDialog.Builder(getActivity())
                 .setTitle("Add Tag")
                 .setView(view)
+                .setNegativeButton(android.R.string.cancel,null)
                 .setPositiveButton("New Tag", (dialog, which) -> {
 
                 })

@@ -36,7 +36,7 @@ import io.start.biruk.saveit.view.articleView.articleAdapter.ArticleAdapter;
 import io.start.biruk.saveit.view.articleView.articleOptions.AddTagDialog;
 import io.start.biruk.saveit.view.articleView.articleOptions.ArticleInfoDialog;
 import io.start.biruk.saveit.view.articleView.articleOptions.ArticleOptionDialog;
-import io.start.biruk.saveit.view.articleView.articleOptions.BaseArticleDialog;
+import io.start.biruk.saveit.view.articleView.articleOptions.EditTitleArticleDialog;
 import io.start.biruk.saveit.view.articleView.articleOptions.DeleteArticleDialog;
 import io.start.biruk.saveit.view.displayArticleView.DisplayArticleActivity;
 import io.start.biruk.saveit.view.listener.ArticleClickListener;
@@ -67,7 +67,6 @@ public class BaseArticleFragment extends Fragment implements BaseArticleView, Ar
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void articleFetchCompleted(ArticleFetchCompletedEvent articleFetchCompletedEvent) {
         updateView();
-
     }
 
     public BaseArticleFragment() {
@@ -107,9 +106,9 @@ public class BaseArticleFragment extends Fragment implements BaseArticleView, Ar
             ArticleModel articleModel = (ArticleModel) data.getSerializableExtra(ArticleOptionDialog.SELECTED_ARTICLE);
             switch (action) {
                 case "edit title":
-                    BaseArticleDialog baseArticleDialog = BaseArticleDialog.newInstance(articleModel);
-                    baseArticleDialog.setTargetFragment(BaseArticleFragment.this, REQUEST_EDIT_TITLE_OPTION);
-                    baseArticleDialog.show(getFragmentManager(), TAG);
+                    EditTitleArticleDialog editTitleArticleDialog = EditTitleArticleDialog.newInstance(articleModel);
+                    editTitleArticleDialog.setTargetFragment(BaseArticleFragment.this, REQUEST_EDIT_TITLE_OPTION);
+                    editTitleArticleDialog.show(getFragmentManager(), TAG);
                     break;
                 
                 case "add tag":
@@ -129,12 +128,12 @@ public class BaseArticleFragment extends Fragment implements BaseArticleView, Ar
             }
         }
         if (requestCode == REQUEST_EDIT_TITLE_OPTION) {
-            ArticleModel articleModel = (ArticleModel) data.getSerializableExtra(BaseArticleDialog.ARTICLE_MODEL_DATA);
+            ArticleModel articleModel = (ArticleModel) data.getSerializableExtra(EditTitleArticleDialog.ARTICLE_MODEL_DATA);
             articlePresenter.updateArticle(articleModel);
         }
 
         if (requestCode == DELETE_ARTICLE_OPTION) {
-            ArticleModel articleModel = (ArticleModel) data.getSerializableExtra(BaseArticleDialog.ARTICLE_MODEL_DATA);
+            ArticleModel articleModel = (ArticleModel) data.getSerializableExtra(EditTitleArticleDialog.ARTICLE_MODEL_DATA);
             articlePresenter.deleteArticle(articleModel);
         }
     }

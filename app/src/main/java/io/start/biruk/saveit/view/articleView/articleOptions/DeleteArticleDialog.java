@@ -56,6 +56,7 @@ public class DeleteArticleDialog extends DialogFragment {
         return new AlertDialog.Builder(getActivity())
                 .setTitle("Delete")
                 .setView(linearLayout)
+                .setNegativeButton(android.R.string.cancel,null)
                 .setPositiveButton(android.R.string.ok, (dialog, which) -> {
                     sendResult(Activity.RESULT_OK,articleModel);
                 })
