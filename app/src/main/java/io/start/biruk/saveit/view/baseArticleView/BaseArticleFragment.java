@@ -54,8 +54,8 @@ public class BaseArticleFragment extends Fragment implements BaseArticleView, Ar
     private static final int DELETE_ARTICLE_OPTION = 8;
     private static final int REQUEST_ADD_TAG = 4;
 
-    @Inject ArticlePresenter articlePresenter;
-    @Inject Picasso picasso;
+    @Inject protected ArticlePresenter articlePresenter;
+    @Inject protected Picasso picasso;
 
     @Bind(R.id.article_recycler_view) protected RecyclerView articleRecyclerView;
     @Bind(R.id.article_fast_scroller) protected FastScroller articleFastScroller;
@@ -66,7 +66,6 @@ public class BaseArticleFragment extends Fragment implements BaseArticleView, Ar
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void articleFetchCompleted(ArticleFetchCompletedEvent articleFetchCompletedEvent) {
-        String url = articleFetchCompletedEvent.getUrl();
         updateView();
 
     }

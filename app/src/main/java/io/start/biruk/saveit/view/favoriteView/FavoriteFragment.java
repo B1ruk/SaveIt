@@ -23,14 +23,10 @@ import io.start.biruk.saveit.view.baseArticleView.BaseArticleFragment;
  */
 public class FavoriteFragment extends BaseArticleFragment{
 
-    @Inject ArticlePresenter articlePresenter;
-    @Inject Picasso picasso;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        App.getAppComponent().inject(this);
     }
 
     @Override
@@ -50,9 +46,15 @@ public class FavoriteFragment extends BaseArticleFragment{
         updateUi(0);
 
         picasso.load(R.drawable.ic_favorite_black_24dp)
-                .resize(100,100)
+                .resize(80,80)
                 .into(emptyArticleImageView);
 
         emptyArticleTextView.setText("no favorite articles found");
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        articlePresenter.dettachView();
     }
 }

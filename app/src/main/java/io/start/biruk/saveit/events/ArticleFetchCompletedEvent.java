@@ -5,13 +5,13 @@ package io.start.biruk.saveit.events;
  */
 public class ArticleFetchCompletedEvent {
 
-    private String url;
+    private String msg;
 
-    public ArticleFetchCompletedEvent(String url) {
-        this.url=url;
+    public ArticleFetchCompletedEvent(String msg) {
+        this.msg=msg;
     }
 
-    public String getUrl() {
-        return url;
+    public String getMsg() {
+        return msg;
     }
 }

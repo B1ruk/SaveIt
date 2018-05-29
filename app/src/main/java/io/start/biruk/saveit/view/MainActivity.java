@@ -44,7 +44,7 @@ public class MainActivity extends AppCompatActivity {
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void articleFetchCompleted(ArticleFetchCompletedEvent articleFetchCompletedEvent){
-        String url = articleFetchCompletedEvent.getUrl();
+        String url = articleFetchCompletedEvent.getMsg();
         displayInfo(String.format("saved %s",url));
 
     }

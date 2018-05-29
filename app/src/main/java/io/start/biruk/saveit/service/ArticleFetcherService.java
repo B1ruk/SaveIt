@@ -93,7 +93,7 @@ public class ArticleFetcherService extends Service implements ArticleMainSaver.C
 
     @Override
     public void onArticleSaved(String msg) {
-
+        EventBus.getDefault().post(new ArticleFetchCompletedEvent(msg));
     }
 
     @Override
