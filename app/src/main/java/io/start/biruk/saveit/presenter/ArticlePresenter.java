@@ -1,5 +1,8 @@
 package io.start.biruk.saveit.presenter;
 
+import com.annimon.stream.function.DoubleSupplier;
+import com.google.common.base.Joiner;
+
 import java.io.File;
 import java.util.List;
 
@@ -13,6 +16,7 @@ import io.reactivex.schedulers.Schedulers;
 import io.start.biruk.saveit.model.dao.ArticleRepository;
 import io.start.biruk.saveit.model.db.ArticleModel;
 import io.start.biruk.saveit.util.FileUtil;
+import io.start.biruk.saveit.util.StringUtil;
 import io.start.biruk.saveit.view.baseArticleView.BaseArticleView;
 
 /**
@@ -96,6 +100,21 @@ public class ArticlePresenter {
                     }
                 });
 
+    }
+
+    public void updateArticle(ArticleModel articleModel,String tag){
+
+
+        ArticleModel updatedArticle=new ArticleModel.Builder()
+                .title(articleModel.getTitle())
+                .url(articleModel.getUrl())
+                .path(articleModel.getPath())
+                .isFavorite(articleModel.isFavorite())
+                .savedDate(articleModel.getSavedDate())
+                .tags(StringUtil.appendTag(articleModel.getTags(),tag))
+                .build();
+
+        this.updateArticle(updatedArticle);
     }
 
     public void updateArticle(ArticleModel articleModel) {

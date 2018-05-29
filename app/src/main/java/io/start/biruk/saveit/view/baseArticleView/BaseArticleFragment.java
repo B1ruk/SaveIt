@@ -136,6 +136,13 @@ public class BaseArticleFragment extends Fragment implements BaseArticleView, Ar
             ArticleModel articleModel = (ArticleModel) data.getSerializableExtra(EditTitleArticleDialog.ARTICLE_MODEL_DATA);
             articlePresenter.deleteArticle(articleModel);
         }
+
+        if (requestCode==REQUEST_ADD_TAG){
+            ArticleModel articleModel = (ArticleModel) data.getSerializableExtra(AddTagDialog.ARTICLE_MODEL_DATA);
+            String tag = data.getAction();
+
+            articlePresenter.updateArticle(articleModel,tag);
+        }
     }
 
 

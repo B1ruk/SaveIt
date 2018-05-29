@@ -3,6 +3,7 @@ package io.start.biruk.saveit.view.articleView.articleOptions;
 
 import android.app.Activity;
 import android.app.Dialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -13,6 +14,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -113,9 +115,25 @@ public class AddTagDialog extends DialogFragment implements TagView{
                 .setView(view)
                 .setNegativeButton(android.R.string.cancel,null)
                 .setPositiveButton("New Tag", (dialog, which) -> {
-
+                    displayNewTagDialog();
                 })
                 .create();
+    }
+
+    private void displayNewTagDialog() {
+        EditText addTagEditText=new EditText(getActivity());
+
+        new AlertDialog.Builder(getActivity())
+                .setTitle("Tag Title")
+                .setView(addTagEditText)
+                .setNegativeButton(android.R.string.cancel,null)
+                .setPositiveButton(android.R.string.ok, (dialog1, which1) -> {
+                    String tag = addTagEditText.getText().toString();
+                    if (!tag.isEmpty()){
+                        sendResult(tag,articleModel);
+                    }
+                })
+                .show();
     }
 
     private void sendResult(String tag,ArticleModel articleModel){
@@ -127,6 +145,4 @@ public class AddTagDialog extends DialogFragment implements TagView{
         intent.putExtra(ARTICLE_MODEL_DATA,articleModel);
         getTargetFragment().onActivityResult(getTargetRequestCode(), Activity.RESULT_OK,intent);
     }
-
-
 }

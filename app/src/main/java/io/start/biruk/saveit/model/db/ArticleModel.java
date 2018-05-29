@@ -9,7 +9,7 @@ import java.io.Serializable;
  * Created by biruk on 5/10/2018.
  */
 @DatabaseTable(tableName = ArticleModel.ARTICLE_TABLE)
-public class ArticleModel implements Serializable{
+public class ArticleModel implements Serializable {
 
     public static final String ARTICLE_TABLE = "articles";
 
@@ -43,30 +43,6 @@ public class ArticleModel implements Serializable{
         this.tags = articleBuilder.tags;
         this.isFavorite = articleBuilder.isFavorite;
         this.savedDate = articleBuilder.savedDate;
-    }
-
-    public String getUrl() {
-        return url;
-    }
-
-    public String getPath() {
-        return path;
-    }
-
-    public String getTags() {
-        return tags;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public boolean isFavorite() {
-        return isFavorite;
-    }
-
-    public String getSavedDate() {
-        return savedDate;
     }
 
     public static class Builder {
@@ -116,6 +92,9 @@ public class ArticleModel implements Serializable{
                 throw new IllegalStateException("url cannot be null");
             if (path == null)
                 throw new IllegalStateException("path cannot be null");
+            if (tags == null) {
+                throw new IllegalStateException("tags cannot be null");
+            }
 
             return new ArticleModel(this);
         }
@@ -125,4 +104,29 @@ public class ArticleModel implements Serializable{
     public String toString() {
         return String.format("url -> %s \n storageDir-> %s", url, path);
     }
+
+    public String getUrl() {
+        return url;
+    }
+
+    public String getPath() {
+        return path;
+    }
+
+    public String getTags() {
+        return tags;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public boolean isFavorite() {
+        return isFavorite;
+    }
+
+    public String getSavedDate() {
+        return savedDate;
+    }
+
 }
