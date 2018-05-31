@@ -18,7 +18,6 @@ import io.start.biruk.saveit.util.StringUtil;
 public class TagRepositoryImpl implements TagRepository {
     private ArticleRepository articleRepository;
 
-    @Inject
     public TagRepositoryImpl(ArticleRepository articleRepository) {
         this.articleRepository = articleRepository;
     }

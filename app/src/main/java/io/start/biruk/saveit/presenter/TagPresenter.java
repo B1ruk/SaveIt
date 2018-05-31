@@ -36,7 +36,6 @@ public class TagPresenter {
         this.tagView = tagView;
     }
 
-
     public void loadTags() {
         tagRepository.getAllTagsSingle()
                 .subscribeOn(Schedulers.io())

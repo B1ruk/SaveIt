@@ -12,16 +12,17 @@ import java.util.List;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import io.start.biruk.saveit.R;
+import io.start.biruk.saveit.model.data.TagData;
 
 /**
  * Created by biruk on 5/29/2018.
  */
 public class TagViewAdapter extends RecyclerView.Adapter<TagViewAdapter.TagViewHolder> {
 
-    private List<String> tags;
+    private List<TagData> tags;
 
 
-    public void addTags(List<String> tags) {
+    public void addTags(List<TagData> tags) {
         this.tags = tags;
         notifyDataSetChanged();
     }
@@ -35,7 +36,11 @@ public class TagViewAdapter extends RecyclerView.Adapter<TagViewAdapter.TagViewH
 
     @Override
     public void onBindViewHolder(TagViewHolder holder, int position) {
+        String tag = tags.get(position).getTag();
+        int size = tags.get(position).getArticleModels().size();
 
+        holder.tagTitleView.setText(tag);
+        holder.tagArticleCountView.setText(Integer.toString(size));
     }
 
     @Override

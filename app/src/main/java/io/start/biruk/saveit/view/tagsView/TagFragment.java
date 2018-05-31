@@ -25,6 +25,7 @@ import io.start.biruk.saveit.App;
 import io.start.biruk.saveit.R;
 import io.start.biruk.saveit.model.data.TagData;
 import io.start.biruk.saveit.presenter.TagPresenter;
+import io.start.biruk.saveit.view.articleView.articleOptions.adapter.TagAdapter;
 import io.start.biruk.saveit.view.widget.fastscroller.FastScroller;
 
 /**
@@ -71,13 +72,35 @@ public class TagFragment extends Fragment implements TagView {
 
     @Override
     public void displayTags(List<TagData> tags) {
+
+        tagFastScroller.setVisibility(View.VISIBLE);
+        tagRecyclerView.setVisibility(View.VISIBLE);
+
+        emptyTagTextView.setVisibility(View.GONE);
+        emptyImageView.setVisibility(View.GONE);
+
+        initRecyclerView(tags);
+    }
+
+    private void initRecyclerView(List<TagData> tags) {
+        TagAdapter tagAdapter=new TagAdapter(this::sendResult,tags);
+
         tagRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-//        tagRecyclerView.setAdapter(tagAdapter);
+        tagRecyclerView.setAdapter(tagAdapter);
+        tagFastScroller.setRecyclerView(tagRecyclerView);
+    }
+
+    private void sendResult(String tag) {
+
     }
 
     @Override
     public void displayEmptyTagView() {
+        tagFastScroller.setVisibility(View.GONE);
+        tagRecyclerView.setVisibility(View.GONE);
 
+        emptyTagTextView.setVisibility(View.VISIBLE);
+        emptyImageView.setVisibility(View.VISIBLE);
     }
 
     @Override
