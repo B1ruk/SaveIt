@@ -14,7 +14,7 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import io.start.biruk.saveit.R;
 import io.start.biruk.saveit.model.db.ArticleModel;
-import io.start.biruk.saveit.util.StringUtil;
+import io.start.biruk.saveit.util.TagStringUtil;
 
 /**
  * Created by biruk on 5/19/2018.
@@ -53,7 +53,7 @@ public class ArticleInfoDialog extends DialogFragment {
         ButterKnife.bind(this,view);
 
         pathTextView.setText(articleModel.getPath());
-        tagsView.setText(StringUtil.getFormatedTag(articleModel.getTags()));
+        tagsView.setText(TagStringUtil.getFormatedTag(articleModel.getTags()));
         articleSavedDateView.setText(articleModel.getSavedDate());
 
         return new AlertDialog.Builder(getActivity())

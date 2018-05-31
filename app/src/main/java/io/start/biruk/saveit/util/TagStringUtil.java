@@ -11,7 +11,7 @@ import java.util.List;
 /**
  * Created by biruk on 5/10/2018.
  */
-public class StringUtil {
+public class TagStringUtil {
 
     private static final String TAG_JOINER_SEQ = "__";
     private static final Joiner TAG_JOINER = Joiner.on(TAG_JOINER_SEQ).skipNulls();

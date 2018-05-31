@@ -2,6 +2,7 @@ package io.start.biruk.saveit.view;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentStatePagerAdapter;
 
 import io.start.biruk.saveit.view.articleView.ArticlesFragment;
@@ -12,7 +13,7 @@ import io.start.biruk.saveit.view.tagsView.TagFragment;
 /**
  * Created by biruk on 5/10/2018.
  */
-public class MainAdapter extends FragmentStatePagerAdapter {
+public class MainAdapter extends FragmentPagerAdapter {
 
     String[] pageFragmentTitles = {"Articles", "Tags", "Favorites"};
     Fragment[] pageFragments = {new BaseArticleFragment(), new TagFragment(), new FavoriteFragment()};

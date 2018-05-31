@@ -1,19 +1,17 @@
 package io.start.biruk.saveit.presenter;
 
+import com.annimon.stream.Stream;
+
 import java.util.List;
 
 import javax.inject.Inject;
 
-import io.reactivex.Observable;
 import io.reactivex.Scheduler;
 import io.reactivex.annotations.NonNull;
 import io.reactivex.observers.DisposableSingleObserver;
 import io.reactivex.schedulers.Schedulers;
 import io.start.biruk.saveit.model.data.TagData;
-import io.start.biruk.saveit.model.repository.ArticleRepository;
-import io.start.biruk.saveit.model.db.ArticleModel;
 import io.start.biruk.saveit.model.repository.TagRepository;
-import io.start.biruk.saveit.util.StringUtil;
 import io.start.biruk.saveit.view.tagsView.TagView;
 
 /**
@@ -43,8 +41,8 @@ public class TagPresenter {
                 .subscribeWith(new DisposableSingleObserver<List<TagData>>() {
                     @Override
                     public void onSuccess(@NonNull List<TagData> tagDatas) {
-                        if (tagDatas.isEmpty()){
-                            tagView.displayTags(tagDatas);
+                        if (!tagDatas.isEmpty()){
+                            tagView.displayTags(sortList(tagDatas));
                         } else {
                             tagView.displayEmptyTagView();
                         }
@@ -55,6 +53,13 @@ public class TagPresenter {
 
                     }
                 });
+    }
+
+    private List<TagData> sortList(List<TagData> tagDatas) {
+        return Stream.of(tagDatas)
+                .sortBy(TagData::getTag)
+                .toList();
+
     }
 
     public void dettachView(TagView tagView) {

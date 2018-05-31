@@ -7,12 +7,14 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import io.start.biruk.saveit.R;
 import io.start.biruk.saveit.model.data.TagData;
+import io.start.biruk.saveit.view.tagsView.TagView;
 
 /**
  * Created by biruk on 5/29/2018.
@@ -20,7 +22,12 @@ import io.start.biruk.saveit.model.data.TagData;
 public class TagViewAdapter extends RecyclerView.Adapter<TagViewAdapter.TagViewHolder> {
 
     private List<TagData> tags;
+    private TagView.TagListener tagListener;
 
+    public TagViewAdapter(TagView.TagListener tagListener){
+        this.tagListener = tagListener;
+        this.tags=new ArrayList<>();
+    }
 
     public void addTags(List<TagData> tags) {
         this.tags = tags;
@@ -38,9 +45,15 @@ public class TagViewAdapter extends RecyclerView.Adapter<TagViewAdapter.TagViewH
     public void onBindViewHolder(TagViewHolder holder, int position) {
         String tag = tags.get(position).getTag();
         int size = tags.get(position).getArticleModels().size();
+        String sizeTxt="";
+        if (size==1){
+            sizeTxt=size+ " article";
+        }else {
+            sizeTxt=size+ "articles";
+        }
 
         holder.tagTitleView.setText(tag);
-        holder.tagArticleCountView.setText(Integer.toString(size));
+        holder.tagArticleCountView.setText(sizeTxt);
     }
 
     @Override

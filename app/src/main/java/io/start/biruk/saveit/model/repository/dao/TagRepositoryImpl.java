@@ -2,15 +2,13 @@ package io.start.biruk.saveit.model.repository.dao;
 
 import java.util.List;
 
-import javax.inject.Inject;
-
 import io.reactivex.Observable;
 import io.reactivex.Single;
 import io.start.biruk.saveit.model.data.TagData;
 import io.start.biruk.saveit.model.db.ArticleModel;
 import io.start.biruk.saveit.model.repository.ArticleRepository;
 import io.start.biruk.saveit.model.repository.TagRepository;
-import io.start.biruk.saveit.util.StringUtil;
+import io.start.biruk.saveit.util.TagStringUtil;
 
 /**
  * Created by biruk on 5/31/2018.
@@ -27,7 +25,7 @@ public class TagRepositoryImpl implements TagRepository {
         return articleRepository.getAllArticlesObser()
                 .map(ArticleModel::getTags)
                 .filter(tags -> !tags.isEmpty())
-                .flatMap(tags -> Observable.fromIterable(StringUtil.getTagList(tags)))
+                .flatMap(tags -> Observable.fromIterable(TagStringUtil.getTagList(tags)))
                 .distinct()
                 .flatMap(this::toTagData)
                 .toList();

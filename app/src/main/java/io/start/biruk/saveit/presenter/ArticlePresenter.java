@@ -5,7 +5,6 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import io.reactivex.Observable;
 import io.reactivex.Scheduler;
 import io.reactivex.annotations.NonNull;
 import io.reactivex.observers.DisposableSingleObserver;
@@ -13,7 +12,7 @@ import io.reactivex.schedulers.Schedulers;
 import io.start.biruk.saveit.model.repository.ArticleRepository;
 import io.start.biruk.saveit.model.db.ArticleModel;
 import io.start.biruk.saveit.util.FileUtil;
-import io.start.biruk.saveit.util.StringUtil;
+import io.start.biruk.saveit.util.TagStringUtil;
 import io.start.biruk.saveit.view.baseArticleView.BaseArticleView;
 
 /**
@@ -108,7 +107,7 @@ public class ArticlePresenter {
                 .path(articleModel.getPath())
                 .isFavorite(articleModel.isFavorite())
                 .savedDate(articleModel.getSavedDate())
-                .tags(StringUtil.appendTag(articleModel.getTags(), tag))
+                .tags(TagStringUtil.appendTag(articleModel.getTags(), tag))
                 .build();
 
         this.updateArticle(updatedArticle);

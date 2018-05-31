@@ -4,6 +4,7 @@ package io.start.biruk.saveit.view.tagsView;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -26,13 +27,14 @@ import io.start.biruk.saveit.R;
 import io.start.biruk.saveit.model.data.TagData;
 import io.start.biruk.saveit.presenter.TagPresenter;
 import io.start.biruk.saveit.view.articleView.articleOptions.adapter.TagAdapter;
+import io.start.biruk.saveit.view.tagsView.adapter.TagViewAdapter;
 import io.start.biruk.saveit.view.widget.fastscroller.FastScroller;
 
 /**
  * A simple {@link Fragment} subclass.
  */
 public class TagFragment extends Fragment implements TagView {
-    private static final String TAG = "TAGFRAGMENT";
+    private static final String TAG = "TagFragment";
 
     @Inject TagPresenter tagPresenter;
     @Inject Picasso picasso;
@@ -66,9 +68,12 @@ public class TagFragment extends Fragment implements TagView {
     public void onResume() {
         super.onResume();
 
+        Log.d(TAG,"onResume");
         tagPresenter.attachView(this);
         tagPresenter.loadTags();
     }
+
+
 
     @Override
     public void displayTags(List<TagData> tags) {
@@ -83,9 +88,10 @@ public class TagFragment extends Fragment implements TagView {
     }
 
     private void initRecyclerView(List<TagData> tags) {
-        TagAdapter tagAdapter=new TagAdapter(this::sendResult,tags);
+        TagViewAdapter tagAdapter=new TagViewAdapter(this::sendResult);
+        tagAdapter.addTags(tags);
 
-        tagRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        tagRecyclerView.setLayoutManager(new GridLayoutManager(getContext(),2));
         tagRecyclerView.setAdapter(tagAdapter);
         tagFastScroller.setRecyclerView(tagRecyclerView);
     }
