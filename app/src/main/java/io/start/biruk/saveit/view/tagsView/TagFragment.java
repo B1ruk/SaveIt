@@ -6,6 +6,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,6 +23,7 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import io.start.biruk.saveit.App;
 import io.start.biruk.saveit.R;
+import io.start.biruk.saveit.model.data.TagData;
 import io.start.biruk.saveit.presenter.TagPresenter;
 import io.start.biruk.saveit.view.widget.fastscroller.FastScroller;
 
@@ -29,6 +31,7 @@ import io.start.biruk.saveit.view.widget.fastscroller.FastScroller;
  * A simple {@link Fragment} subclass.
  */
 public class TagFragment extends Fragment implements TagView {
+    private static final String TAG = "TAGFRAGMENT";
 
     @Inject TagPresenter tagPresenter;
     @Inject Picasso picasso;
@@ -54,7 +57,7 @@ public class TagFragment extends Fragment implements TagView {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_tag, container, false);
-        ButterKnife.bind(this,view);
+        ButterKnife.bind(this, view);
         return view;
     }
 
@@ -62,11 +65,12 @@ public class TagFragment extends Fragment implements TagView {
     public void onResume() {
         super.onResume();
 
+        tagPresenter.attachView(this);
         tagPresenter.loadTags();
     }
 
     @Override
-    public void displayTags(List<String> tags) {
+    public void displayTags(List<TagData> tags) {
         tagRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 //        tagRecyclerView.setAdapter(tagAdapter);
     }
@@ -74,5 +78,10 @@ public class TagFragment extends Fragment implements TagView {
     @Override
     public void displayEmptyTagView() {
 
+    }
+
+    @Override
+    public void onTagLoadError(Throwable e) {
+        Log.e(TAG,"error on loading ",e);
     }
 }

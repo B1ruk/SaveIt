@@ -11,6 +11,7 @@ import java.util.List;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import io.start.biruk.saveit.R;
+import io.start.biruk.saveit.model.data.TagData;
 import io.start.biruk.saveit.view.tagsView.TagView;
 
 /**
@@ -19,9 +20,9 @@ import io.start.biruk.saveit.view.tagsView.TagView;
 public class TagAdapter extends RecyclerView.Adapter<TagAdapter.TagViewHolder> {
 
     private TagView.TagListener tagListener;
-    private List<String> tags;
+    private List<TagData> tags;
 
-    public TagAdapter(TagView.TagListener tagListener, List<String> tags) {
+    public TagAdapter(TagView.TagListener tagListener, List<TagData> tags) {
         this.tagListener = tagListener;
         this.tags = tags;
     }
@@ -35,7 +36,7 @@ public class TagAdapter extends RecyclerView.Adapter<TagAdapter.TagViewHolder> {
 
     @Override
     public void onBindViewHolder(TagViewHolder holder, int position) {
-        String tags = this.tags.get(position);
+        String tags = this.tags.get(position).getTag();
         holder.tagTitleView.setText(tags);
     }
 
@@ -55,7 +56,7 @@ public class TagAdapter extends RecyclerView.Adapter<TagAdapter.TagViewHolder> {
 
         @Override
         public void onClick(View v) {
-            tagListener.onTagSelected(tags.get(getAdapterPosition()));
+            tagListener.onTagSelected(tags.get(getAdapterPosition()).getTag());
         }
     }
 }

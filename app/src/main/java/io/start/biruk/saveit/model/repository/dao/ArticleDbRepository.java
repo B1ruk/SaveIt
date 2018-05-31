@@ -1,4 +1,4 @@
-package io.start.biruk.saveit.model.dao;
+package io.start.biruk.saveit.model.repository.dao;
 
 import android.content.Context;
 
@@ -9,6 +9,7 @@ import io.reactivex.Observable;
 import io.reactivex.Single;
 import io.start.biruk.saveit.model.db.ArticleDbHelper;
 import io.start.biruk.saveit.model.db.ArticleModel;
+import io.start.biruk.saveit.model.repository.ArticleRepository;
 
 /**
  * Created by biruk on 5/13/2018.
@@ -33,6 +34,12 @@ public class ArticleDbRepository implements ArticleRepository {
                 .toList();
     }
 
+
+    @Override
+    public Observable<ArticleModel> getAllArticlesObser() {
+        return Observable.defer(()->Observable.fromIterable(articleDbHelper.getArticleDao().queryForAll()))
+                .filter(articleModel -> new File(articleModel.getPath()).exists());
+    }
 
     @Override
     public boolean removeArticle(ArticleModel articleModel) {

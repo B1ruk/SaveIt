@@ -13,7 +13,7 @@ import io.reactivex.annotations.NonNull;
 import io.reactivex.observers.DisposableSingleObserver;
 import io.reactivex.schedulers.Schedulers;
 import io.start.biruk.saveit.model.articleFetcher.responseFetcher.ResourceFetcher;
-import io.start.biruk.saveit.model.dao.ArticleRepository;
+import io.start.biruk.saveit.model.repository.ArticleRepository;
 import io.start.biruk.saveit.model.db.ArticleModel;
 import io.start.biruk.saveit.util.DateUtil;
 

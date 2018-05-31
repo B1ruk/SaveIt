@@ -11,12 +11,15 @@ import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.annimon.stream.Stream;
+import com.annimon.stream.function.Function;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -27,6 +30,7 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import io.start.biruk.saveit.App;
 import io.start.biruk.saveit.R;
+import io.start.biruk.saveit.model.data.TagData;
 import io.start.biruk.saveit.model.db.ArticleModel;
 import io.start.biruk.saveit.presenter.TagPresenter;
 import io.start.biruk.saveit.view.articleView.articleOptions.adapter.TagAdapter;
@@ -36,7 +40,7 @@ import io.start.biruk.saveit.view.tagsView.TagView;
  * Created by biruk on 5/28/2018.
  */
 
-public class AddTagDialog extends DialogFragment implements TagView{
+public class AddTagDialog extends DialogFragment implements TagView {
 
     @Inject TagPresenter tagPresenter;
     @Inject Picasso picasso;
@@ -47,6 +51,8 @@ public class AddTagDialog extends DialogFragment implements TagView{
 
     public static final String ARTICLE_MODEL_DATA = "article_data";
     private ArticleModel articleModel;
+
+    private static final String TAG="AddTagDialog";
 
     public static AddTagDialog newInstance(ArticleModel articleModel) {
         Bundle bundle = new Bundle();
@@ -75,12 +81,13 @@ public class AddTagDialog extends DialogFragment implements TagView{
     }
 
     @Override
-    public void displayTags(List<String> tags) {
+    public void displayTags(List<TagData> tags) {
+
         tagRecyclerView.setVisibility(View.VISIBLE);
         tagEmptyImageView.setVisibility(View.GONE);
         tagEmptyTextView.setVisibility(View.GONE);
 
-        TagAdapter tagAdapter=new TagAdapter(tag -> sendResult(tag,articleModel),tags);
+        TagAdapter tagAdapter = new TagAdapter(tag -> sendResult(tag, articleModel),tags);
 
         tagRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         tagRecyclerView.setAdapter(tagAdapter);
@@ -93,10 +100,16 @@ public class AddTagDialog extends DialogFragment implements TagView{
         tagRecyclerView.setVisibility(View.GONE);
 
         picasso.load(R.drawable.ic_tag_file_black_24dp)
-                .resize(70,70)
+                .resize(70, 70)
                 .into(tagEmptyImageView);
 
         tagEmptyTextView.setText("no tags found");
+    }
+
+    @Override
+    public void onTagLoadError(Throwable e) {
+        Log.e(TAG, "error on loading ", e);
+
     }
 
     @NonNull
@@ -104,7 +117,7 @@ public class AddTagDialog extends DialogFragment implements TagView{
     public Dialog onCreateDialog(Bundle savedInstanceState) {
 
         View view = LayoutInflater.from(getContext()).inflate(R.layout.dialog_article_tag_option, null);
-        ButterKnife.bind(this,view);
+        ButterKnife.bind(this, view);
 
         tagPresenter.attachView(this);
         tagPresenter.loadTags();
@@ -112,7 +125,7 @@ public class AddTagDialog extends DialogFragment implements TagView{
         return new AlertDialog.Builder(getActivity())
                 .setTitle("Add Tag")
                 .setView(view)
-                .setNegativeButton(android.R.string.cancel,null)
+                .setNegativeButton(android.R.string.cancel, null)
                 .setPositiveButton("New Tag", (dialog, which) -> {
                     displayNewTagDialog();
                 })
@@ -120,31 +133,31 @@ public class AddTagDialog extends DialogFragment implements TagView{
     }
 
     private void displayNewTagDialog() {
-        EditText addTagEditText=new EditText(getActivity());
+        EditText addTagEditText = new EditText(getActivity());
 
         new AlertDialog.Builder(getActivity())
                 .setTitle("Tag Title")
                 .setView(addTagEditText)
-                .setNegativeButton(android.R.string.cancel,null)
+                .setNegativeButton(android.R.string.cancel, null)
                 .setPositiveButton(android.R.string.ok, (dialog1, which1) -> {
                     String tag = addTagEditText.getText().toString();
-                    if (!tag.isEmpty()){
-                        sendResult(tag,articleModel);
+                    if (!tag.isEmpty()) {
+                        sendResult(tag, articleModel);
                     }
                 })
                 .show();
     }
 
-    private void sendResult(String tag,ArticleModel articleModel){
+    private void sendResult(String tag, ArticleModel articleModel) {
 
         this.getDialog().dismiss();
 
-        if (getTargetFragment()==null){
+        if (getTargetFragment() == null) {
             return;
         }
-        Intent intent=new Intent();
+        Intent intent = new Intent();
         intent.setAction(tag);
-        intent.putExtra(ARTICLE_MODEL_DATA,articleModel);
-        getTargetFragment().onActivityResult(getTargetRequestCode(), Activity.RESULT_OK,intent);
+        intent.putExtra(ARTICLE_MODEL_DATA, articleModel);
+        getTargetFragment().onActivityResult(getTargetRequestCode(), Activity.RESULT_OK, intent);
     }
 }

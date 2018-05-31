@@ -1,8 +1,5 @@
 package io.start.biruk.saveit.presenter;
 
-import com.annimon.stream.function.DoubleSupplier;
-import com.google.common.base.Joiner;
-
 import java.io.File;
 import java.util.List;
 
@@ -13,7 +10,7 @@ import io.reactivex.Scheduler;
 import io.reactivex.annotations.NonNull;
 import io.reactivex.observers.DisposableSingleObserver;
 import io.reactivex.schedulers.Schedulers;
-import io.start.biruk.saveit.model.dao.ArticleRepository;
+import io.start.biruk.saveit.model.repository.ArticleRepository;
 import io.start.biruk.saveit.model.db.ArticleModel;
 import io.start.biruk.saveit.util.FileUtil;
 import io.start.biruk.saveit.util.StringUtil;
@@ -102,16 +99,16 @@ public class ArticlePresenter {
 
     }
 
-    public void updateArticle(ArticleModel articleModel,String tag){
+    public void updateArticle(ArticleModel articleModel, String tag) {
 
 
-        ArticleModel updatedArticle=new ArticleModel.Builder()
+        ArticleModel updatedArticle = new ArticleModel.Builder()
                 .title(articleModel.getTitle())
                 .url(articleModel.getUrl())
                 .path(articleModel.getPath())
                 .isFavorite(articleModel.isFavorite())
                 .savedDate(articleModel.getSavedDate())
-                .tags(StringUtil.appendTag(articleModel.getTags(),tag))
+                .tags(StringUtil.appendTag(articleModel.getTags(), tag))
                 .build();
 
         this.updateArticle(updatedArticle);
@@ -158,9 +155,7 @@ public class ArticlePresenter {
     }
 
     public void loadFavoriteArticles() {
-        articleRepository.getAllArticles()
-                .toObservable()
-                .flatMap(Observable::fromIterable)
+        articleRepository.getAllArticlesObser()
                 .filter(ArticleModel::isFavorite)
                 .toList()
                 .subscribeOn(Schedulers.io())

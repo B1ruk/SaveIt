@@ -13,8 +13,8 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.start.biruk.saveit.model.articleFetcher.ArticleFetcher;
 import io.start.biruk.saveit.model.articleFetcher.ArticleSaver;
 import io.start.biruk.saveit.model.articleFetcher.responseFetcher.ResourceFetcher;
-import io.start.biruk.saveit.model.dao.ArticleDbRepository;
-import io.start.biruk.saveit.model.dao.ArticleRepository;
+import io.start.biruk.saveit.model.repository.dao.ArticleDbRepository;
+import io.start.biruk.saveit.model.repository.ArticleRepository;
 
 /**
  * Created by biruk on 5/26/2018.
