@@ -13,6 +13,8 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.start.biruk.saveit.model.articleFetcher.ArticleFetcher;
 import io.start.biruk.saveit.model.articleFetcher.ArticleSaver;
 import io.start.biruk.saveit.model.articleFetcher.responseFetcher.ResourceFetcher;
+import io.start.biruk.saveit.model.repository.SearchRepository;
+import io.start.biruk.saveit.model.repository.SearchRepositoryImpl;
 import io.start.biruk.saveit.model.repository.TagRepository;
 import io.start.biruk.saveit.model.repository.dao.ArticleDbRepository;
 import io.start.biruk.saveit.model.repository.ArticleRepository;
@@ -51,6 +53,12 @@ public class MainModule {
     @Singleton
     public TagRepository providesTagRepository(ArticleRepository articleRepository){
         return new TagRepositoryImpl(articleRepository);
+    }
+
+    @Provides
+    @Singleton
+    public SearchRepository providesSearchRepository(ArticleRepository articleRepository){
+        return new SearchRepositoryImpl(articleRepository);
     }
 
     @Provides
