@@ -1,13 +1,16 @@
 package io.start.biruk.saveit.model.repository;
 
+import java.io.File;
+import java.util.List;
+
 import io.reactivex.Observable;
+import io.reactivex.Single;
 import io.start.biruk.saveit.model.db.ArticleModel;
-import io.start.biruk.saveit.view.searchView.SearchView;
 
 /**
  * Created by biruk on 6/3/2018.
  */
-public class SearchRepositoryImpl implements SearchRepository{
+public class SearchRepositoryImpl implements SearchRepository {
 
     private ArticleRepository articleRepository;
 
@@ -16,22 +19,36 @@ public class SearchRepositoryImpl implements SearchRepository{
     }
 
     @Override
-    public Observable<ArticleModel> searchArticle(String query) {
-        return null;
+    public Single<List<ArticleModel>> searchArticle(String query) {
+
+        return articleRepository.getAllArticles()
+                .flatMap(articleModels -> Observable.merge(
+                        searchByTitle(query, articleModels),
+                        searchByTag(query, articleModels))
+                        .sorted(this::sort)
+                        .toList());
     }
 
     @Override
-    public Observable<ArticleModel> searchByTag(String tag) {
-        return null;
+    public Observable<ArticleModel> searchByTag(String tag, List<ArticleModel> articleModels) {
+        return Observable.fromIterable(articleModels)
+                .filter(articleModel -> articleModel.getTags().contains(tag));
     }
 
     @Override
-    public Observable<ArticleModel> searchByTitle(String tag) {
-        return null;
+    public Observable<ArticleModel> searchByTitle(String query, List<ArticleModel> articleModels) {
+        return Observable.fromIterable(articleModels)
+                .filter(articleModel -> articleModel.getTitle().contains(query));
     }
 
     @Override
-    public Observable<ArticleModel> searchByContent(String tag) {
+    public Observable<ArticleModel> searchByContent(String tag, List<ArticleModel> articleModels) {
         return null;
     }
+
+
+    private int sort(ArticleModel articleModel, ArticleModel articleModel1) {
+        return articleModel.getTitle().compareTo(articleModel1.getTitle());
+    }
+
 }
