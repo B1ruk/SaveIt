@@ -42,8 +42,8 @@ public class SearchRepositoryImpl implements SearchRepository {
     }
 
     @Override
-    public Observable<ArticleModel> searchByContent(String tag, List<ArticleModel> articleModels) {
-        return null;
+    public Observable<ArticleModel> searchByContent(String tag) {
+        return articleRepository.getAllArticlesObser();
     }
 
 

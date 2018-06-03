@@ -16,6 +16,6 @@ public interface SearchRepository {
 
     Observable<ArticleModel> searchByTitle(String title,List<ArticleModel> articleModels);
 
-    Observable<ArticleModel> searchByContent(String query,List<ArticleModel> articleModels);
+    Observable<ArticleModel> searchByContent(String query);
 
 }
