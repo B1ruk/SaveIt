@@ -2,6 +2,7 @@ package io.start.biruk.saveit.view.searchView;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
@@ -24,6 +25,8 @@ import io.start.biruk.saveit.App;
 import io.start.biruk.saveit.R;
 import io.start.biruk.saveit.model.db.ArticleModel;
 import io.start.biruk.saveit.presenter.SearchPresenter;
+import io.start.biruk.saveit.view.articleView.articleAdapter.ArticleAdapter;
+import io.start.biruk.saveit.view.listener.ArticleClickListener;
 import io.start.biruk.saveit.view.widget.fastscroller.FastScroller;
 
 public class SearchActivity extends AppCompatActivity implements SearchArticleView {
@@ -48,11 +51,9 @@ public class SearchActivity extends AppCompatActivity implements SearchArticleVi
         setContentView(R.layout.activity_search);
 
         ButterKnife.bind(this);
-
-        setSupportActionBar(mainSearchToolbar);
-
         App.getAppComponent().inject(this);
 
+        setSupportActionBar(mainSearchToolbar);
         displayDefaultView();
     }
 
@@ -63,8 +64,6 @@ public class SearchActivity extends AppCompatActivity implements SearchArticleVi
         searchPresenter.attachView(this);
     }
 
-
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.search_menu, menu);
@@ -72,17 +71,18 @@ public class SearchActivity extends AppCompatActivity implements SearchArticleVi
         MenuItem searchBar = menu.findItem(R.id.article_library_search);
         SearchView searchView = (SearchView) searchBar.getActionView();
 
-        searchView.setIconified(true);
+        searchView.setIconifiedByDefault(false);
 
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-                Log.d(TAG,String.format(" -> %s",query));
+                onSearchQuery(query);
                 return true;
             }
 
             @Override
             public boolean onQueryTextChange(String newText) {
+                onSearchQuery(newText);
                 return true;
             }
         });
@@ -93,6 +93,30 @@ public class SearchActivity extends AppCompatActivity implements SearchArticleVi
 
     @Override
     public void showSearchResults(List<ArticleModel> articleModels) {
+        emptySearchView.setVisibility(View.GONE);
+        listSearView.setVisibility(View.VISIBLE);
+
+        ArticleAdapter articleAdapter=new ArticleAdapter(this, new ArticleClickListener() {
+            @Override
+            public void onArticleSelected(ArticleModel articleModel) {
+
+            }
+
+            @Override
+            public void onArticleOptionsSelected(ArticleModel articleModel) {
+
+            }
+
+            @Override
+            public void onArticleFavoriteToggleSelected(ArticleModel articleModel) {
+
+            }
+        });
+
+        searchRecyclerView.setAdapter(articleAdapter);
+        searchRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        fastScroller.setRecyclerView(searchRecyclerView);
+        articleAdapter.setArticleData(articleModels);
 
     }
 
@@ -123,7 +147,7 @@ public class SearchActivity extends AppCompatActivity implements SearchArticleVi
 
     @Override
     public void onSearchQuery(String query) {
-
+        searchPresenter.loadArticleSearchResults(query);
     }
 
     @Override
