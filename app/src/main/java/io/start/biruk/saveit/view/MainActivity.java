@@ -28,6 +28,7 @@ import io.start.biruk.saveit.R;
 import io.start.biruk.saveit.events.ArticleFetchCompletedEvent;
 import io.start.biruk.saveit.service.ArticleFetcherService;
 import io.start.biruk.saveit.util.FileUtil;
+import io.start.biruk.saveit.view.searchView.SearchActivity;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class MainActivity extends AppCompatActivity {
@@ -116,11 +117,16 @@ public class MainActivity extends AppCompatActivity {
         MenuItem searchBar = menu.findItem(R.id.main_search_bar);
 
         searchBar.setOnMenuItemClickListener(item -> {
-            Log.d(TAG,"search laumched");
-            return false;
+            launchSearchView();
+            return true;
         });
 
         return super.onCreateOptionsMenu(menu);
+    }
+
+    private void launchSearchView() {
+        Intent launchSearchResults=new Intent(this, SearchActivity.class);
+        startActivity(launchSearchResults);
     }
 
     public void setUpDrawerLayout() {

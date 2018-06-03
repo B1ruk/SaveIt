@@ -33,7 +33,7 @@
 
         <activity android:name=".view.displayArticleView.DisplayArticleActivity">
         </activity>
-        <activity android:name=".view.searchArticleView.SearchActivity">
+        <activity android:name=".view.searchView.SearchActivity">
         </activity>
     </application>
 
