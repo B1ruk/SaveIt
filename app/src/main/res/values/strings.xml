@@ -15,5 +15,6 @@
     <string name="tags_input_inst">tags should NOT contain commas(,)</string>
     <string name="article_info_path">path</string>
     <string name="saved_date">saved date</string>
+    <string name="article_search">search</string>
 
 </resources>

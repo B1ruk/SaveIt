@@ -18,7 +18,7 @@ import io.start.biruk.saveit.view.widget.fastscroller.BubbleTextGetter;
 /**
  * Created by biruk on 5/28/2018.
  */
-public class TagAdapter extends RecyclerView.Adapter<TagAdapter.TagViewHolder> implements BubbleTextGetter {
+public class TagAdapter extends RecyclerView.Adapter<TagAdapter.TagViewHolder> {
 
     private TagView.TagListener tagListener;
     private List<TagData> tags;
@@ -44,11 +44,6 @@ public class TagAdapter extends RecyclerView.Adapter<TagAdapter.TagViewHolder> i
     @Override
     public int getItemCount() {
         return tags.size();
-    }
-
-    @Override
-    public String getTextToShowInBubble(int pos) {
-        return String.valueOf(tags.get(pos).getTag().charAt(0)).toUpperCase();
     }
 
     class TagViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {

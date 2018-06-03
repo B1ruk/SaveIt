@@ -115,9 +115,10 @@ public class MainActivity extends AppCompatActivity {
 
         MenuItem searchBar = menu.findItem(R.id.main_search_bar);
 
-//        SearchView searchView = (SearchView) searchBar.getActionView();
-//        searchView.setIconified(true);
-//        searchView.setOnSearchClickListener(v -> Log.d(TAG, "launch search view"));
+        searchBar.setOnMenuItemClickListener(item -> {
+            Log.d(TAG,"search laumched");
+            return false;
+        });
 
         return super.onCreateOptionsMenu(menu);
     }

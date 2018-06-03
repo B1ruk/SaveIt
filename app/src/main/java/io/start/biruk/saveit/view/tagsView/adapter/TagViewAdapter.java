@@ -15,11 +15,12 @@ import butterknife.ButterKnife;
 import io.start.biruk.saveit.R;
 import io.start.biruk.saveit.model.data.TagData;
 import io.start.biruk.saveit.view.tagsView.TagView;
+import io.start.biruk.saveit.view.widget.fastscroller.BubbleTextGetter;
 
 /**
  * Created by biruk on 5/29/2018.
  */
-public class TagViewAdapter extends RecyclerView.Adapter<TagViewAdapter.TagViewHolder> {
+public class TagViewAdapter extends RecyclerView.Adapter<TagViewAdapter.TagViewHolder> implements BubbleTextGetter{
 
     private List<TagData> tags;
     private TagView.TagListener tagListener;
@@ -59,6 +60,11 @@ public class TagViewAdapter extends RecyclerView.Adapter<TagViewAdapter.TagViewH
     @Override
     public int getItemCount() {
         return tags.size();
+    }
+
+    @Override
+    public String getTextToShowInBubble(int pos) {
+        return String.valueOf(tags.get(pos).getTag().toUpperCase().charAt(0));
     }
 
     class TagViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
