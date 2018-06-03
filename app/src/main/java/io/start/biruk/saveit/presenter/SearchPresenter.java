@@ -10,7 +10,7 @@ import io.reactivex.observers.DisposableSingleObserver;
 import io.reactivex.schedulers.Schedulers;
 import io.start.biruk.saveit.model.db.ArticleModel;
 import io.start.biruk.saveit.model.repository.SearchRepository;
-import io.start.biruk.saveit.view.searchView.SearchView;
+import io.start.biruk.saveit.view.searchView.SearchArticleView;
 
 /**
  * Created by biruk on 6/3/2018.
@@ -19,7 +19,7 @@ public class SearchPresenter {
     private SearchRepository searchRepository;
     private Scheduler uiThread;
 
-    private SearchView searchView;
+    private SearchArticleView searchArticleView;
 
     @Inject
     public SearchPresenter(SearchRepository searchRepository, Scheduler uiThread) {
@@ -27,8 +27,8 @@ public class SearchPresenter {
         this.uiThread = uiThread;
     }
 
-    public void attachView(SearchView searchView){
-        this.searchView=searchView;
+    public void attachView(SearchArticleView searchArticleView){
+        this.searchArticleView = searchArticleView;
     }
 
     public void loadArticleSearchResults(String query){
@@ -39,11 +39,11 @@ public class SearchPresenter {
                     @Override
                     public void onSuccess(@NonNull List<ArticleModel> articleModels) {
                         if (!articleModels.isEmpty()){
-                            searchView.showSearchResults(articleModels);
+                            searchArticleView.showSearchResults(articleModels);
                         }
                         else if (articleModels.isEmpty()){
-                            loadAdvacnedArticleSearchResults(query);
-                            searchView.displayEmptyResultsView();
+//                            loadAdvacnedArticleSearchResults(query);
+                            searchArticleView.displayEmptyResultsView();
                         }
                     }
 
@@ -63,9 +63,9 @@ public class SearchPresenter {
                     @Override
                     public void onSuccess(@NonNull List<ArticleModel> articleModels) {
                         if (!articleModels.isEmpty()){
-                            searchView.showSearchResults(articleModels);
+                            searchArticleView.showSearchResults(articleModels);
                         }else {
-                            searchView.displayEmptyResultsView();
+                            searchArticleView.displayEmptyResultsView();
                         }
                     }
 
@@ -77,7 +77,7 @@ public class SearchPresenter {
     }
 
 
-    public void detachView(SearchView searchView){
-        this.searchView=null;
+    public void detachView(SearchArticleView searchArticleView){
+        this.searchArticleView =null;
     }
 }

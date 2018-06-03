@@ -11,6 +11,7 @@ import io.start.biruk.saveit.view.MainActivity;
 import io.start.biruk.saveit.view.articleView.articleOptions.AddTagDialog;
 import io.start.biruk.saveit.view.baseArticleView.BaseArticleFragment;
 import io.start.biruk.saveit.view.favoriteView.FavoriteFragment;
+import io.start.biruk.saveit.view.searchView.SearchActivity;
 import io.start.biruk.saveit.view.tagsView.TagFragment;
 
 /**
@@ -32,6 +33,7 @@ public interface MainComponent {
 
     void inject(BaseArticleFragment baseArticleFragment);
 
+    void inject(SearchActivity searchActivity);
 
     void inject(MainActivity mainActivity);
 

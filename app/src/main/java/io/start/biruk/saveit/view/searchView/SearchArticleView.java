@@ -7,7 +7,7 @@ import io.start.biruk.saveit.model.db.ArticleModel;
 /**
  * Created by biruk on 5/10/2018.
  */
-public interface SearchView {
+public interface SearchArticleView {
     void displayEmptyResultsView();
 
     void showSearchResults(List<ArticleModel> articleModels);
