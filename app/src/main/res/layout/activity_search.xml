@@ -10,7 +10,7 @@
         android:id="@+id/search_toolbar"
         layout="@layout/app_main_toolbar"
         />
-    <FrameLayout
+    <RelativeLayout
         android:id="@+id/empty_search_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -33,9 +33,9 @@
             android:textStyle="bold|italic"
             android:layout_margin="64dp"
             android:layout_centerHorizontal="true"
-            android:layout_below="@+id/empty_article_image"
+            android:layout_below="@+id/empty_search_article_image"
             />
-    </FrameLayout>
+    </RelativeLayout>
 
     <RelativeLayout
         android:layout_width="match_parent"

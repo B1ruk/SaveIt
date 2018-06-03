@@ -42,7 +42,7 @@ public class SearchPresenter {
                             searchArticleView.showSearchResults(articleModels);
                         }
                         else if (articleModels.isEmpty()){
-//                            loadAdvacnedArticleSearchResults(query);
+                            loadAdvacnedArticleSearchResults(query);
                             searchArticleView.displayEmptyResultsView();
                         }
                     }

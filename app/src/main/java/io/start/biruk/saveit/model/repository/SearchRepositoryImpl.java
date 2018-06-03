@@ -1,6 +1,15 @@
 package io.start.biruk.saveit.model.repository;
 
+import android.util.Log;
+
+import com.google.common.io.Files;
+
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+
 import java.io.File;
+import java.io.IOException;
+import java.nio.charset.Charset;
 import java.util.List;
 
 import io.reactivex.Observable;
@@ -32,18 +41,39 @@ public class SearchRepositoryImpl implements SearchRepository {
     @Override
     public Observable<ArticleModel> searchByTag(String tag, List<ArticleModel> articleModels) {
         return Observable.fromIterable(articleModels)
-                .filter(articleModel -> articleModel.getTags().contains(tag));
+                .filter(articleModel -> contains(articleModel, tag));
     }
 
     @Override
-    public Observable<ArticleModel> searchByTitle(String query, List<ArticleModel> articleModels) {
+    public Observable<ArticleModel> searchByTitle(String title, List<ArticleModel> articleModels) {
         return Observable.fromIterable(articleModels)
-                .filter(articleModel -> articleModel.getTitle().contains(query));
+                .filter(articleModel -> contains(articleModel, title));
     }
 
     @Override
     public Observable<ArticleModel> searchByContent(String tag) {
-        return articleRepository.getAllArticlesObser();
+        return articleRepository.getAllArticlesObser()
+                .filter(articleModel -> fileContainsQuery(articleModel, tag));
+    }
+
+    private boolean fileContainsQuery(ArticleModel articleModel, String query) throws IOException {
+        String indexPagePath = articleModel.getPath() + File.separator + "index.html";
+        String articleContent = getPathContent(indexPagePath)
+                .toLowerCase();
+
+        return articleContent
+                .toLowerCase()
+                .contains(query.toLowerCase());
+    }
+
+    private String getPathContent(String path) throws IOException {
+        return Files.asByteSource(new File(path))
+                .asCharSource(Charset.defaultCharset())
+                .read();
+    }
+
+    private boolean contains(ArticleModel articleModel, String query) {
+        return articleModel.getTitle().toLowerCase().contains(query.toLowerCase());
     }
 
 
