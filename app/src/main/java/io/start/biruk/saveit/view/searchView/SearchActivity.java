@@ -1,5 +1,6 @@
 package io.start.biruk.saveit.view.searchView;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -26,6 +27,7 @@ import io.start.biruk.saveit.R;
 import io.start.biruk.saveit.model.db.ArticleModel;
 import io.start.biruk.saveit.presenter.SearchPresenter;
 import io.start.biruk.saveit.view.articleView.articleAdapter.ArticleAdapter;
+import io.start.biruk.saveit.view.displayArticleView.DisplayArticleActivity;
 import io.start.biruk.saveit.view.listener.ArticleClickListener;
 import io.start.biruk.saveit.view.widget.fastscroller.FastScroller;
 
@@ -43,7 +45,7 @@ public class SearchActivity extends AppCompatActivity implements SearchArticleVi
     @Bind(R.id.empty_search_article_image) ImageView emptySearchImageView;
 
 
-    private static final String TAG="SearchActivity";
+    private static final String TAG = "SearchActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,14 +55,18 @@ public class SearchActivity extends AppCompatActivity implements SearchArticleVi
         ButterKnife.bind(this);
         App.getAppComponent().inject(this);
 
-        setSupportActionBar(mainSearchToolbar);
+        setupToolbar();
         displayDefaultView();
+    }
+
+    private void setupToolbar() {
+        setSupportActionBar(mainSearchToolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-
         searchPresenter.attachView(this);
     }
 
@@ -72,7 +78,6 @@ public class SearchActivity extends AppCompatActivity implements SearchArticleVi
         SearchView searchView = (SearchView) searchBar.getActionView();
 
         searchView.setIconifiedByDefault(false);
-
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
@@ -96,10 +101,10 @@ public class SearchActivity extends AppCompatActivity implements SearchArticleVi
         emptySearchView.setVisibility(View.GONE);
         listSearView.setVisibility(View.VISIBLE);
 
-        ArticleAdapter articleAdapter=new ArticleAdapter(this, new ArticleClickListener() {
+        ArticleAdapter articleAdapter = new ArticleAdapter(this, new ArticleClickListener() {
             @Override
             public void onArticleSelected(ArticleModel articleModel) {
-
+                launchDisplayArticleView(articleModel);
             }
 
             @Override
@@ -120,6 +125,12 @@ public class SearchActivity extends AppCompatActivity implements SearchArticleVi
 
     }
 
+    private void launchDisplayArticleView(ArticleModel articleModel) {
+        Intent launchActivityView = new Intent(this, DisplayArticleActivity.class);
+        launchActivityView.setAction(articleModel.getPath());
+        startActivity(launchActivityView);
+    }
+
 
     @Override
     public void displayEmptyResultsView() {
@@ -127,7 +138,7 @@ public class SearchActivity extends AppCompatActivity implements SearchArticleVi
         emptySearchView.setVisibility(View.VISIBLE);
 
         picasso.load(R.drawable.book_outline)
-                .resize(200,200)
+                .resize(200, 200)
                 .into(emptySearchImageView);
 
         emptySearchResultsView.setText("no articles found");
@@ -139,7 +150,7 @@ public class SearchActivity extends AppCompatActivity implements SearchArticleVi
         emptySearchView.setVisibility(View.VISIBLE);
 
         picasso.load(R.drawable.ic_search_24dp)
-                .resize(32,32)
+                .resize(32, 32)
                 .into(emptySearchImageView);
 
         emptySearchResultsView.setText("search articles");

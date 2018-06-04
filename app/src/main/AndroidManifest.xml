@@ -33,7 +33,9 @@
 
         <activity android:name=".view.displayArticleView.DisplayArticleActivity">
         </activity>
-        <activity android:name=".view.searchView.SearchActivity">
+        <activity
+            android:name=".view.searchView.SearchActivity"
+            android:parentActivityName=".view.MainActivity">
         </activity>
     </application>
 
