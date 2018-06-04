@@ -13,6 +13,7 @@ import io.start.biruk.saveit.view.baseArticleView.BaseArticleFragment;
 import io.start.biruk.saveit.view.favoriteView.FavoriteFragment;
 import io.start.biruk.saveit.view.searchView.SearchActivity;
 import io.start.biruk.saveit.view.tagsView.TagFragment;
+import io.start.biruk.saveit.view.tagsView.adapter.TagViewAdapter;
 
 /**
  * Created by biruk on 5/26/2018.
@@ -38,4 +39,6 @@ public interface MainComponent {
     void inject(MainActivity mainActivity);
 
     void inject(AddTagDialog addTagDialog);
+
+    void inject(TagViewAdapter tagViewAdapter);
 }

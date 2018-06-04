@@ -7,13 +7,21 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.annimon.stream.Stream;
+import com.squareup.picasso.Picasso;
+
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.inject.Inject;
+
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import io.start.biruk.saveit.App;
 import io.start.biruk.saveit.R;
 import io.start.biruk.saveit.model.data.TagData;
+import io.start.biruk.saveit.model.db.ArticleModel;
 import io.start.biruk.saveit.view.tagsView.TagView;
 import io.start.biruk.saveit.view.widget.fastscroller.BubbleTextGetter;
 
@@ -22,12 +30,16 @@ import io.start.biruk.saveit.view.widget.fastscroller.BubbleTextGetter;
  */
 public class TagViewAdapter extends RecyclerView.Adapter<TagViewAdapter.TagViewHolder> implements BubbleTextGetter{
 
+    @Inject Picasso picasso;
+
     private List<TagData> tags;
     private TagView.TagListener tagListener;
 
     public TagViewAdapter(TagView.TagListener tagListener){
         this.tagListener = tagListener;
         this.tags=new ArrayList<>();
+
+        App.getAppComponent().inject(this);
     }
 
     public void addTags(List<TagData> tags) {
@@ -46,6 +58,7 @@ public class TagViewAdapter extends RecyclerView.Adapter<TagViewAdapter.TagViewH
     public void onBindViewHolder(TagViewHolder holder, int position) {
         String tag = tags.get(position).getTag();
         int size = tags.get(position).getArticleModels().size();
+
         String sizeTxt="";
         if (size==1){
             sizeTxt=size+ " article";
@@ -55,6 +68,16 @@ public class TagViewAdapter extends RecyclerView.Adapter<TagViewAdapter.TagViewH
 
         holder.tagTitleView.setText(tag);
         holder.tagArticleCountView.setText(sizeTxt);
+
+        List<String> coverArts = Stream.of(tags.get(position).getArticleModels())
+                .map(ArticleModel::getPath)
+                .filter(path -> new File(path + File.separator + "sc.png").exists())
+                .toList();
+
+        picasso.load(new File(coverArts.get(0)+File.separator + "sc.png"))
+                .placeholder(R.drawable.default_bg)
+                .resize(140,140)
+                .into(holder.tagArticleCoverArt);
     }
 
     @Override
