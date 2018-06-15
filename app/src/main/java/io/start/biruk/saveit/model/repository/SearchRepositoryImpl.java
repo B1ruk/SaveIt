@@ -34,6 +34,7 @@ public class SearchRepositoryImpl implements SearchRepository {
                 .flatMap(articleModels -> Observable.merge(
                         searchByTitle(query, articleModels),
                         searchByTag(query, articleModels))
+                        .distinct()
                         .sorted(this::sort)
                         .toList());
     }
@@ -53,7 +54,8 @@ public class SearchRepositoryImpl implements SearchRepository {
     @Override
     public Observable<ArticleModel> searchByContent(String tag) {
         return articleRepository.getAllArticlesObser()
-                .filter(articleModel -> fileContainsQuery(articleModel, tag));
+                .filter(articleModel -> fileContainsQuery(articleModel, tag))
+                .distinct();
     }
 
     private boolean fileContainsQuery(ArticleModel articleModel, String query) throws IOException {
