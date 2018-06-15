@@ -5,7 +5,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -60,7 +59,7 @@ public class ArticleAdapter extends RecyclerView.Adapter<ArticleAdapter.ArticleV
 
         holder.articleTitleView.setText(articleModel.getTitle());
         holder.articleSavedDateView.setText(articleModel.getSavedDate());
-        holder.tagBtnView.setText(TagStringUtil.getFormatedTag(articleModel.getTags()));
+        holder.tagContentView.setText(TagStringUtil.getFormatedTag(articleModel.getTags()));
 
         if (articleModel.isFavorite()){
             holder.articleFavoriteView.setAlpha(1.0f);
@@ -71,7 +70,6 @@ public class ArticleAdapter extends RecyclerView.Adapter<ArticleAdapter.ArticleV
         }
 
         holder.articleFavoriteView.setOnClickListener(v -> articleClickListener.onArticleFavoriteToggleSelected(articleModel));
-//        holder.tagBtnView.setOnClickListener(v -> articleClickListener.onArticleTagSelected(articleModel));
 
         Picasso.with(context)
                 .load(new File(imgPath))
@@ -103,7 +101,7 @@ public class ArticleAdapter extends RecyclerView.Adapter<ArticleAdapter.ArticleV
         @Bind(R.id.article_title) TextView articleTitleView;
         @Bind(R.id.article_text_date) TextView articleSavedDateView;
         @Bind(R.id.article_favorite_toggle) ImageView articleFavoriteView;
-        @Bind(R.id.tag_content) Button tagBtnView;
+        @Bind(R.id.tag_content) TextView tagContentView;
         @Bind(R.id.article_img) ImageView articleImg;
 
 
