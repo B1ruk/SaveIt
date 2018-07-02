@@ -18,6 +18,7 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import io.start.biruk.saveit.R;
 import io.start.biruk.saveit.model.db.ArticleModel;
+import io.start.biruk.saveit.util.FontUtil;
 import io.start.biruk.saveit.util.TagStringUtil;
 import io.start.biruk.saveit.view.listener.ArticleClickListener;
 import io.start.biruk.saveit.view.widget.CircleTransform;
@@ -111,6 +112,7 @@ public class ArticleAdapter extends RecyclerView.Adapter<ArticleAdapter.ArticleV
             ButterKnife.bind(this, itemView);
             itemView.setOnClickListener(this);
             itemView.setOnLongClickListener(this);
+            FontUtil.setFont(context,articleTitleView,"Bazar.ttf");
         }
 
 
@@ -123,7 +125,6 @@ public class ArticleAdapter extends RecyclerView.Adapter<ArticleAdapter.ArticleV
         @Override
         public boolean onLongClick(View v) {
             ArticleModel articleModel = ArticleAdapter.this.articleModels.get(getAdapterPosition());
-
             articleClickListener.onArticleOptionsSelected(articleModel);
             return false;
         }
