@@ -21,10 +21,11 @@ import io.start.biruk.saveit.model.db.ArticleModel;
 import io.start.biruk.saveit.presenter.SelectedTagPresenter;
 import io.start.biruk.saveit.view.baseArticleView.ArticleFragment;
 
-public class SelectedTagActivity extends AppCompatActivity implements SelectedTagView{
+public class SelectedTagActivity extends AppCompatActivity implements SelectedTagView {
     @Inject SelectedTagPresenter selectedTagPresenter;
 
     @Bind(R.id.tag_articles) FrameLayout selectedTagArticleView;
+    @Bind(R.id.selected_tag_toolbar) Toolbar mainToolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,16 +44,20 @@ public class SelectedTagActivity extends AppCompatActivity implements SelectedTa
 
         selectedTagPresenter.attachView(this);
 
-        String action = getIntent().getAction();
-        if (action!=null){
-            selectedTag(action);
+        String tag = getIntent().getAction();
+        if (tag != null) {
+            selectedTag(tag);
+            setTagTitle(tag);
         }
     }
 
     private void initViews() {
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+        setSupportActionBar(mainToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+    }
+
+    private void setTagTitle(String tag){
+        mainToolbar.setTitle(tag);
     }
 
     @Override
