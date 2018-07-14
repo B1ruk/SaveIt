@@ -2,6 +2,7 @@ package io.start.biruk.saveit.view;
 
 import android.content.Context;
 import android.content.Intent;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
@@ -40,6 +41,7 @@ public class MainActivity extends AppCompatActivity {
     @Bind(R.id.main_view_pager) ViewPager mainViewPager;
     @Bind(R.id.drawer_layout) DrawerLayout drawerLayout;
     @Bind(R.id.main_navigation) NavigationView navigationView;
+    @Bind(R.id.launch_add_url) FloatingActionButton launchAddUrlFab;
 
     private MainAdapter mainAdapter;
 
@@ -85,6 +87,11 @@ public class MainActivity extends AppCompatActivity {
         setUpDrawerLayout();
         setUpTabLayout();
         navigationView.setNavigationItemSelectedListener(this::navItemClickListener);
+        launchAddUrlFab.setOnClickListener(v->launchAddUrlDialog());
+    }
+
+    public void launchAddUrlDialog(){
+
     }
 
     public void initArticleFetcherService() {
