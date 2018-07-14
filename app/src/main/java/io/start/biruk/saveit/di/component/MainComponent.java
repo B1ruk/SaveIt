@@ -11,6 +11,7 @@ import io.start.biruk.saveit.view.MainActivity;
 import io.start.biruk.saveit.view.articleView.articleOptions.AddTagDialog;
 import io.start.biruk.saveit.view.baseArticleView.ArticleFragment;
 import io.start.biruk.saveit.view.searchView.SearchActivity;
+import io.start.biruk.saveit.view.tagsView.SelectedTagActivity;
 import io.start.biruk.saveit.view.tagsView.TagFragment;
 import io.start.biruk.saveit.view.tagsView.adapter.TagViewAdapter;
 
@@ -26,6 +27,8 @@ public interface MainComponent {
     void inject(TagPresenter tagPresenter);
 
     void inject(ArticleFetcherService articleFetcherService);
+
+    void inject(SelectedTagActivity selectedTagActivity);
 
     void inject(TagFragment tagFragment);
 
