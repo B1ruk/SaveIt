@@ -1,6 +1,9 @@
 package io.start.biruk.saveit.service;
 
 import android.app.Service;
+import android.content.ClipData;
+import android.content.ClipboardManager;
+import android.content.Context;
 import android.content.Intent;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
@@ -15,17 +18,20 @@ import javax.inject.Inject;
 import io.start.biruk.saveit.App;
 import io.start.biruk.saveit.events.ArticleFetchCompletedEvent;
 import io.start.biruk.saveit.events.FetchArticleEvent;
+import io.start.biruk.saveit.events.UrlFromClipboardEvent;
 import io.start.biruk.saveit.model.articleFetcher.ArticleMainSaver;
+import io.start.biruk.saveit.util.HttpUtil;
 
 /**
  * Created by biruk on 5/12/2018.
  */
-public class ArticleFetcherService extends Service implements ArticleMainSaver.CallBack{
+public class ArticleFetcherService extends Service implements ArticleMainSaver.CallBack {
 
 
     private static final String TAG = "ArticleFetcherService";
 
-    @Inject ArticleMainSaver articleMainSaver;
+    @Inject
+    ArticleMainSaver articleMainSaver;
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void fetchArticleEvent(FetchArticleEvent fetchArticleEvent) {
@@ -41,6 +47,16 @@ public class ArticleFetcherService extends Service implements ArticleMainSaver.C
         App.getAppComponent().inject(this);
         EventBus.getDefault().register(this);
         articleMainSaver.addCallBack(this);
+
+        ClipboardManager clipboardManager = (ClipboardManager) this.getSystemService(Context.CLIPBOARD_SERVICE);
+        clipboardManager.addPrimaryClipChangedListener(() -> {
+            CharSequence text = clipboardManager.getText();
+            if (HttpUtil.isValid(text.toString())){
+                EventBus.getDefault().postSticky(new UrlFromClipboardEvent(text.toString()));
+            }
+
+        });
+
     }
 
     @Override
