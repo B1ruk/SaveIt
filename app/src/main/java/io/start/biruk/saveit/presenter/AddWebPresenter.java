@@ -3,6 +3,7 @@ package io.start.biruk.saveit.presenter;
 import org.greenrobot.eventbus.EventBus;
 
 import io.start.biruk.saveit.events.FetchArticleEvent;
+import io.start.biruk.saveit.util.HttpUtil;
 import io.start.biruk.saveit.view.addwebView.AddWebView;
 
 /**
@@ -18,7 +19,7 @@ public class AddWebPresenter {
     public void addContent(String text) {
 
         String resMsg;
-        if (isValudUrl(text)) {
+        if (HttpUtil.isValid(text)) {
             EventBus.getDefault().post(new FetchArticleEvent(text));
             resMsg="added "+text+" to queue";
         }else {
@@ -28,10 +29,4 @@ public class AddWebPresenter {
 
     }
 
-    private boolean isValudUrl(String text) {
-        if (!text.isEmpty()) {
-            return text.startsWith("http") || text.startsWith("https");
-        }
-        return false;
-    }
 }
