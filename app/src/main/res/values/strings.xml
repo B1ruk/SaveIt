@@ -16,5 +16,7 @@
     <string name="article_info_path">path</string>
     <string name="saved_date">saved date</string>
     <string name="article_search">search</string>
+    <string name="title_activity_selected">SelectedActivity</string>
+    <string name="action_settings">Settings</string>
 
 </resources>
