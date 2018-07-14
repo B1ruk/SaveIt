@@ -1,4 +1,4 @@
-package io.start.biruk.saveit.component;
+package io.start.biruk.saveit.di.component;
 
 import javax.inject.Singleton;
 
@@ -9,8 +9,7 @@ import io.start.biruk.saveit.presenter.TagPresenter;
 import io.start.biruk.saveit.service.ArticleFetcherService;
 import io.start.biruk.saveit.view.MainActivity;
 import io.start.biruk.saveit.view.articleView.articleOptions.AddTagDialog;
-import io.start.biruk.saveit.view.baseArticleView.BaseArticleFragment;
-import io.start.biruk.saveit.view.favoriteView.FavoriteFragment;
+import io.start.biruk.saveit.view.baseArticleView.ArticleFragment;
 import io.start.biruk.saveit.view.searchView.SearchActivity;
 import io.start.biruk.saveit.view.tagsView.TagFragment;
 import io.start.biruk.saveit.view.tagsView.adapter.TagViewAdapter;
@@ -30,9 +29,7 @@ public interface MainComponent {
 
     void inject(TagFragment tagFragment);
 
-    void inject(FavoriteFragment favoriteFragment);
-
-    void inject(BaseArticleFragment baseArticleFragment);
+    void inject(ArticleFragment articleFragment);
 
     void inject(SearchActivity searchActivity);
 
