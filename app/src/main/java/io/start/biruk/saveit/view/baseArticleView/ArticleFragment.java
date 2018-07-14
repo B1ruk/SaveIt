@@ -80,15 +80,18 @@ public class ArticleFragment extends Fragment implements ArticleView, ArticleCli
         updateView();
     }
 
-    @Subscribe(threadMode = ThreadMode.MAIN)
+    @Subscribe(threadMode = ThreadMode.MAIN,sticky = true)
     public void articleFromEvent(ArticleListEvent articleListEvent) {
-         this.articleModels = articleListEvent.getArticleModels();
+        this.articleModels = articleListEvent.getArticleModels();
         updateView();
     }
 
     public ArticleFragment() {
     }
 
+    /**
+     * @param defaultView (0->search,tag,1->Default,2->favorite )
+     */
     public static ArticleFragment newInstance(int defaultView) {
         ArticleFragment articleFragment = new ArticleFragment();
         Bundle args = new Bundle();
@@ -106,9 +109,7 @@ public class ArticleFragment extends Fragment implements ArticleView, ArticleCli
 
         App.getAppComponent().inject(this);
 
-        if (!getArguments().isEmpty()) {
-            this.defaultView = getArguments().getInt(DEFAULT_VIEW);
-        }
+        this.defaultView = getArguments().getInt(DEFAULT_VIEW);
         this.articleModels = new ArrayList<>();
     }
 
@@ -126,8 +127,8 @@ public class ArticleFragment extends Fragment implements ArticleView, ArticleCli
         super.onResume();
 
         articlePresenter.attachView(this);
-        updateView();
         EventBus.getDefault().register(this);
+        updateView();
     }
 
 
