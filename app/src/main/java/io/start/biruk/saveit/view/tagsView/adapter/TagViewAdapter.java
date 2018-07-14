@@ -10,6 +10,8 @@ import android.widget.TextView;
 import com.annimon.stream.Stream;
 import com.squareup.picasso.Picasso;
 
+import org.greenrobot.eventbus.EventBus;
+
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
@@ -20,6 +22,7 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import io.start.biruk.saveit.App;
 import io.start.biruk.saveit.R;
+import io.start.biruk.saveit.events.TagSelectEvent;
 import io.start.biruk.saveit.model.data.TagData;
 import io.start.biruk.saveit.model.db.ArticleModel;
 import io.start.biruk.saveit.view.tagsView.TagView;
@@ -103,7 +106,7 @@ public class TagViewAdapter extends RecyclerView.Adapter<TagViewAdapter.TagViewH
 
         @Override
         public void onClick(View v) {
-
+            EventBus.getDefault().post(new TagSelectEvent(tags.get(getAdapterPosition()).getTag()));
         }
     }
 }

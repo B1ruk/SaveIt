@@ -1,6 +1,7 @@
 package io.start.biruk.saveit.view.tagsView;
 
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -16,6 +17,10 @@ import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+
 import java.util.List;
 
 import javax.inject.Inject;
@@ -24,6 +29,7 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import io.start.biruk.saveit.App;
 import io.start.biruk.saveit.R;
+import io.start.biruk.saveit.events.TagSelectEvent;
 import io.start.biruk.saveit.model.data.TagData;
 import io.start.biruk.saveit.presenter.TagPresenter;
 import io.start.biruk.saveit.view.articleView.articleOptions.adapter.TagAdapter;
@@ -48,6 +54,12 @@ public class TagFragment extends Fragment implements TagView {
         // Required empty public constructor
     }
 
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onTagSelect(TagSelectEvent tagSelectEvent){
+        launchSelectedTagView(tagSelectEvent.getTag());
+    }
+
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -68,9 +80,9 @@ public class TagFragment extends Fragment implements TagView {
     public void onResume() {
         super.onResume();
 
-        Log.d(TAG,"onResume");
         tagPresenter.attachView(this);
         tagPresenter.loadTags();
+        EventBus.getDefault().register(this);
     }
 
     @Override
@@ -94,6 +106,13 @@ public class TagFragment extends Fragment implements TagView {
         tagFastScroller.setRecyclerView(tagRecyclerView);
     }
 
+
+    private void launchSelectedTagView(String tag) {
+        Intent launchSelectedTag=new Intent(getActivity(),SelectedTagActivity.class);
+        launchSelectedTag.setAction(tag);
+        startActivity(launchSelectedTag);
+    }
+
     private void sendResult(String tag) {
 
     }
@@ -112,5 +131,16 @@ public class TagFragment extends Fragment implements TagView {
     @Override
     public void onTagLoadError(Throwable e) {
         Log.e(TAG,"error on loading ",e);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        EventBus.getDefault().unregister(this);
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
     }
 }
