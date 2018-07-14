@@ -73,10 +73,9 @@ public class TagFragment extends Fragment implements TagView {
         tagPresenter.loadTags();
     }
 
-
-
     @Override
     public void displayTags(List<TagData> tags) {
+        initRecyclerView(tags);
 
         tagFastScroller.setVisibility(View.VISIBLE);
         tagRecyclerView.setVisibility(View.VISIBLE);
@@ -84,7 +83,6 @@ public class TagFragment extends Fragment implements TagView {
         emptyTagTextView.setVisibility(View.GONE);
         emptyImageView.setVisibility(View.GONE);
 
-        initRecyclerView(tags);
     }
 
     private void initRecyclerView(List<TagData> tags) {
@@ -102,6 +100,8 @@ public class TagFragment extends Fragment implements TagView {
 
     @Override
     public void displayEmptyTagView() {
+
+        emptyTagTextView.setText("No tags");
         tagFastScroller.setVisibility(View.GONE);
         tagRecyclerView.setVisibility(View.GONE);
 
