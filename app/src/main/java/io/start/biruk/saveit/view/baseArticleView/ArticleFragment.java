@@ -47,9 +47,9 @@ import io.start.biruk.saveit.view.widget.fastscroller.FastScroller;
 /**
  * Created by biruk on 5/13/2018.
  */
-public class BaseArticleFragment extends Fragment implements BaseArticleView, ArticleClickListener {
+public class ArticleFragment extends Fragment implements ArticleView, ArticleClickListener {
 
-    private static final String TAG = "BaseArticleFragment";
+    private static final String TAG = "ArticleFragment";
 
     private static final int REQUEST_ARTICLE_OPTION = 0;
     private static final int REQUEST_EDIT_TITLE_OPTION = 7;
@@ -86,17 +86,17 @@ public class BaseArticleFragment extends Fragment implements BaseArticleView, Ar
         updateView();
     }
 
-    public BaseArticleFragment() {
+    public ArticleFragment() {
     }
 
-    public static BaseArticleFragment newInstance(int defaultView) {
-        BaseArticleFragment baseArticleFragment = new BaseArticleFragment();
+    public static ArticleFragment newInstance(int defaultView) {
+        ArticleFragment articleFragment = new ArticleFragment();
         Bundle args = new Bundle();
 
         args.putInt(DEFAULT_VIEW, defaultView);
-        baseArticleFragment.setArguments(args);
+        articleFragment.setArguments(args);
 
-        return baseArticleFragment;
+        return articleFragment;
     }
 
 
@@ -138,13 +138,13 @@ public class BaseArticleFragment extends Fragment implements BaseArticleView, Ar
             switch (action) {
                 case "edit title":
                     EditTitleArticleDialog editTitleArticleDialog = EditTitleArticleDialog.newInstance(articleModel);
-                    editTitleArticleDialog.setTargetFragment(BaseArticleFragment.this, REQUEST_EDIT_TITLE_OPTION);
+                    editTitleArticleDialog.setTargetFragment(ArticleFragment.this, REQUEST_EDIT_TITLE_OPTION);
                     editTitleArticleDialog.show(getFragmentManager(), TAG);
                     break;
 
                 case "add tag":
                     AddTagDialog addTagDialog = AddTagDialog.newInstance(articleModel);
-                    addTagDialog.setTargetFragment(BaseArticleFragment.this, REQUEST_ADD_TAG);
+                    addTagDialog.setTargetFragment(ArticleFragment.this, REQUEST_ADD_TAG);
                     addTagDialog.show(getFragmentManager(), TAG);
                     break;
                 case "info":
@@ -153,7 +153,7 @@ public class BaseArticleFragment extends Fragment implements BaseArticleView, Ar
                     break;
                 case "delete":
                     DeleteArticleDialog deleteArticleDialog = DeleteArticleDialog.newInstance(articleModel);
-                    deleteArticleDialog.setTargetFragment(BaseArticleFragment.this, DELETE_ARTICLE_OPTION);
+                    deleteArticleDialog.setTargetFragment(ArticleFragment.this, DELETE_ARTICLE_OPTION);
                     deleteArticleDialog.show(getFragmentManager(), TAG);
                     break;
             }
@@ -269,7 +269,7 @@ public class BaseArticleFragment extends Fragment implements BaseArticleView, Ar
     @Override
     public void launchArticleOptionsView(ArticleModel articleModel) {
         ArticleOptionDialog articleOptDialog = ArticleOptionDialog.newInstance(articleModel);
-        articleOptDialog.setTargetFragment(BaseArticleFragment.this, REQUEST_ARTICLE_OPTION);
+        articleOptDialog.setTargetFragment(ArticleFragment.this, REQUEST_ARTICLE_OPTION);
         articleOptDialog.show(getFragmentManager(), TAG);
     }
 

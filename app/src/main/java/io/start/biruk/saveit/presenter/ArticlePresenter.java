@@ -13,7 +13,7 @@ import io.start.biruk.saveit.model.repository.ArticleRepository;
 import io.start.biruk.saveit.model.db.ArticleModel;
 import io.start.biruk.saveit.util.FileUtil;
 import io.start.biruk.saveit.util.TagStringUtil;
-import io.start.biruk.saveit.view.baseArticleView.BaseArticleView;
+import io.start.biruk.saveit.view.baseArticleView.ArticleView;
 
 /**
  * Created by biruk on 5/17/2018.
@@ -23,7 +23,7 @@ public class ArticlePresenter {
     private ArticleRepository articleRepository;
     private Scheduler uiThread;
 
-    private BaseArticleView baseArticleView;
+    private ArticleView articleView;
 
     @Inject
     public ArticlePresenter(ArticleRepository articleRepository, Scheduler uiThread) {
@@ -31,16 +31,16 @@ public class ArticlePresenter {
         this.uiThread = uiThread;
     }
 
-    public void attachView(BaseArticleView view) {
-        this.baseArticleView = view;
+    public void attachView(ArticleView view) {
+        this.articleView = view;
     }
 
     public void onArticleSelected(ArticleModel articleModel) {
-        baseArticleView.launchArticleView(articleModel);
+        articleView.launchArticleView(articleModel);
     }
 
     public void onArticleOptionSelected(ArticleModel articleModel) {
-        baseArticleView.launchArticleOptionsView(articleModel);
+        articleView.launchArticleOptionsView(articleModel);
     }
 
 
@@ -60,11 +60,11 @@ public class ArticlePresenter {
                 .subscribeWith(new DisposableSingleObserver<Integer>() {
                     @Override
                     public void onSuccess(@NonNull Integer updateStatus) {
-                        baseArticleView.updateView();
+                        articleView.updateView();
                         if (modifiedArticleModel.isFavorite()) {
-                            baseArticleView.displayUpdateView("Article added to favorite.");
+                            articleView.displayUpdateView("Article added to favorite.");
                         } else {
-                            baseArticleView.displayUpdateView("Article removed from favorite.");
+                            articleView.displayUpdateView("Article removed from favorite.");
                         }
                     }
 
@@ -86,8 +86,8 @@ public class ArticlePresenter {
                 .subscribeWith(new DisposableSingleObserver<Integer>() {
                     @Override
                     public void onSuccess(@NonNull Integer integer) {
-                        baseArticleView.displayUpdateView("Article Deleted");
-                        baseArticleView.updateView();
+                        articleView.displayUpdateView("Article Deleted");
+                        articleView.updateView();
                     }
 
                     @Override
@@ -120,8 +120,8 @@ public class ArticlePresenter {
                 .subscribeWith(new DisposableSingleObserver<Integer>() {
                     @Override
                     public void onSuccess(@NonNull Integer integer) {
-                        baseArticleView.displayUpdateView("Article updated");
-                        baseArticleView.updateView();
+                        articleView.displayUpdateView("Article updated");
+                        articleView.updateView();
                     }
 
                     @Override
@@ -133,9 +133,9 @@ public class ArticlePresenter {
 
     public void loadArticles(List<ArticleModel> articleModels) {
         if (!articleModels.isEmpty()) {
-            baseArticleView.displayArticle(articleModels);
+            articleView.displayArticle(articleModels);
         } else {
-            baseArticleView.displayEmptyArticlesView("empty articles");
+            articleView.displayEmptyArticlesView("empty articles");
         }
     }
 
@@ -147,9 +147,9 @@ public class ArticlePresenter {
                     @Override
                     public void onSuccess(@NonNull List<ArticleModel> articleModels) {
                         if (!articleModels.isEmpty()) {
-                            baseArticleView.displayArticle(articleModels);
+                            articleView.displayArticle(articleModels);
                         } else {
-                            baseArticleView.displayEmptyArticlesView("empty articles");
+                            articleView.displayEmptyArticlesView("empty articles");
                         }
                     }
 
@@ -171,9 +171,9 @@ public class ArticlePresenter {
                     @Override
                     public void onSuccess(@NonNull List<ArticleModel> articleModels) {
                         if (!articleModels.isEmpty()) {
-                            baseArticleView.displayArticle(articleModels);
+                            articleView.displayArticle(articleModels);
                         } else {
-                            baseArticleView.displayEmptyArticlesView("empty articles view");
+                            articleView.displayEmptyArticlesView("empty articles view");
                         }
                     }
 
@@ -194,7 +194,7 @@ public class ArticlePresenter {
     }
 
     public void dettachView() {
-        this.baseArticleView = null;
+        this.articleView = null;
     }
 
 

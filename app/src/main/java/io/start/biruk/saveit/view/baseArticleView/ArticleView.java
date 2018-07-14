@@ -7,7 +7,7 @@ import io.start.biruk.saveit.model.db.ArticleModel;
 /**
  * Created by biruk on 5/13/2018.
  */
-public interface BaseArticleView {
+public interface ArticleView {
 
     void updateView();
 
