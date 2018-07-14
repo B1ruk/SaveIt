@@ -43,7 +43,6 @@ public class SearchPresenter {
                         }
                         else if (articleModels.isEmpty()){
                             loadAdvacnedArticleSearchResults(query);
-                            searchArticleView.displayEmptyResultsView();
                         }
                     }
 
@@ -62,11 +61,7 @@ public class SearchPresenter {
                 .subscribeWith(new DisposableSingleObserver<List<ArticleModel>>() {
                     @Override
                     public void onSuccess(@NonNull List<ArticleModel> articleModels) {
-                        if (!articleModels.isEmpty()){
-                            searchArticleView.showSearchResults(articleModels);
-                        }else {
-                            searchArticleView.displayEmptyResultsView();
-                        }
+                        searchArticleView.showSearchResults(articleModels);
                     }
 
                     @Override

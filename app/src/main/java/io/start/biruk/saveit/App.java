@@ -2,7 +2,7 @@ package io.start.biruk.saveit;
 
 import android.app.Application;
 
-import io.start.biruk.saveit.component.DaggerMainComponent;
+import io.start.biruk.saveit.di.component.DaggerMainComponent;
 import io.start.biruk.saveit.di.component.MainComponent;
 import io.start.biruk.saveit.di.module.MainModule;
 import uk.co.chrisjenx.calligraphy.CalligraphyConfig;

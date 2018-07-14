@@ -10,53 +10,9 @@
         android:id="@+id/search_toolbar"
         layout="@layout/app_main_toolbar"
         />
-    <RelativeLayout
-        android:id="@+id/empty_search_view"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:layout_gravity="center"
-        android:visibility="gone"
-        >
-        <ImageView
-            android:id="@+id/empty_search_article_image"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:alpha="0.6"
-            android:src="@drawable/book_outline"/>
 
-        <TextView
-            android:id="@+id/empty_article_search_description"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textStyle="bold|italic"
-            android:layout_margin="64dp"
-            android:layout_centerHorizontal="true"
-            android:layout_below="@+id/empty_search_article_image"
-            />
-    </RelativeLayout>
-
-    <RelativeLayout
+    <FrameLayout
+        android:id="@+id/search_results_view"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/search_list_view">
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/article_search_recycler_view"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginRight="4dp"></android.support.v7.widget.RecyclerView>
-
-        <io.start.biruk.saveit.view.widget.fastscroller.FastScroller
-            android:id="@+id/article_search_fast_scroller"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentEnd="true"
-            android:layout_marginLeft="2dp"
-            android:layout_marginRight="2dp"
-            ></io.start.biruk.saveit.view.widget.fastscroller.FastScroller>
-
-
-    </RelativeLayout>
+        android:layout_height="wrap_content"/>
 </LinearLayout>

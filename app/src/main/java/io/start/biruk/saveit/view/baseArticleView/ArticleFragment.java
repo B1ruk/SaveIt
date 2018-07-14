@@ -82,7 +82,7 @@ public class ArticleFragment extends Fragment implements ArticleView, ArticleCli
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void articleFromEvent(ArticleListEvent articleListEvent) {
-        List<ArticleModel> articleModels = articleListEvent.getArticleModels();
+         this.articleModels = articleListEvent.getArticleModels();
         updateView();
     }
 
@@ -130,6 +130,23 @@ public class ArticleFragment extends Fragment implements ArticleView, ArticleCli
         EventBus.getDefault().register(this);
     }
 
+
+    @Override
+    public void updateView() {
+
+        switch (defaultView) {
+            case 0:
+                articlePresenter.loadArticles(articleModels);
+                break;
+            case 1:
+                articlePresenter.loadAllArticles();
+                break;
+            case 2:
+                articlePresenter.loadFavoriteArticles();
+                break;
+        }
+    }
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode == Activity.RESULT_OK && requestCode == REQUEST_ARTICLE_OPTION) {
@@ -175,24 +192,6 @@ public class ArticleFragment extends Fragment implements ArticleView, ArticleCli
             articlePresenter.updateArticle(articleModel, tag);
         }
     }
-
-
-    @Override
-    public void updateView() {
-
-        switch (defaultView) {
-            case 0:
-                articlePresenter.loadArticles(articleModels);
-                break;
-            case 1:
-                articlePresenter.loadAllArticles();
-                break;
-            case 2:
-                articlePresenter.loadFavoriteArticles();
-                break;
-        }
-    }
-
 
     @Override
     public void displayArticle(List<ArticleModel> articleModels) {
