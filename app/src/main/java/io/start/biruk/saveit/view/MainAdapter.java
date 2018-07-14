@@ -3,11 +3,8 @@ package io.start.biruk.saveit.view;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.app.FragmentStatePagerAdapter;
 
-import io.start.biruk.saveit.view.articleView.ArticlesFragment;
 import io.start.biruk.saveit.view.baseArticleView.BaseArticleFragment;
-import io.start.biruk.saveit.view.favoriteView.FavoriteFragment;
 import io.start.biruk.saveit.view.tagsView.TagFragment;
 
 /**
@@ -16,7 +13,7 @@ import io.start.biruk.saveit.view.tagsView.TagFragment;
 public class MainAdapter extends FragmentPagerAdapter {
 
     String[] pageFragmentTitles = {"Articles", "Tags", "Favorites"};
-    Fragment[] pageFragments = {new BaseArticleFragment(), new TagFragment(), new FavoriteFragment()};
+    Fragment[] pageFragments = {BaseArticleFragment.newInstance(1), new TagFragment(), BaseArticleFragment.newInstance(2)};
 
     public MainAdapter(FragmentManager fm) {
         super(fm);

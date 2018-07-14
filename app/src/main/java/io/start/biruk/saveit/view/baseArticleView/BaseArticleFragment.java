@@ -21,6 +21,7 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -30,6 +31,7 @@ import butterknife.ButterKnife;
 import io.start.biruk.saveit.App;
 import io.start.biruk.saveit.R;
 import io.start.biruk.saveit.events.ArticleFetchCompletedEvent;
+import io.start.biruk.saveit.events.ArticleListEvent;
 import io.start.biruk.saveit.model.db.ArticleModel;
 import io.start.biruk.saveit.presenter.ArticlePresenter;
 import io.start.biruk.saveit.view.articleView.articleAdapter.ArticleAdapter;
@@ -63,13 +65,38 @@ public class BaseArticleFragment extends Fragment implements BaseArticleView, Ar
     @Bind(R.id.empty_article_description) protected TextView emptyArticleTextView;
     @Bind(R.id.empty_article_image) protected ImageView emptyArticleImageView;
 
+    private static final String DEFAULT_VIEW = "io.start.biruk.saveit.view.baseArticleView";
+    /*
+    *
+    * 0->Search Results,Specific Tag View
+    * 1->Default View
+    * 2->Favorite View
+    * */
+    private int defaultView = -1;
+    private List<ArticleModel> articleModels;
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void articleFetchCompleted(ArticleFetchCompletedEvent articleFetchCompletedEvent) {
         updateView();
     }
 
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void articleFromEvent(ArticleListEvent articleListEvent) {
+        List<ArticleModel> articleModels = articleListEvent.getArticleModels();
+        updateView();
+    }
+
     public BaseArticleFragment() {
+    }
+
+    public static BaseArticleFragment newInstance(int defaultView) {
+        BaseArticleFragment baseArticleFragment = new BaseArticleFragment();
+        Bundle args = new Bundle();
+
+        args.putInt(DEFAULT_VIEW, defaultView);
+        baseArticleFragment.setArguments(args);
+
+        return baseArticleFragment;
     }
 
 
@@ -78,6 +105,11 @@ public class BaseArticleFragment extends Fragment implements BaseArticleView, Ar
         super.onCreate(savedInstanceState);
 
         App.getAppComponent().inject(this);
+
+        if (!getArguments().isEmpty()) {
+            this.defaultView = getArguments().getInt(DEFAULT_VIEW);
+        }
+        this.articleModels = new ArrayList<>();
     }
 
     @Nullable
@@ -93,10 +125,9 @@ public class BaseArticleFragment extends Fragment implements BaseArticleView, Ar
     public void onResume() {
         super.onResume();
 
-        EventBus.getDefault().register(this);
-
         articlePresenter.attachView(this);
         updateView();
+        EventBus.getDefault().register(this);
     }
 
     @Override
@@ -110,11 +141,11 @@ public class BaseArticleFragment extends Fragment implements BaseArticleView, Ar
                     editTitleArticleDialog.setTargetFragment(BaseArticleFragment.this, REQUEST_EDIT_TITLE_OPTION);
                     editTitleArticleDialog.show(getFragmentManager(), TAG);
                     break;
-                
+
                 case "add tag":
-                    AddTagDialog addTagDialog=AddTagDialog.newInstance(articleModel);
-                    addTagDialog.setTargetFragment(BaseArticleFragment.this,REQUEST_ADD_TAG);
-                    addTagDialog.show(getFragmentManager(),TAG);
+                    AddTagDialog addTagDialog = AddTagDialog.newInstance(articleModel);
+                    addTagDialog.setTargetFragment(BaseArticleFragment.this, REQUEST_ADD_TAG);
+                    addTagDialog.show(getFragmentManager(), TAG);
                     break;
                 case "info":
                     ArticleInfoDialog articleInfoDialog = ArticleInfoDialog.newInstance(articleModel);
@@ -137,18 +168,29 @@ public class BaseArticleFragment extends Fragment implements BaseArticleView, Ar
             articlePresenter.deleteArticle(articleModel);
         }
 
-        if (requestCode==REQUEST_ADD_TAG){
+        if (requestCode == REQUEST_ADD_TAG) {
             ArticleModel articleModel = (ArticleModel) data.getSerializableExtra(AddTagDialog.ARTICLE_MODEL_DATA);
             String tag = data.getAction();
 
-            articlePresenter.updateArticle(articleModel,tag);
+            articlePresenter.updateArticle(articleModel, tag);
         }
     }
 
 
     @Override
     public void updateView() {
-        articlePresenter.loadAllArticles();
+
+        switch (defaultView) {
+            case 0:
+                articlePresenter.loadArticles(articleModels);
+                break;
+            case 1:
+                articlePresenter.loadAllArticles();
+                break;
+            case 2:
+                articlePresenter.loadFavoriteArticles();
+                break;
+        }
     }
 
 
@@ -180,7 +222,7 @@ public class BaseArticleFragment extends Fragment implements BaseArticleView, Ar
         updateUi(0);
 
         picasso.load(R.drawable.book_outline)
-                .resize(200,200)
+                .resize(200, 200)
                 .into(emptyArticleImageView);
 
         emptyArticleTextView.setText("no articles found");

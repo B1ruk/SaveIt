@@ -131,6 +131,14 @@ public class ArticlePresenter {
                 });
     }
 
+    public void loadArticles(List<ArticleModel> articleModels) {
+        if (!articleModels.isEmpty()) {
+            baseArticleView.displayArticle(articleModels);
+        } else {
+            baseArticleView.displayEmptyArticlesView("empty articles");
+        }
+    }
+
     public void loadAllArticles() {
         articleRepository.getAllArticles()
                 .subscribeOn(Schedulers.io())
