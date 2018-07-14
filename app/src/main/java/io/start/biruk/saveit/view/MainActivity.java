@@ -29,6 +29,7 @@ import io.start.biruk.saveit.R;
 import io.start.biruk.saveit.events.ArticleFetchCompletedEvent;
 import io.start.biruk.saveit.service.ArticleFetcherService;
 import io.start.biruk.saveit.util.FileUtil;
+import io.start.biruk.saveit.view.dialog.AddUrlDialog;
 import io.start.biruk.saveit.view.searchView.SearchActivity;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
@@ -92,6 +93,8 @@ public class MainActivity extends AppCompatActivity {
 
     public void launchAddUrlDialog(){
 
+        AddUrlDialog addUrlDialog=new AddUrlDialog();
+        addUrlDialog.show(getSupportFragmentManager(),TAG);
     }
 
     public void initArticleFetcherService() {
