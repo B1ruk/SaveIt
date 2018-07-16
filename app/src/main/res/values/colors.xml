@@ -2,7 +2,14 @@
 <resources>
     <color name="colorPrimary">#616161</color>
     <color name="colorPrimaryDark">#424242</color>
-    <color name="colorAccent">#ff9800</color>
+    <color name="colorAccent">#eeaa4e</color>
+    <color name="background">#f4f4f4</color>
+
+    <color name="colorPrimaryDarkTheme">#393737</color>
+    <color name="colorPrimaryDarkDarkTheme">#3d3939</color>
+    <color name="colorAccentDarkTheme">#a16457</color>
+    <color name="noFavoriteIconDarkTheme">#f4f4f4</color>
+    <color name="backgroundDark">#383131</color>
 
     <color name="colorFav">#973e3e</color>
     <color name="noFavoriteIcon">#da000000</color>
