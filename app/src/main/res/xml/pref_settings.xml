@@ -1,5 +1,14 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
+    <PreferenceCategory android:title="Page View">
+        <SwitchPreference
+            android:key="@string/zoomCtrlKey"
+            android:defaultValue="false"
+            android:title="@string/zoomCtrl_title"
+            android:summary="@string/zoomCtrl_summary"
+            />
+    </PreferenceCategory>
+
     <PreferenceCategory android:title="@string/themes">
         <ListPreference
             android:dialogTitle="@string/select_theme"

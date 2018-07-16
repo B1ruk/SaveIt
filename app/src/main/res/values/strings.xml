@@ -25,6 +25,9 @@
     <string name="select_theme">Select Theme</string>
     <string name="theme_key">list_theme</string>
     <string name="themes_pref_summary">Changes will take effect on the next launch.</string>
+    <string name="zoomCtrlKey">dispZoomCtrl</string>
+    <string name="zoomCtrl_title">Built in zoom control</string>
+    <string name="zoomCtrl_summary">allows you to control the built in zoom Control</string>
 
     <string-array name="themes">
         <item>Light</item>

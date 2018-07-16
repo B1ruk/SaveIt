@@ -1,7 +1,9 @@
 package io.start.biruk.saveit.view.displayArticleView;
 
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.os.Environment;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -30,6 +32,8 @@ public class DisplayArticleActivity extends AppCompatActivity {
 
     @Bind(R.id.web_view) WebView webView;
 
+    private SharedPreferences preferences;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,6 +41,8 @@ public class DisplayArticleActivity extends AppCompatActivity {
         setContentView(R.layout.activity_display_article);
 
         ButterKnife.bind(this);
+
+        this.preferences=PreferenceManager.getDefaultSharedPreferences(this);
 
         String articlePath = getIntent().getAction();
         initWebView(articlePath);
@@ -60,7 +66,7 @@ public class DisplayArticleActivity extends AppCompatActivity {
         webView.getSettings().setBuiltInZoomControls(true);
         webView.getSettings().setAllowFileAccessFromFileURLs(true);
         webView.getSettings().setAllowFileAccessFromFileURLs(true);
-        webView.getSettings().setBuiltInZoomControls(true);
+        webView.getSettings().setBuiltInZoomControls(preferences.getBoolean(getResources().getString(R.string.zoomCtrlKey),false));
         webView.getSettings().setSupportZoom(true);
         webView.setScrollBarStyle(View.SCROLLBARS_INSIDE_INSET);
         webView.setFocusable(true);
