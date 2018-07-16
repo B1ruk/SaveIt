@@ -19,9 +19,10 @@ import io.start.biruk.saveit.R;
 import io.start.biruk.saveit.events.ArticleListEvent;
 import io.start.biruk.saveit.model.db.ArticleModel;
 import io.start.biruk.saveit.presenter.SelectedTagPresenter;
+import io.start.biruk.saveit.view.BaseThemeActivity;
 import io.start.biruk.saveit.view.baseArticleView.ArticleFragment;
 
-public class SelectedTagActivity extends AppCompatActivity implements SelectedTagView {
+public class SelectedTagActivity extends BaseThemeActivity implements SelectedTagView {
     @Inject SelectedTagPresenter selectedTagPresenter;
 
     @Bind(R.id.tag_articles) FrameLayout selectedTagArticleView;

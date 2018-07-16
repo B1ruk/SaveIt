@@ -25,9 +25,10 @@ import io.start.biruk.saveit.R;
 import io.start.biruk.saveit.events.ArticleListEvent;
 import io.start.biruk.saveit.model.db.ArticleModel;
 import io.start.biruk.saveit.presenter.SearchPresenter;
+import io.start.biruk.saveit.view.BaseThemeActivity;
 import io.start.biruk.saveit.view.baseArticleView.ArticleFragment;
 
-public class SearchActivity extends AppCompatActivity implements SearchArticleView {
+public class SearchActivity extends BaseThemeActivity implements SearchArticleView {
 
     @Inject SearchPresenter searchPresenter;
     @Inject Picasso picasso;
@@ -41,13 +42,12 @@ public class SearchActivity extends AppCompatActivity implements SearchArticleVi
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_search);
 
+        setContentView(R.layout.activity_search);
         ButterKnife.bind(this);
         App.getAppComponent().inject(this);
 
         setupToolbar();
-
     }
 
     private void setupToolbar() {

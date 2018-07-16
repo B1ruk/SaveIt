@@ -1,6 +1,5 @@
 package io.start.biruk.saveit.view;
 
-import android.content.Context;
 import android.content.Intent;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
@@ -9,15 +8,13 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.View;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -31,9 +28,9 @@ import io.start.biruk.saveit.service.ArticleFetcherService;
 import io.start.biruk.saveit.util.FileUtil;
 import io.start.biruk.saveit.view.dialog.AddUrlDialog;
 import io.start.biruk.saveit.view.searchView.SearchActivity;
-import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
+import io.start.biruk.saveit.view.settingsView.SettingsActivity;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends BaseThemeActivity {
 
     private static final String TAG = "MainActivity";
 
@@ -54,16 +51,10 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void attachBaseContext(Context newBase) {
-        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
-
-    }
-
-    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.main_activity_view);
 
+        setContentView(R.layout.main_activity_view);
 
         ButterKnife.bind(this);
 
@@ -170,7 +161,8 @@ public class MainActivity extends AppCompatActivity {
                 mainViewPager.setCurrentItem(2);
                 break;
             case R.id.nav_menu_settings:
-                Log.d(TAG, "nav settings");
+                Intent stAct=new Intent(this, SettingsActivity.class);
+                startActivity(stAct);
                 break;
         }
         drawerLayout.closeDrawers();
