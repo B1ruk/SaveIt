@@ -1,0 +1,13 @@
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <PreferenceCategory android:title="@string/themes">
+        <ListPreference
+            android:dialogTitle="@string/select_theme"
+            android:key="@string/theme_key"
+            android:title="@string/themes"
+            android:entries="@array/themes"
+            android:entryValues="@array/themes"
+            android:summary="@string/themes_pref_summary"
+            />
+    </PreferenceCategory>
+</PreferenceScreen>

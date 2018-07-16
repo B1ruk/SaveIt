@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="io.start.biruk.saveit">
+          package="io.start.biruk.saveit">
 
-    <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
 
     <application
         android:name=".App"
@@ -14,27 +14,27 @@
         android:theme="@style/AppTheme">
         <activity android:name=".view.MainActivity">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+                <action android:name="android.intent.action.MAIN"/>
 
-                <category android:name="android.intent.category.LAUNCHER" />
+                <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
         <activity android:name=".view.addwebView.AddWebActivity">
             <intent-filter>
-                <action android:name="android.intent.action.SEND" />
+                <action android:name="android.intent.action.SEND"/>
 
-                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.DEFAULT"/>
 
-                <data android:mimeType="*/*" />
+                <data android:mimeType="*/*"/>
             </intent-filter>
         </activity>
 
-        <service android:name=".service.ArticleFetcherService" />
+        <service android:name=".service.ArticleFetcherService"/>
 
-        <activity android:name=".view.displayArticleView.DisplayArticleActivity"></activity>
+        <activity android:name=".view.displayArticleView.DisplayArticleActivity"/>
         <activity
             android:name=".view.searchView.SearchActivity"
-            android:parentActivityName=".view.MainActivity"></activity>
+            android:parentActivityName=".view.MainActivity"/>
         <activity
             android:name=".view.tagsView.SelectedTagActivity"
             android:label="@string/title_activity_selected"
@@ -42,7 +42,15 @@
             android:theme="@style/AppTheme">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="io.start.biruk.saveit.view.MainActivity" />
+                android:value="io.start.biruk.saveit.view.MainActivity"/>
+        </activity>
+        <activity
+            android:name=".view.settingsView.SettingsActivity"
+            android:label="@string/title_activity_settings"
+            android:parentActivityName=".view.MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="io.start.biruk.saveit.view.MainActivity"/>
         </activity>
     </application>
 
