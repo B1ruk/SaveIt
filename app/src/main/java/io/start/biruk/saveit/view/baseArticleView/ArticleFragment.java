@@ -42,7 +42,6 @@ import io.start.biruk.saveit.view.articleView.articleOptions.EditTitleArticleDia
 import io.start.biruk.saveit.view.articleView.articleOptions.DeleteArticleDialog;
 import io.start.biruk.saveit.view.displayArticleView.DisplayArticleActivity;
 import io.start.biruk.saveit.view.listener.ArticleClickListener;
-import io.start.biruk.saveit.view.widget.fastscroller.FastScroller;
 
 /**
  * Created by biruk on 5/13/2018.
@@ -60,7 +59,6 @@ public class ArticleFragment extends Fragment implements ArticleView, ArticleCli
     @Inject protected Picasso picasso;
 
     @Bind(R.id.article_recycler_view) protected RecyclerView articleRecyclerView;
-    @Bind(R.id.article_fast_scroller) protected FastScroller articleFastScroller;
     @Bind(R.id.empty_article_view) protected View emptyArticleView;
     @Bind(R.id.empty_article_description) protected TextView emptyArticleTextView;
     @Bind(R.id.empty_article_image) protected ImageView emptyArticleImageView;
@@ -213,8 +211,6 @@ public class ArticleFragment extends Fragment implements ArticleView, ArticleCli
         articleAdapter.setArticleData(sortedArticles);
         articleRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
-        articleFastScroller.setRecyclerView(articleRecyclerView);
-
     }
 
     @Override
@@ -224,7 +220,6 @@ public class ArticleFragment extends Fragment implements ArticleView, ArticleCli
         picasso.load(R.drawable.book_outline)
                 .resize(200, 200)
                 .into(emptyArticleImageView);
-
         emptyArticleTextView.setText("no articles found");
 
     }
@@ -239,12 +234,10 @@ public class ArticleFragment extends Fragment implements ArticleView, ArticleCli
             case 0:
                 emptyArticleView.setVisibility(View.VISIBLE);
                 articleRecyclerView.setVisibility(View.GONE);
-                articleFastScroller.setVisibility(View.GONE);
                 break;
             case 1:
                 emptyArticleView.setVisibility(View.GONE);
                 articleRecyclerView.setVisibility(View.VISIBLE);
-                articleFastScroller.setVisibility(View.VISIBLE);
                 break;
         }
     }

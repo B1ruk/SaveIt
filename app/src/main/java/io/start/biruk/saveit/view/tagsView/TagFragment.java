@@ -32,9 +32,7 @@ import io.start.biruk.saveit.R;
 import io.start.biruk.saveit.events.TagSelectEvent;
 import io.start.biruk.saveit.model.data.TagData;
 import io.start.biruk.saveit.presenter.TagPresenter;
-import io.start.biruk.saveit.view.articleView.articleOptions.adapter.TagAdapter;
 import io.start.biruk.saveit.view.tagsView.adapter.TagViewAdapter;
-import io.start.biruk.saveit.view.widget.fastscroller.FastScroller;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -46,7 +44,6 @@ public class TagFragment extends Fragment implements TagView {
     @Inject Picasso picasso;
 
     @Bind(R.id.tag_recycler_view) RecyclerView tagRecyclerView;
-    @Bind(R.id.tag_fast_scroller) FastScroller tagFastScroller;
     @Bind(R.id.empty_tag_description) TextView emptyTagTextView;
     @Bind(R.id.empty_tag_image) ImageView emptyImageView;
 
@@ -89,7 +86,6 @@ public class TagFragment extends Fragment implements TagView {
     public void displayTags(List<TagData> tags) {
         initRecyclerView(tags);
 
-        tagFastScroller.setVisibility(View.VISIBLE);
         tagRecyclerView.setVisibility(View.VISIBLE);
 
         emptyTagTextView.setVisibility(View.GONE);
@@ -103,7 +99,6 @@ public class TagFragment extends Fragment implements TagView {
 
         tagRecyclerView.setLayoutManager(new GridLayoutManager(getContext(),2));
         tagRecyclerView.setAdapter(tagAdapter);
-        tagFastScroller.setRecyclerView(tagRecyclerView);
     }
 
 
@@ -121,7 +116,6 @@ public class TagFragment extends Fragment implements TagView {
     public void displayEmptyTagView() {
 
         emptyTagTextView.setText("No tags");
-        tagFastScroller.setVisibility(View.GONE);
         tagRecyclerView.setVisibility(View.GONE);
 
         emptyTagTextView.setVisibility(View.VISIBLE);

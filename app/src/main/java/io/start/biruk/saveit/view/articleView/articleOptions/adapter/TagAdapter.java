@@ -13,7 +13,6 @@ import butterknife.ButterKnife;
 import io.start.biruk.saveit.R;
 import io.start.biruk.saveit.model.data.TagData;
 import io.start.biruk.saveit.view.tagsView.TagView;
-import io.start.biruk.saveit.view.widget.fastscroller.BubbleTextGetter;
 
 /**
  * Created by biruk on 5/28/2018.
