@@ -14,7 +14,6 @@
         android:layout_height="wrap_content"
         android:text="@string/nav_title"
         android:layout_alignParentBottom="true"
-        android:textColor="@color/whiteText"
         android:textAppearance="?android:textAppearance"
         android:padding="10dp"/>
 
