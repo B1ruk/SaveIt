@@ -48,5 +48,4 @@ dependencies {
     compile 'com.jakewharton:butterknife:7.0.1'
     compile 'com.google.dagger:dagger:2.8'
     compile 'com.android.support:support-v4:25.1.0'
-    compile project(':calligraphy')
 }
