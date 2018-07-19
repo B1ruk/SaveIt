@@ -29,6 +29,7 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import io.start.biruk.saveit.App;
 import io.start.biruk.saveit.R;
+import io.start.biruk.saveit.events.ArticleFetchCompletedEvent;
 import io.start.biruk.saveit.events.TagSelectEvent;
 import io.start.biruk.saveit.model.data.TagData;
 import io.start.biruk.saveit.presenter.TagPresenter;
@@ -49,6 +50,11 @@ public class TagFragment extends Fragment implements TagView {
 
     public TagFragment() {
         // Required empty public constructor
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void articleFetchCompleted(ArticleFetchCompletedEvent articleFetchCompletedEvent) {
+        tagPresenter.loadTags();
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
@@ -77,9 +83,9 @@ public class TagFragment extends Fragment implements TagView {
     public void onResume() {
         super.onResume();
 
+        EventBus.getDefault().register(this);
         tagPresenter.attachView(this);
         tagPresenter.loadTags();
-        EventBus.getDefault().register(this);
     }
 
     @Override
