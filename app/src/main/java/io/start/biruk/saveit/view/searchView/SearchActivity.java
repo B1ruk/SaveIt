@@ -47,7 +47,19 @@ public class SearchActivity extends BaseThemeActivity implements SearchArticleVi
         ButterKnife.bind(this);
         App.getAppComponent().inject(this);
 
+        initView();
+    }
+
+    private void initView() {
+        setUpSearchFragment();
         setupToolbar();
+    }
+
+    private void setUpSearchFragment() {
+        getSupportFragmentManager().beginTransaction()
+                .add(searchResultsContainer.getId(), ArticleFragment.newInstance(0))
+                .commit();
+
     }
 
     private void setupToolbar() {
@@ -95,10 +107,6 @@ public class SearchActivity extends BaseThemeActivity implements SearchArticleVi
 
     @Override
     public void showSearchResults(List<ArticleModel> articleModels) {
-
-        getSupportFragmentManager().beginTransaction()
-                .add(searchResultsContainer.getId(), ArticleFragment.newInstance(0))
-                .commit();
 
         EventBus.getDefault().post(new ArticleListEvent(articleModels));
 

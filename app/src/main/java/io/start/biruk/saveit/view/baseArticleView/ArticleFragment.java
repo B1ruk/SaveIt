@@ -78,7 +78,7 @@ public class ArticleFragment extends Fragment implements ArticleView, ArticleCli
         updateView();
     }
 
-    @Subscribe(threadMode = ThreadMode.MAIN,sticky = true)
+    @Subscribe(threadMode = ThreadMode.MAIN)
     public void articleFromEvent(ArticleListEvent articleListEvent) {
         this.articleModels = articleListEvent.getArticleModels();
         updateView();
