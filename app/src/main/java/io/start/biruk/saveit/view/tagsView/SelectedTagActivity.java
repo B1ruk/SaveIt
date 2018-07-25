@@ -44,7 +44,7 @@ public class SelectedTagActivity extends BaseThemeActivity implements SelectedTa
         super.onResume();
 
         selectedTagPresenter.attachView(this);
-
+        attachFragment();
         String tag = getIntent().getAction();
         if (tag != null) {
             selectedTag(tag);
@@ -52,12 +52,18 @@ public class SelectedTagActivity extends BaseThemeActivity implements SelectedTa
         }
     }
 
+    private void attachFragment() {
+        getSupportFragmentManager().beginTransaction()
+                .add(selectedTagArticleView.getId(), ArticleFragment.newInstance(0))
+                .commit();
+    }
+
     private void initViews() {
         setSupportActionBar(mainToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
-    private void setTagTitle(String tag){
+    private void setTagTitle(String tag) {
         mainToolbar.setTitle(tag);
     }
 
@@ -68,11 +74,7 @@ public class SelectedTagActivity extends BaseThemeActivity implements SelectedTa
 
     @Override
     public void displayArticles(List<ArticleModel> articleModels) {
-        getSupportFragmentManager().beginTransaction()
-                .add(selectedTagArticleView.getId(), ArticleFragment.newInstance(0))
-                .commit();
-
-        EventBus.getDefault().postSticky(new ArticleListEvent(articleModels));
+        EventBus.getDefault().post(new ArticleListEvent(articleModels));
 
     }
 
