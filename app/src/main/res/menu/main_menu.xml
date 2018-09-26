@@ -8,4 +8,12 @@
         android:title="@string/search"
         app:showAsAction="always"
         />
+
+    <item
+        android:id="@+id/menu_settings"
+        app:actionViewClass="android.support.v7.widget.SearchView"
+        android:icon="@drawable/ic_build_black_24dp"
+        android:title="@string/settings"
+        app:showAsAction="never" />
+
 </menu>

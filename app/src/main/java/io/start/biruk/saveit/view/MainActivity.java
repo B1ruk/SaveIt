@@ -120,6 +120,14 @@ public class MainActivity extends BaseThemeActivity {
         menuInflater.inflate(R.menu.main_menu, menu);
 
         MenuItem searchBar = menu.findItem(R.id.main_search_bar);
+        MenuItem settings = menu.findItem(R.id.menu_settings);
+
+        settings.setOnMenuItemClickListener(item -> {
+
+            Intent stAct = new Intent(this, SettingsActivity.class);
+            startActivity(stAct);
+            return true;
+        });
 
         searchBar.setOnMenuItemClickListener(item -> {
             launchSearchView();
