@@ -27,7 +27,6 @@ public class TagRepositoryImpl implements TagRepository {
                 .filter(tags -> !tags.isEmpty())
                 .flatMap(tags -> Observable.fromIterable(TagStringUtil.getTagList(tags))
                         .distinct())
-                .distinct()
                 .flatMap(this::toTagData)
                 .toList();
     }

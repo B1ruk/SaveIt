@@ -30,8 +30,12 @@ public class TagStringUtil {
         if (oldTag.isEmpty()) {
             return newTag;
         } else {
-            String tag = TAG_JOINER.join(oldTag, newTag);
-            return tag;
+            if (!oldTag.toLowerCase().contains(newTag.toLowerCase())) {
+                String tag = TAG_JOINER.join(oldTag, newTag);
+                return tag;
+            }else {
+                return oldTag;
+            }
         }
     }
 
