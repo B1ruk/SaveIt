@@ -1,6 +1,7 @@
 package io.start.biruk.saveit.model.articleFetcher;
 
 
+import org.greenrobot.eventbus.EventBus;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 
@@ -12,6 +13,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.annotations.NonNull;
 import io.reactivex.observers.DisposableSingleObserver;
 import io.reactivex.schedulers.Schedulers;
+import io.start.biruk.saveit.events.ArticleFetchCompletedEvent;
 import io.start.biruk.saveit.model.articleFetcher.responseFetcher.ResourceFetcher;
 import io.start.biruk.saveit.model.repository.ArticleRepository;
 import io.start.biruk.saveit.model.db.ArticleModel;
@@ -42,18 +44,21 @@ public class ArticleMainSaver {
     }
 
     public void fetchArticle(String url) {
+        mainCallback.init();
+
         articleFetcher.fetchIndexPage(url)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeWith(new DisposableSingleObserver<String>() {
                     @Override
                     public void onSuccess(@NonNull String response) {
+                        mainCallback.onArticleSaveProgressUpdater(String.format("%s is cached",url));
                         saveArticleToStorage(url,response);
                     }
 
                     @Override
                     public void onError(@NonNull Throwable e) {
-                        mainCallback.onArticleSaveError("unable to save article");
+                        mainCallback.onArticleSaveError(e);
                     }
                 });
     }
@@ -95,7 +100,7 @@ public class ArticleMainSaver {
                 .subscribeWith(new DisposableSingleObserver<Boolean>() {
                     @Override
                     public void onSuccess(@NonNull Boolean status) {
-                        mainCallback.onLoadingResourcesStarted("saving resources");
+                        mainCallback.onArticleSaveProgressUpdater(String.format("Saving %s to disk",url));
                         saveResourcesToStorage(url, responseDoc, path);
 
                     }
@@ -108,29 +113,28 @@ public class ArticleMainSaver {
     }
 
     public void saveResourcesToStorage(String url, Document responseDoc, String path) {
-        resourceFetcher.saveResponsesToStorage(url, responseDoc, path)
+        resourceFetcher.saveResourcesToStorage(url, responseDoc, path)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeWith(new DisposableSingleObserver<Boolean>() {
                     @Override
                     public void onSuccess(@NonNull Boolean status) {
-//                        EventBus.getDefault().post(new ArticleFetchCompletedEvent(url));
-                        mainCallback.onArticleSaved("article fetch completed");
+                        mainCallback.onArticleSaveCompletion(String.format("%s is saved to storage",url));
+                        EventBus.getDefault().post(new ArticleFetchCompletedEvent(url));
                     }
 
                     @Override
                     public void onError(@NonNull Throwable e) {
-                        mainCallback.onResourceFetchError("unable to save some resources files");
+                        mainCallback.onArticleSaveError(e);
                     }
                 });
     }
 
     public interface CallBack{
-        void onArticleSaveError(String msg);
-        void onLoadingResourcesStarted(String msg);
-        void onArticleSaved(String msg);
-        void onResourceFetchError(String msg);
-        void onArticleFetchStarted(String msg);
+        void init();
+        void onArticleSaveError(Throwable error);
+        void onArticleSaveProgressUpdater(String msg);
+        void onArticleSaveCompletion(String msg);
     }
 
 }

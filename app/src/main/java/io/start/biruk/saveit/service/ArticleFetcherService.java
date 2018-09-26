@@ -1,5 +1,7 @@
 package io.start.biruk.saveit.service;
 
+import android.app.Notification;
+import android.app.NotificationManager;
 import android.app.Service;
 import android.content.ClipData;
 import android.content.ClipboardManager;
@@ -7,6 +9,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
+import android.support.v7.app.NotificationCompat;
 import android.util.Log;
 
 import org.greenrobot.eventbus.EventBus;
@@ -16,6 +19,7 @@ import org.greenrobot.eventbus.ThreadMode;
 import javax.inject.Inject;
 
 import io.start.biruk.saveit.App;
+import io.start.biruk.saveit.R;
 import io.start.biruk.saveit.events.ArticleFetchCompletedEvent;
 import io.start.biruk.saveit.events.FetchArticleEvent;
 import io.start.biruk.saveit.events.UrlFromClipboardEvent;
@@ -29,6 +33,10 @@ public class ArticleFetcherService extends Service implements ArticleMainSaver.C
 
 
     private static final String TAG = "ArticleFetcherService";
+    private static final int NOTIFICATION_ID = 3870;
+
+    private NotificationManager notificationManager;
+    private Notification.Builder notificationBuilder;
 
     @Inject
     ArticleMainSaver articleMainSaver;
@@ -51,13 +59,14 @@ public class ArticleFetcherService extends Service implements ArticleMainSaver.C
         ClipboardManager clipboardManager = (ClipboardManager) this.getSystemService(Context.CLIPBOARD_SERVICE);
         clipboardManager.addPrimaryClipChangedListener(() -> {
             CharSequence text = clipboardManager.getText();
-            if (HttpUtil.isValid(text.toString())){
+            if (HttpUtil.isValid(text.toString())) {
                 EventBus.getDefault().postSticky(new UrlFromClipboardEvent(text.toString()));
             }
 
         });
 
     }
+
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
@@ -77,29 +86,41 @@ public class ArticleFetcherService extends Service implements ArticleMainSaver.C
         EventBus.getDefault().unregister(this);
     }
 
-
     @Override
-    public void onArticleSaveError(String msg) {
+    public void init() {
+        notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        notificationBuilder = new Notification.Builder(getApplicationContext());
 
+        notificationBuilder.setSmallIcon(R.drawable.book_outline)
+                .setPriority(Notification.PRIORITY_MAX)
+                .setTicker("Saving page...")
+                .setContentTitle("Parsing Page ...")
+                .setProgress(0, 0, true)
+                .setOnlyAlertOnce(true);
+
+        notificationManager.notify(NOTIFICATION_ID, notificationBuilder.build());
     }
 
     @Override
-    public void onLoadingResourcesStarted(String msg) {
-
+    public void onArticleSaveError(Throwable error) {
+        notificationBuilder.setSubText(error.getMessage())
+                .setProgress(0, 0, true);
+        notificationManager.notify(NOTIFICATION_ID, notificationBuilder.build());
     }
 
     @Override
-    public void onArticleSaved(String msg) {
-        EventBus.getDefault().post(new ArticleFetchCompletedEvent(msg));
+    public void onArticleSaveProgressUpdater(String msg) {
+        notificationBuilder.setSubText(msg)
+                .setProgress(0, 0, true);
+        notificationManager.notify(NOTIFICATION_ID, notificationBuilder.build());
     }
 
     @Override
-    public void onResourceFetchError(String msg) {
-
-    }
-
-    @Override
-    public void onArticleFetchStarted(String msg) {
-
+    public void onArticleSaveCompletion(String msg) {
+        notificationBuilder
+                .setContentTitle("Page is saved to disk")
+                .setContentText(msg)
+                .setProgress(0, 0, false);
+        notificationManager.notify(NOTIFICATION_ID, notificationBuilder.build());
     }
 }

@@ -44,7 +44,7 @@ public class ResourceFetcher {
     private ResourcesLinkFetcher resLinkFetcher;
 
 
-    public Single<Boolean> saveResponsesToStorage(String url, Document responseDoc, String articlePath) {
+    public Single<Boolean> saveResourcesToStorage(String url, Document responseDoc, String articlePath) {
         init(url, responseDoc, articlePath);
         resLinkFetcher = new ResourcesLinkFetcher();
 
