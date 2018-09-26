@@ -25,7 +25,8 @@ public class TagRepositoryImpl implements TagRepository {
         return articleRepository.getAllArticlesObser()
                 .map(ArticleModel::getTags)
                 .filter(tags -> !tags.isEmpty())
-                .flatMap(tags -> Observable.fromIterable(TagStringUtil.getTagList(tags)))
+                .flatMap(tags -> Observable.fromIterable(TagStringUtil.getTagList(tags))
+                        .distinct())
                 .distinct()
                 .flatMap(this::toTagData)
                 .toList();
@@ -35,7 +36,7 @@ public class TagRepositoryImpl implements TagRepository {
         return articleRepository.getAllArticlesObser()
                 .filter(articleModel -> articleModel.getTags().contains(tag))
                 .toList()
-                .map(articleModels ->new TagData(tag,articleModels))
+                .map(articleModels -> new TagData(tag, articleModels))
                 .toObservable();
     }
 

@@ -39,6 +39,21 @@
             tools:text="data,io,stream"
             android:textAppearance="?android:textAppearance"/>
 
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/file_size"
+            android:textStyle="bold"
+            android:textAppearance="?android:textAppearance"/>
+
+        <TextView
+            android:id="@+id/article_size"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text="3.14 MB"
+            android:textAppearance="?android:textAppearance"/>
+
+
 
         <TextView
             android:layout_width="wrap_content"
