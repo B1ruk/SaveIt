@@ -15,6 +15,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.FrameLayout;
 
 import org.greenrobot.eventbus.EventBus;
@@ -38,7 +39,7 @@ public class MainActivity extends BaseThemeActivity {
     private static final String TAG = "MainActivity";
 
     @Bind(R.id.main_toolbar) Toolbar mainToolbar;
-    @Bind(R.id.fragment_container) FrameLayout fragmentContainer;
+    @Bind(R.id.fragment_container) View fragmentContainer;
     @Bind(R.id.bottom_nav) BottomNavigationView bottomNav;
     @Bind(R.id.drawer_layout) DrawerLayout drawerLayout;
     @Bind(R.id.main_navigation) NavigationView navigationView;
