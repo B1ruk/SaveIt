@@ -17,6 +17,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.FrameLayout;
+import android.widget.Toast;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -70,29 +71,6 @@ public class MainActivity extends BaseThemeActivity {
 
     }
 
-    private void checkStorage() {
-        FileUtil.createMainDirectory();
-    }
-
-
-    private void initViews() {
-        setSupportActionBar(mainToolbar);
-
-        setUpBottomNav();
-        launchAddUrlFab.setOnClickListener(v -> launchAddUrlDialog());
-    }
-
-    public void launchAddUrlDialog() {
-
-        AddUrlDialog addUrlDialog = new AddUrlDialog();
-        addUrlDialog.show(getSupportFragmentManager(), TAG);
-    }
-
-    public void initArticleFetcherService() {
-        Intent startArticleService = new Intent(this, ArticleFetcherService.class);
-        startService(startArticleService);
-    }
-
     @Override
     protected void onResume() {
         super.onResume();
@@ -105,7 +83,37 @@ public class MainActivity extends BaseThemeActivity {
         }
     }
 
+    private void checkStorage() {
+        FileUtil.createMainDirectory();
+    }
+
+
+    public void initArticleFetcherService() {
+        Intent startArticleService = new Intent(this, ArticleFetcherService.class);
+        startService(startArticleService);
+    }
+
+
+    private void initViews() {
+        setSupportActionBar(mainToolbar);
+
+        setDefaultView();
+        setUpBottomNav();
+        launchAddUrlFab.setOnClickListener(v -> launchAddUrlDialog());
+    }
+
+    public void setDefaultView(){
+        bindFragment(ArticleFragment.newInstance(1));
+    }
+
+    public void launchAddUrlDialog() {
+
+        AddUrlDialog addUrlDialog = new AddUrlDialog();
+        addUrlDialog.show(getSupportFragmentManager(), TAG);
+    }
+
     private void displayInfo(String msg) {
+        Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
     }
 
     @Override
