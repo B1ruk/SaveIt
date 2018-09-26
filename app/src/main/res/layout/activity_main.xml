@@ -15,7 +15,7 @@
             android:id="@+id/main_toolbar"
             layout="@layout/app_main_toolbar" />
 
-        <include layout="@layout/main_tab_layout" />
+        <include layout="@layout/main_view_layout" />
     </LinearLayout>
 
     <android.support.design.widget.FloatingActionButton
