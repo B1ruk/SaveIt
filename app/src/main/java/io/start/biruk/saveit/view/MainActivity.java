@@ -41,8 +41,6 @@ public class MainActivity extends BaseThemeActivity {
     @Bind(R.id.main_toolbar) Toolbar mainToolbar;
     @Bind(R.id.fragment_container) View fragmentContainer;
     @Bind(R.id.bottom_nav) BottomNavigationView bottomNav;
-    @Bind(R.id.drawer_layout) DrawerLayout drawerLayout;
-    @Bind(R.id.main_navigation) NavigationView navigationView;
     @Bind(R.id.launch_add_url) FloatingActionButton launchAddUrlFab;
 
     private MainAdapter mainAdapter;
@@ -58,7 +56,7 @@ public class MainActivity extends BaseThemeActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.main_activity_view);
+        setContentView(R.layout.activity_main);
 
         ButterKnife.bind(this);
 
@@ -80,9 +78,7 @@ public class MainActivity extends BaseThemeActivity {
     private void initViews() {
         setSupportActionBar(mainToolbar);
 
-        setUpDrawerLayout();
         setUpBottomNav();
-        navigationView.setNavigationItemSelectedListener(this::navItemClickListener);
         launchAddUrlFab.setOnClickListener(v -> launchAddUrlDialog());
     }
 
@@ -110,8 +106,6 @@ public class MainActivity extends BaseThemeActivity {
     }
 
     private void displayInfo(String msg) {
-        Snackbar snackbar = Snackbar.make(drawerLayout, msg, Snackbar.LENGTH_LONG);
-        snackbar.show();
     }
 
     @Override
@@ -142,16 +136,6 @@ public class MainActivity extends BaseThemeActivity {
         startActivity(launchSearchResults);
     }
 
-    public void setUpDrawerLayout() {
-        ActionBarDrawerToggle actionBarDrawerToggle = new ActionBarDrawerToggle(this,
-                drawerLayout,
-                mainToolbar,
-                R.string.open_drawer,
-                R.string.close_drawer);
-
-        drawerLayout.addDrawerListener(actionBarDrawerToggle);
-        actionBarDrawerToggle.syncState();
-    }
 
     public void setUpBottomNav() {
         bottomNav.setOnNavigationItemSelectedListener(item -> {
@@ -175,23 +159,6 @@ public class MainActivity extends BaseThemeActivity {
                 .replace(fragmentContainer.getId(), fragment)
                 .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
                 .commit();
-    }
-
-    public boolean navItemClickListener(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.nav_articles:
-                break;
-            case R.id.nav_tags:
-                break;
-            case R.id.nav_favorites:
-                break;
-            case R.id.nav_menu_settings:
-                Intent stAct = new Intent(this, SettingsActivity.class);
-                startActivity(stAct);
-                break;
-        }
-        drawerLayout.closeDrawers();
-        return true;
     }
 
     @Override
