@@ -8,6 +8,8 @@
     <color name="cream">#f6f6f6</color>
     <color name="background">#f4f4f4</color>
 
+    <color name="new_article_indicator">#8bc34a</color>
+
     <color name="colorPrimaryDarkTheme">#393737</color>
     <color name="colorPrimaryDarkDarkTheme">#3d3939</color>
     <color name="colorAccentDarkTheme">#a16457</color>

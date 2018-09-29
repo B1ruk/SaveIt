@@ -18,6 +18,7 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import io.start.biruk.saveit.R;
 import io.start.biruk.saveit.model.db.ArticleModel;
+import io.start.biruk.saveit.util.CoverArtUtil;
 import io.start.biruk.saveit.util.FontUtil;
 import io.start.biruk.saveit.util.TagStringUtil;
 import io.start.biruk.saveit.view.listener.ArticleClickListener;
@@ -69,6 +70,12 @@ public class ArticleAdapter extends RecyclerView.Adapter<ArticleAdapter.ArticleV
             holder.articleFavoriteView.setAlpha(0.4f);
         }
 
+        if (!CoverArtUtil.coverArtExists(articleModel.getPath())){
+            holder.newArticleIndicator.setVisibility(View.VISIBLE);
+        }else {
+            holder.newArticleIndicator.setVisibility(View.GONE);
+        }
+
         holder.articleFavoriteView.setOnClickListener(v -> articleClickListener.onArticleFavoriteToggleSelected(articleModel));
 
         Picasso.with(context)
@@ -91,6 +98,7 @@ public class ArticleAdapter extends RecyclerView.Adapter<ArticleAdapter.ArticleV
         @Bind(R.id.article_favorite_toggle) ImageView articleFavoriteView;
         @Bind(R.id.tag_content) TextView tagContentView;
         @Bind(R.id.article_img) ImageView articleImg;
+        @Bind(R.id.new_article_indicator) View newArticleIndicator;
 
 
         public ArticleViewHolder(View itemView) {

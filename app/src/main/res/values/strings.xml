@@ -10,6 +10,8 @@
     <string name="articles">articles</string>
     <string name="tags">tags</string>
 
+    <string name="new_article">New</string>
+
     <string name="nav_title">Save it !</string>
     <string name="search">Search</string>
     <string name="tags_input_inst">tags should NOT contain commas(,)</string>

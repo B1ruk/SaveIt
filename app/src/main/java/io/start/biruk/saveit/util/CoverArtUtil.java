@@ -20,4 +20,9 @@ public class CoverArtUtil {
                 .toList();
     }
 
+    public static boolean coverArtExists(String path) {
+        File scPath = new File(path + File.separator + "sc.png");
+        return scPath.exists();
+    }
+
 }
