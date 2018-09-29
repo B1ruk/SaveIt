@@ -11,13 +11,18 @@ import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AlertDialog;
 import android.text.Editable;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageView;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
+import io.start.biruk.saveit.R;
 import io.start.biruk.saveit.events.FetchArticleEvent;
 import io.start.biruk.saveit.events.UrlFromClipboardEvent;
 import io.start.biruk.saveit.util.HttpUtil;
@@ -30,7 +35,10 @@ import static android.content.ContentValues.TAG;
 
 public class AddUrlDialog extends DialogFragment {
 
-    private String urlFromClipboard="";
+    private String urlFromClipboard = "";
+
+    @Bind(R.id.dialog_add_url_clipboard) ImageView clipbaordImgView;
+    @Bind(R.id.dialog_add_url_edit_Text) EditText urlTextView;
 
     @Subscribe(sticky = true, threadMode = ThreadMode.MAIN)
     public void onCopyUrlFromCliboard(UrlFromClipboardEvent urlFromClipboardEvent) {
@@ -52,19 +60,22 @@ public class AddUrlDialog extends DialogFragment {
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
 
-        EditText urlText = new EditText(getActivity());
+        View view = LayoutInflater.from(getContext()).inflate(R.layout.dialog_add_url, null);
+        ButterKnife.bind(this, view);
+
+        clipbaordImgView.setOnClickListener(v->{
+            if (!urlFromClipboard.isEmpty()){
+                urlTextView.setText(urlFromClipboard);
+            }
+        });
+
 
         return new AlertDialog.Builder(getActivity())
-                .setTitle("Add url")
-                .setView(urlText)
-                .setNeutralButton("URL from clipboard", (dialog, which) -> {
-                    if (!urlFromClipboard.isEmpty()){
-                        urlText.setText(urlFromClipboard);
-                    }
-                })
+                .setTitle("Add url/Link")
+                .setView(view)
                 .setPositiveButton(android.R.string.ok, (dialog, which) -> {
-                    String url = urlText.getText().toString();
-                    if (HttpUtil.isValid(url)){
+                    String url = urlTextView.getText().toString();
+                    if (HttpUtil.isValid(url)) {
                         addContent(url);
                     }
                 })

@@ -31,6 +31,7 @@
     <string name="zoomCtrl_title">Built in zoom control</string>
     <string name="zoomCtrl_summary">allows you to control the built in zoom Control</string>
     <string name="file_size">file size</string>
+    <string name="dialog_link">Link</string>
 
     <string-array name="themes">
         <item>Light</item>
