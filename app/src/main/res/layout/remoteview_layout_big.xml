@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                xmlns:tools="http://schemas.android.com/tools"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="14dp"
+                android:background="@color/notif_bg"
+                android:orientation="vertical">
+
+    <ImageView
+        android:id="@+id/remote_view_download"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_margin="8dp"
+        android:src="@drawable/book_outline"/>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@id/remote_view_download"
+        android:layout_toRightOf="@+id/remote_view_download"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/remote_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="6dp"
+            android:layout_marginLeft="4dp"
+            android:textColor="@color/whiteText"
+            tools:text="Saving page : http://.............."
+            tools:textAppearance="@style/Base.TextAppearance.AppCompat.Small"/>
+
+        <ProgressBar
+            android:id="@+id/remote_progress"
+            style="@android:style/Widget.ProgressBar.Horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="5dp"
+            android:layout_marginBottom="6dp"
+            android:indeterminate="true"
+            />
+
+        <TextView
+            android:id="@+id/remote_content"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@id/remote_title"
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
+            android:textColor="@color/whiteText"
+            tools:text="saving http://img/dfskfd/sdfdf.js"/>
+
+
+    </LinearLayout>
+
+</RelativeLayout>

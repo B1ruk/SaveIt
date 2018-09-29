@@ -17,8 +17,11 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.annotations.NonNull;
 import io.reactivex.observers.DisposableSingleObserver;
 import io.reactivex.schedulers.Schedulers;
+import io.start.biruk.saveit.indicator.NotificationIndicator;
+import io.start.biruk.saveit.model.articleFetcher.ArticleMainSaver;
 import io.start.biruk.saveit.model.data.ResourceLink;
 import io.start.biruk.saveit.model.data.ResourceType;
+import io.start.biruk.saveit.model.db.ArticleModel;
 import okhttp3.HttpUrl;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -42,6 +45,12 @@ public class ResourceFetcher {
     private String path;
     private Document responseDoc;
     private ResourcesLinkFetcher resLinkFetcher;
+
+    private ArticleMainSaver.CallBack callBack;
+
+    public void setCallBack(ArticleMainSaver.CallBack callBack) {
+        this.callBack = callBack;
+    }
 
 
     public Single<Boolean> saveResourcesToStorage(String url, Document responseDoc, String articlePath) {
@@ -129,6 +138,9 @@ public class ResourceFetcher {
             writeToFile(response, resFile);
         }
 
+
+        callBack.update(NotificationIndicator.ON_GOING, String.format("saving file %s", getFileName(link)));
+
         return new ResourceLink(link, newLink);
 
     }
@@ -150,19 +162,17 @@ public class ResourceFetcher {
     }
 
     private HttpUrl getAbsolutePath(String link) {
-        if (link.startsWith("http") || link.startsWith("https")){
+        if (link.startsWith("http") || link.startsWith("https")) {
             return HttpUrl.parse(link);
         }
 
-        if (url.endsWith("/") && link.startsWith("/")){
-            String fullPath=url+link.substring(1,link.length());
+        if (url.endsWith("/") && link.startsWith("/")) {
+            String fullPath = url + link.substring(1, link.length());
             return HttpUrl.parse(fullPath);
-        }
-        else if (!url.endsWith("/") && !link.startsWith("/")){
+        } else if (!url.endsWith("/") && !link.startsWith("/")) {
             return HttpUrl.parse(url + "/" + link);
-        }
-        else
-            return HttpUrl.parse(url+link);
+        } else
+            return HttpUrl.parse(url + link);
     }
 
     private String getFileName(String link) {

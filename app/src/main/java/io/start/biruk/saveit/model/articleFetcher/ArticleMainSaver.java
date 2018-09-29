@@ -14,6 +14,7 @@ import io.reactivex.annotations.NonNull;
 import io.reactivex.observers.DisposableSingleObserver;
 import io.reactivex.schedulers.Schedulers;
 import io.start.biruk.saveit.events.ArticleFetchCompletedEvent;
+import io.start.biruk.saveit.indicator.NotificationIndicator;
 import io.start.biruk.saveit.model.articleFetcher.responseFetcher.ResourceFetcher;
 import io.start.biruk.saveit.model.repository.ArticleRepository;
 import io.start.biruk.saveit.model.db.ArticleModel;
@@ -39,12 +40,14 @@ public class ArticleMainSaver {
         this.articleRepository = articleRepository;
     }
 
-    public void addCallBack(ArticleMainSaver.CallBack callBack){
-        this.mainCallback=callBack;
+    public void addCallBack(ArticleMainSaver.CallBack callBack) {
+        this.mainCallback = callBack;
+        this.resourceFetcher.setCallBack(callBack);
     }
 
     public void fetchArticle(String url) {
         mainCallback.init();
+
 
         articleFetcher.fetchIndexPage(url)
                 .subscribeOn(Schedulers.io())
@@ -52,13 +55,13 @@ public class ArticleMainSaver {
                 .subscribeWith(new DisposableSingleObserver<String>() {
                     @Override
                     public void onSuccess(@NonNull String response) {
-                        mainCallback.onArticleSaveProgressUpdater(String.format("%s is cached",url));
-                        saveArticleToStorage(url,response);
+                        mainCallback.update(NotificationIndicator.ON_GOING, String.format("%s is cached", url));
+                        saveArticleToStorage(url, response);
                     }
 
                     @Override
                     public void onError(@NonNull Throwable e) {
-                        mainCallback.onArticleSaveError(e);
+                        mainCallback.update(NotificationIndicator.ERROR, e.getMessage());
                     }
                 });
     }
@@ -100,7 +103,7 @@ public class ArticleMainSaver {
                 .subscribeWith(new DisposableSingleObserver<Boolean>() {
                     @Override
                     public void onSuccess(@NonNull Boolean status) {
-                        mainCallback.onArticleSaveProgressUpdater(String.format("Saving %s to disk",url));
+                        mainCallback.update(NotificationIndicator.ON_GOING, String.format("Saving %s to disk", url));
                         saveResourcesToStorage(url, responseDoc, path);
 
                     }
@@ -119,22 +122,21 @@ public class ArticleMainSaver {
                 .subscribeWith(new DisposableSingleObserver<Boolean>() {
                     @Override
                     public void onSuccess(@NonNull Boolean status) {
-                        mainCallback.onArticleSaveCompletion(String.format("%s is saved to storage",url));
+                        mainCallback.update(NotificationIndicator.COMPLETE, String.format("%s is saved to storage", url));
                         EventBus.getDefault().post(new ArticleFetchCompletedEvent(url));
                     }
 
                     @Override
                     public void onError(@NonNull Throwable e) {
-                        mainCallback.onArticleSaveError(e);
+                        mainCallback.update(NotificationIndicator.ERROR, e.getMessage());
                     }
                 });
     }
 
-    public interface CallBack{
+    public interface CallBack {
         void init();
-        void onArticleSaveError(Throwable error);
-        void onArticleSaveProgressUpdater(String msg);
-        void onArticleSaveCompletion(String msg);
+
+        void update(NotificationIndicator indicator, String msg);
     }
 
 }

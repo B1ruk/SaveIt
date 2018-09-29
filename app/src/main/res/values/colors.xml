@@ -9,6 +9,7 @@
     <color name="background">#f4f4f4</color>
 
     <color name="new_article_indicator">#8bc34a</color>
+    <color name="notif_bg">#2c919b</color>
 
     <color name="colorPrimaryDarkTheme">#393737</color>
     <color name="colorPrimaryDarkDarkTheme">#3d3939</color>
