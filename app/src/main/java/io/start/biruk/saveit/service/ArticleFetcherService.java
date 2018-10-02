@@ -2,6 +2,7 @@ package io.start.biruk.saveit.service;
 
 import android.app.Notification;
 import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.app.Service;
 import android.content.ClipboardManager;
 import android.content.Context;
@@ -27,6 +28,7 @@ import io.start.biruk.saveit.events.UrlFromClipboardEvent;
 import io.start.biruk.saveit.indicator.NotificationIndicator;
 import io.start.biruk.saveit.model.articleFetcher.ArticleMainSaver;
 import io.start.biruk.saveit.util.HttpUtil;
+import io.start.biruk.saveit.view.MainActivity;
 import io.start.biruk.saveit.view.displayArticleView.DisplayArticleActivity;
 
 /**
@@ -36,6 +38,8 @@ public class ArticleFetcherService extends Service implements ArticleMainSaver.C
 
 
     private static final String TAG = "ArticleFetcherService";
+    private static final String CLOSE_NOTIF = "io.start.biruk.saveit.service.close.notif";
+
     private static final int NOTIFICATION_ID = 3870;
 
     private NotificationManager notificationManager;
@@ -59,6 +63,8 @@ public class ArticleFetcherService extends Service implements ArticleMainSaver.C
         EventBus.getDefault().register(this);
         articleMainSaver.addCallBack(this);
 
+        notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+
         ClipboardManager clipboardManager = (ClipboardManager) this.getSystemService(Context.CLIPBOARD_SERVICE);
         clipboardManager.addPrimaryClipChangedListener(() -> {
             CharSequence text = clipboardManager.getText();
@@ -73,7 +79,14 @@ public class ArticleFetcherService extends Service implements ArticleMainSaver.C
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
+        if (intent.hasExtra(CLOSE_NOTIF)) {
+            closeNotification();
+        }
         return START_STICKY;
+    }
+
+    public void closeNotification(){
+        notificationManager.cancel(NOTIFICATION_ID);
     }
 
 
@@ -92,7 +105,6 @@ public class ArticleFetcherService extends Service implements ArticleMainSaver.C
 
     @Override
     public void init() {
-        notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
     }
 
     @Override
@@ -105,11 +117,14 @@ public class ArticleFetcherService extends Service implements ArticleMainSaver.C
     }
 
     public NotificationCompat.Builder buildNotification(NotificationIndicator indicator, String msg) {
-        Intent dispArt = new Intent(this, DisplayArticleActivity.class);
+        Intent dispActivity = new Intent(this, MainActivity.class);
+
+        PendingIntent pendingIntent=PendingIntent.getActivity(this,0,dispActivity,PendingIntent.FLAG_UPDATE_CURRENT);
 
         return new NotificationCompat.Builder(this)
                 .setSmallIcon(R.drawable.book_outline)
                 .setCustomBigContentView(setUpBigContentView(indicator, msg))
+                .setContentIntent(pendingIntent)
                 .setPriority(NotificationCompat.PRIORITY_MAX)
                 .setOngoing(true);
     }
@@ -125,8 +140,15 @@ public class ArticleFetcherService extends Service implements ArticleMainSaver.C
 
     public void initRemoteViews() {
         this.largeRemoteViews = new RemoteViews(getPackageName(), R.layout.remoteview_layout_big);
-        this.largeRemoteViews.setViewVisibility(R.id.remote_progress,View.VISIBLE);
-        updateRemoteViews(NotificationIndicator.ON_GOING,"Parsing page ...");
+        this.largeRemoteViews.setViewVisibility(R.id.remote_progress, View.VISIBLE);
+        this.largeRemoteViews.setOnClickPendingIntent(R.id.remote_close_notif, setClosePendingIntent());
+    }
+
+    public PendingIntent setClosePendingIntent() {
+        Intent closeNotif = new Intent(this, ArticleFetcherService.class);
+        closeNotif.putExtra(CLOSE_NOTIF,true);
+
+        return PendingIntent.getService(this, 0, closeNotif, PendingIntent.FLAG_UPDATE_CURRENT);
     }
 
     public void updateRemoteViews(NotificationIndicator indicator, String msg) {
@@ -135,14 +157,17 @@ public class ArticleFetcherService extends Service implements ArticleMainSaver.C
                 largeRemoteViews.setTextViewText(R.id.remote_title, "Saving page resource ...");
                 largeRemoteViews.setProgressBar(R.id.remote_progress, 1, 1, true);
                 largeRemoteViews.setTextViewText(R.id.remote_content, msg);
+                largeRemoteViews.setViewVisibility(R.id.remote_close_notif, View.INVISIBLE);
                 break;
             case ERROR:
                 largeRemoteViews.setTextViewText(R.id.remote_title, "Something went wrong ...");
                 largeRemoteViews.setProgressBar(R.id.remote_progress, 1, 1, true);
                 largeRemoteViews.setTextViewText(R.id.remote_content, msg);
+                largeRemoteViews.setViewVisibility(R.id.remote_close_notif, View.VISIBLE);
                 break;
             case COMPLETE:
                 largeRemoteViews.setViewVisibility(R.id.remote_progress, View.GONE);
+                largeRemoteViews.setViewVisibility(R.id.remote_close_notif, View.VISIBLE);
                 largeRemoteViews.setTextViewText(R.id.remote_content, msg);
                 largeRemoteViews.setTextViewText(R.id.remote_title, "Page is saved");
                 break;
