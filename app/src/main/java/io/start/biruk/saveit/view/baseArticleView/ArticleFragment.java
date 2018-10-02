@@ -200,15 +200,11 @@ public class ArticleFragment extends Fragment implements ArticleView, ArticleCli
 
 
     private void initRecyclerView(List<ArticleModel> articleModels) {
-        List<ArticleModel> sortedArticles = Stream.of(articleModels)
-                .sortBy(ArticleModel::getTitle)
-                .toList();
-
 
         ArticleAdapter articleAdapter = new ArticleAdapter(getContext(), this);
 
         articleRecyclerView.setAdapter(articleAdapter);
-        articleAdapter.setArticleData(sortedArticles);
+        articleAdapter.setArticleData(articleModels);
         articleRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
     }

@@ -13,13 +13,19 @@ public class DateUtil {
         caland.setTime(currentTime);
 
         int date = caland.get(Calendar.DATE);
-//        int month = caland.get(Calendar.MONTH);
         int year = caland.get(Calendar.YEAR);
 
         String month = caland.getDisplayName(Calendar.MONTH, Calendar.SHORT, Locale.US);
         String format = String.format("%s %s,%s", month, date, year);
 
         return format;
-
     }
+
+    public static long parseToDate(String dateFmt){
+        return Date.parse(dateFmt);
+    }
+
+
+
+
 }

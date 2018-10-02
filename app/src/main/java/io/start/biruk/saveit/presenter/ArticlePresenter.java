@@ -1,6 +1,12 @@
 package io.start.biruk.saveit.presenter;
 
+import com.annimon.stream.Stream;
+import com.annimon.stream.function.Function;
+
 import java.io.File;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -11,6 +17,7 @@ import io.reactivex.observers.DisposableSingleObserver;
 import io.reactivex.schedulers.Schedulers;
 import io.start.biruk.saveit.model.repository.ArticleRepository;
 import io.start.biruk.saveit.model.db.ArticleModel;
+import io.start.biruk.saveit.util.DateUtil;
 import io.start.biruk.saveit.util.FileUtil;
 import io.start.biruk.saveit.util.TagStringUtil;
 import io.start.biruk.saveit.view.baseArticleView.ArticleView;
@@ -141,6 +148,7 @@ public class ArticlePresenter {
 
     public void loadAllArticles() {
         articleRepository.getAllArticles()
+                .map(this::sortArticles)
                 .subscribeOn(Schedulers.io())
                 .observeOn(uiThread)
                 .subscribeWith(new DisposableSingleObserver<List<ArticleModel>>() {
@@ -159,6 +167,17 @@ public class ArticlePresenter {
                     }
                 });
 
+    }
+
+    public List<ArticleModel> sortArticles(List<ArticleModel> articles) {
+
+        List<ArticleModel> articleModels = Stream.of(articles)
+                .sortBy(articleModel -> DateUtil.parseToDate(articleModel.getSavedDate()))
+                .toList();
+
+        Collections.reverse(articleModels);     //descending order
+
+        return articleModels;
     }
 
     public void loadFavoriteArticles() {
