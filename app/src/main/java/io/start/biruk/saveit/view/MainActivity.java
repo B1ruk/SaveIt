@@ -40,17 +40,15 @@ public class MainActivity extends BaseThemeActivity {
 
     private static final String TAG = "MainActivity";
 
+    @Bind(R.id.main_view) View mainView;
     @Bind(R.id.main_toolbar) Toolbar mainToolbar;
     @Bind(R.id.fragment_container) View fragmentContainer;
     @Bind(R.id.bottom_nav) BottomNavigationView bottomNav;
     @Bind(R.id.launch_add_url) FloatingActionButton launchAddUrlFab;
 
-    private MainAdapter mainAdapter;
-
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void articleFetchCompleted(ArticleFetchCompletedEvent articleFetchCompletedEvent) {
-        String url = articleFetchCompletedEvent.getMsg();
-        displayInfo(String.format("saved %s", url));
+        displayInfo("Page is saved successfully");
 
     }
 
@@ -116,7 +114,7 @@ public class MainActivity extends BaseThemeActivity {
     }
 
     private void displayInfo(String msg) {
-        Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
+        Snackbar.make(mainView,msg,Snackbar.LENGTH_SHORT).show();
     }
 
     @Override
