@@ -43,6 +43,9 @@ public class AddUrlDialog extends DialogFragment {
     @Subscribe(sticky = true, threadMode = ThreadMode.MAIN)
     public void onCopyUrlFromCliboard(UrlFromClipboardEvent urlFromClipboardEvent) {
         this.urlFromClipboard = urlFromClipboardEvent.getUrl();
+        if (clipbaordImgView!=null){
+            clipbaordImgView.setVisibility(View.VISIBLE);
+        }
     }
 
     @Override
@@ -62,6 +65,7 @@ public class AddUrlDialog extends DialogFragment {
 
         View view = LayoutInflater.from(getContext()).inflate(R.layout.dialog_add_url, null);
         ButterKnife.bind(this, view);
+        clipbaordImgView.setVisibility(View.INVISIBLE);
 
         clipbaordImgView.setOnClickListener(v->{
             if (!urlFromClipboard.isEmpty()){
