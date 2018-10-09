@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:tools="http://schemas.android.com/tools"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp">
+
+        <TextView
+            android:id="@+id/status_contains_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/status_contains"/>
+
+        <TextView
+            android:id="@+id/status_article_count"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="32dp"
+            android:layout_toRightOf="@+id/status_contains_title"
+            tools:text="5 Articles"/>
+
+
+        <TextView
+            android:id="@+id/status_total_size_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:layout_below="@id/status_contains_title"
+            android:text="@string/total_size"/>
+
+        <TextView
+            android:id="@+id/status_total_size"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@id/status_article_count"
+            android:layout_below="@id/status_article_count"
+            android:layout_toRightOf="@id/status_total_size_title"
+            android:layout_alignBottom="@id/status_total_size_title"
+            tools:text="125 MB"/>
+    </RelativeLayout>
+
+</RelativeLayout>

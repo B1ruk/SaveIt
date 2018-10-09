@@ -1,6 +1,8 @@
 package io.start.biruk.saveit.view;
 
+import android.Manifest;
 import android.content.Intent;
+import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.FloatingActionButton;
@@ -12,6 +14,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -20,9 +23,22 @@ import android.view.WindowManager;
 import android.widget.FrameLayout;
 import android.widget.Toast;
 
+import com.karumi.dexter.Dexter;
+import com.karumi.dexter.MultiplePermissionsReport;
+import com.karumi.dexter.PermissionToken;
+import com.karumi.dexter.listener.PermissionDeniedResponse;
+import com.karumi.dexter.listener.PermissionGrantedResponse;
+import com.karumi.dexter.listener.PermissionRequest;
+import com.karumi.dexter.listener.multi.MultiplePermissionsListener;
+import com.karumi.dexter.listener.single.DialogOnDeniedPermissionListener;
+import com.karumi.dexter.listener.single.PermissionListener;
+import com.karumi.dexter.listener.single.SnackbarOnDeniedPermissionListener;
+
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
+
+import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -32,6 +48,7 @@ import io.start.biruk.saveit.service.ArticleFetcherService;
 import io.start.biruk.saveit.util.FileUtil;
 import io.start.biruk.saveit.view.baseArticleView.ArticleFragment;
 import io.start.biruk.saveit.view.dialog.AddUrlDialog;
+import io.start.biruk.saveit.view.dialog.StatusDialog;
 import io.start.biruk.saveit.view.searchView.SearchActivity;
 import io.start.biruk.saveit.view.settingsView.SettingsActivity;
 import io.start.biruk.saveit.view.tagsView.TagFragment;
@@ -48,7 +65,7 @@ public class MainActivity extends BaseThemeActivity {
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void articleFetchCompleted(ArticleFetchCompletedEvent articleFetchCompletedEvent) {
-        displayInfo("Page is saved successfully");
+        displayInfo("Page saved successfully");
 
     }
 
@@ -60,14 +77,70 @@ public class MainActivity extends BaseThemeActivity {
 
         ButterKnife.bind(this);
 
+        permissionCheck();
+
+
+    }
+
+    public void permissionCheck() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            DialogOnDeniedPermissionListener storagePermission = DialogOnDeniedPermissionListener.Builder
+                    .withContext(this)
+                    .withTitle("Storage Permission")
+                    .withButtonText(android.R.string.ok)
+                    .withIcon(R.mipmap.ic_launcher)
+                    .build();
+
+            Dexter.withActivity(this)
+                    .withPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                    .withListener(new PermissionListener() {
+                        @Override
+                        public void onPermissionGranted(PermissionGrantedResponse permissionGrantedResponse) {
+                            Log.d(TAG,"storage permission success");
+                            checkStorage();
+                        }
+
+                        @Override
+                        public void onPermissionDenied(PermissionDeniedResponse permissionDeniedResponse) {
+                            Log.d(TAG,"storage permission deinied");
+                        }
+
+                        @Override
+                        public void onPermissionRationaleShouldBeShown(PermissionRequest permissionRequest, PermissionToken permissionToken) {
+
+                        }
+                    })
+                    .check();
+            Dexter.withActivity(this)
+                    .withPermission(Manifest.permission.INTERNET)
+                    .withListener(new PermissionListener() {
+                        @Override
+                        public void onPermissionGranted(PermissionGrantedResponse permissionGrantedResponse) {
+                            Log.d(TAG,"internet permission success");
+                            initViews();
+                            initArticleFetcherService();
+
+                        }
+
+                        @Override
+                        public void onPermissionDenied(PermissionDeniedResponse permissionDeniedResponse) {
+                            Log.d(TAG,"internet permission deinied");
+                        }
+
+                        @Override
+                        public void onPermissionRationaleShouldBeShown(PermissionRequest permissionRequest, PermissionToken permissionToken) {
+
+                        }
+                    })
+                    .check();
+
+
+        } else if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
+            checkStorage();
+            initArticleFetcherService();
+            initViews();
+        }
         EventBus.getDefault().register(this);
-
-        initArticleFetcherService();
-
-        checkStorage();
-
-        initViews();
-
     }
 
     @Override
@@ -103,7 +176,7 @@ public class MainActivity extends BaseThemeActivity {
         launchAddUrlFab.setOnClickListener(v -> launchAddUrlDialog());
     }
 
-    public void setDefaultView(){
+    public void setDefaultView() {
         bindFragment(ArticleFragment.newInstance(1));
     }
 
@@ -114,7 +187,7 @@ public class MainActivity extends BaseThemeActivity {
     }
 
     private void displayInfo(String msg) {
-        Snackbar.make(mainView,msg,Snackbar.LENGTH_SHORT).show();
+        Snackbar.make(mainView, msg, Snackbar.LENGTH_SHORT).show();
     }
 
     @Override
@@ -124,6 +197,13 @@ public class MainActivity extends BaseThemeActivity {
 
         MenuItem searchBar = menu.findItem(R.id.main_search_bar);
         MenuItem settings = menu.findItem(R.id.menu_settings);
+        MenuItem status = menu.findItem(R.id.menu_status);
+
+        status.setOnMenuItemClickListener(item -> {
+            StatusDialog statusDialog = new StatusDialog();
+            statusDialog.show(getSupportFragmentManager(), TAG);
+            return true;
+        });
 
         settings.setOnMenuItemClickListener(item -> {
 

@@ -10,6 +10,7 @@ import io.start.biruk.saveit.service.ArticleFetcherService;
 import io.start.biruk.saveit.view.MainActivity;
 import io.start.biruk.saveit.view.articleView.articleOptions.AddTagDialog;
 import io.start.biruk.saveit.view.baseArticleView.ArticleFragment;
+import io.start.biruk.saveit.view.dialog.StatusDialog;
 import io.start.biruk.saveit.view.searchView.SearchActivity;
 import io.start.biruk.saveit.view.tagsView.SelectedTagActivity;
 import io.start.biruk.saveit.view.tagsView.TagFragment;
@@ -41,4 +42,6 @@ public interface MainComponent {
     void inject(AddTagDialog addTagDialog);
 
     void inject(TagViewAdapter tagViewAdapter);
+
+    void inject(StatusDialog statusDialog);
 }
