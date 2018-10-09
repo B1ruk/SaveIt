@@ -1,10 +1,10 @@
 package io.start.biruk.saveit.util;
 
+
 import java.io.File;
 
 import io.reactivex.Observable;
 import io.reactivex.Single;
-import io.start.biruk.saveit.model.data.ResourceType;
 
 /**
  * Created by biruk on 26/09/18.
@@ -12,39 +12,44 @@ import io.start.biruk.saveit.model.data.ResourceType;
 
 public class FileSizeUtil {
 
-    public static Single<Long> computeFileSize(String path) {
-        return getFiles(path)
-                .filter(File::isFile)
-                .map(File::length)
-                .reduce((size1, size2) -> size1 + size2)
-                .toSingle();
+    public static Single<Long> computeFolderSizeSingle(String path) {
+        return Single.just(path)
+                .map(File::new)
+                .map(FileSizeUtil::computeFolderSize);
     }
 
-    protected static Observable<File> getFiles(String path) {
-        String mainPath = path + File.separator;
+    private static long computeFolderSize(File folder) {
+        File[] files = folder.listFiles();
 
-        File cssDir = new File(mainPath + ResourceType.css);
-        File jsDir = new File(mainPath + ResourceType.js);
-        File imgDir = new File(mainPath + ResourceType.img);
+        long folderSize = 0;
 
-        return Observable.merge(
-                Observable.fromArray(cssDir.listFiles()),
-                Observable.fromArray(jsDir.listFiles()),
-                Observable.fromArray(imgDir.listFiles())
-        );
+        for (int i = 0; i < files.length; i++) {
+            if (files[i].isFile()) {
+                folderSize += files[i].length();
+            } else {
+                folderSize += computeFolderSize(files[i]);
+            }
+        }
+        return folderSize;
     }
+
 
     public static String sizeFormater(long size) {
-        long sizeByte = 1;
-        long sizeKb = sizeByte * 1024;
-        long sizeMb = sizeKb * 1024;
+        double sizeByte = 1;
+        double sizeKb = sizeByte * 1024;
+        double sizeMb = sizeKb * 1024;
 
         if (size >= sizeMb) {
-            return String.format("%s MB", size / sizeMb);
-        } else if (size >= sizeKb && size<sizeMb){
-            return String.format("%s KB", size / sizeKb);
-        }else{
-            return String.format("%s byte", size);
+            double sizeInMB = size / sizeMb;
+            if (sizeInMB > 100) {
+                return String.format("%.5s MB", sizeInMB);
+            } else {
+                return String.format("%.4s MB", sizeInMB);
+            }
+        } else if (size >= sizeKb && size < sizeMb) {
+            return String.format("%.5s KB", size / sizeKb);
+        } else {
+            return String.format("%.3s byte", size);
         }
     }
 }
