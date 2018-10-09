@@ -5,5 +5,5 @@ package io.start.biruk.saveit.indicator;
  */
 
 public enum NotificationIndicator {
-    ON_GOING, ERROR, COMPLETE
+    ON_START, ON_GOING, ERROR, COMPLETE
 }

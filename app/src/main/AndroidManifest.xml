@@ -12,7 +12,8 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".view.MainActivity"
+        <activity
+            android:name=".view.MainActivity"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
@@ -20,7 +21,8 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-        <activity android:name=".view.addwebView.AddWebActivity"
+        <activity
+            android:name=".view.addwebView.AddWebActivity"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.SEND"/>
@@ -33,11 +35,14 @@
 
         <service android:name=".service.ArticleFetcherService"/>
 
-        <activity android:name=".view.displayArticleView.DisplayArticleActivity"/>
+        <activity
+            android:name=".view.displayArticleView.DisplayArticleActivity"
+            android:configChanges="orientation|screenSize">
+        </activity>
         <activity
             android:name=".view.searchView.SearchActivity"
-            android:screenOrientation="portrait"
-            android:parentActivityName=".view.MainActivity"/>
+            android:parentActivityName=".view.MainActivity"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".view.tagsView.SelectedTagActivity"
             android:label="@string/title_activity_selected"
@@ -49,9 +54,9 @@
         </activity>
         <activity
             android:name=".view.settingsView.SettingsActivity"
-            android:screenOrientation="portrait"
             android:label="@string/title_activity_settings"
-            android:parentActivityName=".view.MainActivity">
+            android:parentActivityName=".view.MainActivity"
+            android:screenOrientation="portrait">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="io.start.biruk.saveit.view.MainActivity"/>

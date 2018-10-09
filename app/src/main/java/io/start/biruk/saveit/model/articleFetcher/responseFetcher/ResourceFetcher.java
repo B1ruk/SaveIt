@@ -9,6 +9,7 @@ import org.jsoup.nodes.Document;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.List;
 
 import io.reactivex.Observable;
@@ -22,6 +23,7 @@ import io.start.biruk.saveit.model.articleFetcher.ArticleMainSaver;
 import io.start.biruk.saveit.model.data.ResourceLink;
 import io.start.biruk.saveit.model.data.ResourceType;
 import io.start.biruk.saveit.model.db.ArticleModel;
+import okhttp3.ConnectionSpec;
 import okhttp3.HttpUrl;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -157,7 +159,12 @@ public class ResourceFetcher {
                 .url(getAbsolutePath(link))
                 .build();
 
-        Response response = new OkHttpClient().newCall(request).execute();
+        OkHttpClient okHttpClient = new OkHttpClient.Builder()
+                .connectionSpecs(Arrays.asList(ConnectionSpec.MODERN_TLS, ConnectionSpec.COMPATIBLE_TLS))
+                .build();
+
+
+        Response response = okHttpClient.newCall(request).execute();
         return response;
     }
 

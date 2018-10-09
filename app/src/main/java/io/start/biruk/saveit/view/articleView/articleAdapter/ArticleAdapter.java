@@ -58,9 +58,17 @@ public class ArticleAdapter extends RecyclerView.Adapter<ArticleAdapter.ArticleV
 
         String imgPath=articleModel.getPath()+File.separator+"sc.png";
 
+        String tags = TagStringUtil.getFormatedTag(articleModel.getTags());
+
+        if (!tags.isEmpty()){
+            holder.tagContainerView.setVisibility(View.VISIBLE);
+            holder.tagContentView.setText(tags);
+        }else {
+            holder.tagContainerView.setVisibility(View.INVISIBLE);
+        }
+
         holder.articleTitleView.setText(articleModel.getTitle());
         holder.articleSavedDateView.setText(articleModel.getSavedDate());
-        holder.tagContentView.setText(TagStringUtil.getFormatedTag(articleModel.getTags()));
 
         if (articleModel.isFavorite()){
             holder.articleFavoriteView.setAlpha(1.0f);
@@ -80,9 +88,8 @@ public class ArticleAdapter extends RecyclerView.Adapter<ArticleAdapter.ArticleV
 
         Picasso.with(context)
                 .load(new File(imgPath))
-                .transform(new CircleTransform())
-                .placeholder(R.drawable.default_bg)
-                .resize(80,80)
+                .placeholder(R.drawable.book_outline)
+                .resize(80,100)
                 .into(holder.articleImg);
     }
 
@@ -99,6 +106,7 @@ public class ArticleAdapter extends RecyclerView.Adapter<ArticleAdapter.ArticleV
         @Bind(R.id.tag_content) TextView tagContentView;
         @Bind(R.id.article_img) ImageView articleImg;
         @Bind(R.id.new_article_indicator) View newArticleIndicator;
+        @Bind(R.id.article_tag_container) View tagContainerView;
 
 
         public ArticleViewHolder(View itemView) {
@@ -107,7 +115,6 @@ public class ArticleAdapter extends RecyclerView.Adapter<ArticleAdapter.ArticleV
             ButterKnife.bind(this, itemView);
             itemView.setOnClickListener(this);
             itemView.setOnLongClickListener(this);
-            FontUtil.setFont(context,articleTitleView,"Bazar.ttf");
         }
 
 

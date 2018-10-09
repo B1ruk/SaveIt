@@ -169,21 +169,11 @@ public class ArticlePresenter {
 
     }
 
-    public List<ArticleModel> sortArticles(List<ArticleModel> articles) {
-
-        List<ArticleModel> articleModels = Stream.of(articles)
-                .sortBy(articleModel -> DateUtil.parseToDate(articleModel.getSavedDate()))
-                .toList();
-
-        Collections.reverse(articleModels);     //descending order
-
-        return articleModels;
-    }
-
     public void loadFavoriteArticles() {
         articleRepository.getAllArticlesObser()
                 .filter(ArticleModel::isFavorite)
                 .toList()
+                .map(this::sortArticles)
                 .subscribeOn(Schedulers.io())
                 .observeOn(uiThread)
                 .subscribeWith(new DisposableSingleObserver<List<ArticleModel>>() {
@@ -204,6 +194,19 @@ public class ArticlePresenter {
 
     }
 
+
+    public List<ArticleModel> sortArticles(List<ArticleModel> articles) {
+
+        List<ArticleModel> articleModels = Stream.of(articles)
+                .sortBy(articleModel -> DateUtil.parseToDate(articleModel.getSavedDate()))
+                .toList();
+
+        Collections.reverse(articleModels);     //descending order
+
+        return articleModels;
+    }
+
+
     public void loadArticlesByQuery(String msg) {
 
     }
@@ -212,7 +215,7 @@ public class ArticlePresenter {
 
     }
 
-    public void dettachView() {
+    public void detachView() {
         this.articleView = null;
     }
 

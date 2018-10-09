@@ -62,8 +62,11 @@ public class DisplayArticleActivity extends AppCompatActivity {
                 super.onPageFinished(view, url);
             }
         });
+        registerForContextMenu(webView);
         webView.getSettings().setJavaScriptEnabled(true);
         webView.getSettings().setBuiltInZoomControls(true);
+        webView.getSettings().setAllowFileAccess(true);
+        webView.getSettings().setUseWideViewPort(true);
         webView.getSettings().setAllowFileAccessFromFileURLs(true);
         webView.getSettings().setAllowFileAccessFromFileURLs(true);
         webView.getSettings().setBuiltInZoomControls(preferences.getBoolean(getResources().getString(R.string.zoomCtrlKey),false));

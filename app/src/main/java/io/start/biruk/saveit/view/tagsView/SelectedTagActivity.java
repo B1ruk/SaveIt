@@ -54,7 +54,7 @@ public class SelectedTagActivity extends BaseThemeActivity implements SelectedTa
 
     private void attachFragment() {
         getSupportFragmentManager().beginTransaction()
-                .add(selectedTagArticleView.getId(), ArticleFragment.newInstance(0))
+                .replace(selectedTagArticleView.getId(), ArticleFragment.newInstance(0))
                 .commit();
     }
 

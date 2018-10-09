@@ -1,15 +1,10 @@
 package io.start.biruk.saveit.model.articleFetcher;
 
-import org.greenrobot.eventbus.EventBus;
-
 import java.io.IOException;
+import java.util.Arrays;
 
 import io.reactivex.Observable;
-import io.reactivex.Single;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.annotations.NonNull;
-import io.reactivex.observers.DisposableSingleObserver;
-import io.reactivex.schedulers.Schedulers;
+import okhttp3.ConnectionSpec;
 import okhttp3.HttpUrl;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -21,24 +16,35 @@ import okhttp3.Response;
  */
 public class ArticleFetcher {
 
-    public Single<String> fetchIndexPage(String url) {
+    public Observable<String> fetchIndexPage(String url) {
+        String mainUrl = url;
 
-        return Single.fromCallable(() -> getIndexPage(url))
+        return Observable.fromCallable(() -> getIndexPage(url))
+                .onErrorResumeNext(Observable.fromCallable(() -> getIndexPageUsingHttps(url)))
                 .filter(Response::isSuccessful)
-                .retry(7)
                 .map(response -> response.body().string())
-                .toSingle();
+                .retry(3);
 
     }
 
     private Response getIndexPage(String url) throws IOException {
-        Request request = new Request.Builder()
-                .url(parseUrl(url))
+    return new OkHttpClient().newCall(buildRequest(url)).execute();
+    }
+
+
+    private Response getIndexPageUsingHttps(String url) throws IOException {
+        OkHttpClient okHttpClient = new OkHttpClient.Builder()
+                .connectionSpecs(Arrays.asList(ConnectionSpec.MODERN_TLS,ConnectionSpec.COMPATIBLE_TLS))
                 .build();
 
-        Response response = new OkHttpClient().newCall(request).execute();
+        return okHttpClient.newCall(buildRequest(url)).execute();
 
-        return response;
+    }
+
+    public Request buildRequest(String url) {
+        return new Request.Builder()
+                .url(parseUrl(url))
+                .build();
     }
 
     private HttpUrl parseUrl(String url) {

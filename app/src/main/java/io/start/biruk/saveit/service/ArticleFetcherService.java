@@ -79,13 +79,15 @@ public class ArticleFetcherService extends Service implements ArticleMainSaver.C
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        if (intent.hasExtra(CLOSE_NOTIF)) {
-            closeNotification();
+        if (intent!=null){
+            if (intent.hasExtra(CLOSE_NOTIF)) {
+                closeNotification();
+            }
         }
         return START_STICKY;
     }
 
-    public void closeNotification(){
+    public void closeNotification() {
         notificationManager.cancel(NOTIFICATION_ID);
     }
 
@@ -105,6 +107,7 @@ public class ArticleFetcherService extends Service implements ArticleMainSaver.C
 
     @Override
     public void init() {
+        notificationManager.notify(NOTIFICATION_ID, buildNotification(NotificationIndicator.ON_START, "").build());
     }
 
     @Override
@@ -119,7 +122,7 @@ public class ArticleFetcherService extends Service implements ArticleMainSaver.C
     public NotificationCompat.Builder buildNotification(NotificationIndicator indicator, String msg) {
         Intent dispActivity = new Intent(this, MainActivity.class);
 
-        PendingIntent pendingIntent=PendingIntent.getActivity(this,0,dispActivity,PendingIntent.FLAG_UPDATE_CURRENT);
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, dispActivity, PendingIntent.FLAG_UPDATE_CURRENT);
 
         return new NotificationCompat.Builder(this)
                 .setSmallIcon(R.drawable.book_outline)
@@ -146,15 +149,23 @@ public class ArticleFetcherService extends Service implements ArticleMainSaver.C
 
     public PendingIntent setClosePendingIntent() {
         Intent closeNotif = new Intent(this, ArticleFetcherService.class);
-        closeNotif.putExtra(CLOSE_NOTIF,true);
+        closeNotif.putExtra(CLOSE_NOTIF, true);
 
         return PendingIntent.getService(this, 0, closeNotif, PendingIntent.FLAG_UPDATE_CURRENT);
     }
 
     public void updateRemoteViews(NotificationIndicator indicator, String msg) {
         switch (indicator) {
+            case ON_START:
+                this.largeRemoteViews.setTextViewText(R.id.remote_title,"Starting to save page");
+                this.largeRemoteViews.setTextViewText(R.id.remote_content,"Saving index page");
+
+                this.largeRemoteViews.setProgressBar(R.id.remote_progress,1,1,true);
+                this.largeRemoteViews.setViewVisibility(R.id.remote_progress,View.VISIBLE);
+                largeRemoteViews.setViewVisibility(R.id.remote_close_notif, View.INVISIBLE);
+                break;
             case ON_GOING:
-                largeRemoteViews.setTextViewText(R.id.remote_title, "Saving page resource ...");
+                largeRemoteViews.setTextViewText(R.id.remote_title, "Saving page ...");
                 largeRemoteViews.setProgressBar(R.id.remote_progress, 1, 1, true);
                 largeRemoteViews.setTextViewText(R.id.remote_content, msg);
                 largeRemoteViews.setViewVisibility(R.id.remote_close_notif, View.INVISIBLE);

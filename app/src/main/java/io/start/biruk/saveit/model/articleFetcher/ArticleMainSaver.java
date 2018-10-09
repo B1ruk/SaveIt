@@ -11,6 +11,7 @@ import javax.inject.Inject;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.annotations.NonNull;
+import io.reactivex.observers.DisposableObserver;
 import io.reactivex.observers.DisposableSingleObserver;
 import io.reactivex.schedulers.Schedulers;
 import io.start.biruk.saveit.events.ArticleFetchCompletedEvent;
@@ -48,13 +49,12 @@ public class ArticleMainSaver {
     public void fetchArticle(String url) {
         mainCallback.init();
 
-
         articleFetcher.fetchIndexPage(url)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribeWith(new DisposableSingleObserver<String>() {
+                .subscribeWith(new DisposableObserver<String>() {
                     @Override
-                    public void onSuccess(@NonNull String response) {
+                    public void onNext(@NonNull String response) {
                         mainCallback.update(NotificationIndicator.ON_GOING, String.format("%s is cached", url));
                         saveArticleToStorage(url, response);
                     }
@@ -63,7 +63,13 @@ public class ArticleMainSaver {
                     public void onError(@NonNull Throwable e) {
                         mainCallback.update(NotificationIndicator.ERROR, e.getMessage());
                     }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
                 });
+
     }
 
     public void saveArticleToStorage(String url, String response) {
@@ -73,7 +79,6 @@ public class ArticleMainSaver {
                 .subscribeWith(new DisposableSingleObserver<String>() {
                     @Override
                     public void onSuccess(@NonNull String path) {
-
                         saveArticle(url, response, path);
                     }
 

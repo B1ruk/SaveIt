@@ -3,18 +3,19 @@ package io.start.biruk.saveit.view.baseArticleView;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.annimon.stream.Stream;
 import com.squareup.picasso.Picasso;
 
 import org.greenrobot.eventbus.EventBus;
@@ -38,6 +39,7 @@ import io.start.biruk.saveit.view.articleView.articleAdapter.ArticleAdapter;
 import io.start.biruk.saveit.view.articleView.articleOptions.AddTagDialog;
 import io.start.biruk.saveit.view.articleView.articleOptions.ArticleInfoDialog;
 import io.start.biruk.saveit.view.articleView.articleOptions.ArticleOptionDialog;
+import io.start.biruk.saveit.view.articleView.articleOptions.EditTagDialog;
 import io.start.biruk.saveit.view.articleView.articleOptions.EditTitleArticleDialog;
 import io.start.biruk.saveit.view.articleView.articleOptions.DeleteArticleDialog;
 import io.start.biruk.saveit.view.displayArticleView.DisplayArticleActivity;
@@ -54,6 +56,9 @@ public class ArticleFragment extends Fragment implements ArticleView, ArticleCli
     private static final int REQUEST_EDIT_TITLE_OPTION = 7;
     private static final int DELETE_ARTICLE_OPTION = 8;
     private static final int REQUEST_ADD_TAG = 4;
+    private static final int REQUEST_EDIT_TAG_OPTION = 12;
+
+    private Parcelable recyclerState;
 
     @Inject protected ArticlePresenter articlePresenter;
     @Inject protected Picasso picasso;
@@ -64,6 +69,7 @@ public class ArticleFragment extends Fragment implements ArticleView, ArticleCli
     @Bind(R.id.empty_article_image) protected ImageView emptyArticleImageView;
 
     private static final String DEFAULT_VIEW = "io.start.biruk.saveit.view.baseArticleView";
+
     /*
     *
     * 0->Search Results,Specific Tag View
@@ -127,8 +133,9 @@ public class ArticleFragment extends Fragment implements ArticleView, ArticleCli
         articlePresenter.attachView(this);
         EventBus.getDefault().register(this);
         updateView();
-    }
 
+        Log.d(TAG, "onResume()");
+    }
 
     @Override
     public void updateView() {
@@ -144,6 +151,7 @@ public class ArticleFragment extends Fragment implements ArticleView, ArticleCli
                 articlePresenter.loadFavoriteArticles();
                 break;
         }
+
     }
 
     @Override
@@ -163,6 +171,11 @@ public class ArticleFragment extends Fragment implements ArticleView, ArticleCli
                     addTagDialog.setTargetFragment(ArticleFragment.this, REQUEST_ADD_TAG);
                     addTagDialog.show(getFragmentManager(), TAG);
                     break;
+                case "edit tag":
+                    EditTagDialog editTagDialog = EditTagDialog.newInstance(articleModel);
+                    editTagDialog.setTargetFragment(ArticleFragment.this, REQUEST_EDIT_TAG_OPTION);
+                    editTagDialog.show(getFragmentManager(), TAG);
+                    break;
                 case "info":
                     ArticleInfoDialog articleInfoDialog = ArticleInfoDialog.newInstance(articleModel);
                     articleInfoDialog.show(getFragmentManager(), TAG);
@@ -174,7 +187,7 @@ public class ArticleFragment extends Fragment implements ArticleView, ArticleCli
                     break;
             }
         }
-        if (requestCode == REQUEST_EDIT_TITLE_OPTION) {
+        if (requestCode == REQUEST_EDIT_TITLE_OPTION || requestCode == REQUEST_EDIT_TAG_OPTION) {
             ArticleModel articleModel = (ArticleModel) data.getSerializableExtra(EditTitleArticleDialog.ARTICLE_MODEL_DATA);
             articlePresenter.updateArticle(articleModel);
         }
@@ -183,6 +196,7 @@ public class ArticleFragment extends Fragment implements ArticleView, ArticleCli
             ArticleModel articleModel = (ArticleModel) data.getSerializableExtra(EditTitleArticleDialog.ARTICLE_MODEL_DATA);
             articlePresenter.deleteArticle(articleModel);
         }
+
 
         if (requestCode == REQUEST_ADD_TAG) {
             ArticleModel articleModel = (ArticleModel) data.getSerializableExtra(AddTagDialog.ARTICLE_MODEL_DATA);
@@ -286,7 +300,7 @@ public class ArticleFragment extends Fragment implements ArticleView, ArticleCli
     @Override
     public void onStop() {
         super.onStop();
-        articlePresenter.dettachView();
+        articlePresenter.detachView();
         EventBus.getDefault().unregister(this);
     }
 

@@ -39,6 +39,10 @@ public class TagStringUtil {
         }
     }
 
+    public static String toTagFormat(String tag){
+        return tag.replace(",",TAG_JOINER_SEQ);
+    }
+
     public static String getFormatedTag(String tag) {
         return tag.replace(TAG_JOINER_SEQ, ",");
     }
