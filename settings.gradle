@@ -1,1 +1,1 @@
-include ':app', ':calligraphy'
+include ':app', ':calligraphy', ':dexter'

@@ -5,6 +5,7 @@
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:layout_margin="4dp"
+                                    app:cardBackgroundColor="@color/card_background"
                                     app:cardCornerRadius="4dp"
                                     app:cardElevation="2dp"
                                     app:cardUseCompatPadding="true">
@@ -14,51 +15,62 @@
         android:layout_height="match_parent"
         android:layout_margin="4dp">
 
+
+        <ImageView
+            android:id="@+id/article_img"
+            android:layout_width="80dp"
+            android:layout_height="100dp"
+            android:layout_margin="4dp"
+            android:src="@drawable/book_outline"/>
+
         <LinearLayout
             android:id="@+id/article_title_and_cover"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@id/article_img"
+            android:layout_alignTop="@id/article_img"
+            android:layout_marginLeft="14dp"
+            android:orientation="vertical">
+
 
             <TextView
                 android:id="@+id/article_title"
-                android:layout_width="0dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="0.5"
-                android:textSize="18sp"
-                android:textStyle="bold"
+                android:textColor="@color/text_color"
+                android:layout_marginTop="14dp"
+                android:lines="3"
                 tools:text="The 5 minute introduction to front end web development in 2018"/>
 
-            <ImageView
-                android:id="@+id/article_img"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
-                android:src="@drawable/default_bg"/>
+            <RelativeLayout
+                android:id="@+id/article_tag_container"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/article_title_and_cover"
+                >
+
+                <ImageView
+                    android:id="@+id/tag_article_indicator_img"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:srcCompat="@drawable/ic_tag_file_black_24dp"
+                    />
+
+                <TextView
+                    android:id="@+id/tag_content"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="sans-serif-condensed"
+                    android:textAppearance="?android:textAppearanceSmall"
+                    android:textStyle="italic|bold"
+                    android:layout_toRightOf="@+id/tag_article_indicator_img"
+                    tools:text="api"/>
+            </RelativeLayout>
 
 
         </LinearLayout>
 
-        <LinearLayout
-            android:id="@+id/article_tag_container"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/article_title_and_cover"
-            android:orientation="horizontal">
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:srcCompat="@drawable/ic_tag_file_black_24dp"
-                />
-
-            <TextView
-                android:id="@+id/tag_content"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:fontFamily="sans-serif-condensed"
-                android:textAppearance="?android:textAppearanceSmall"
-                android:textStyle="italic|bold"
-                tools:text="api"/>
-        </LinearLayout>
 
         <LinearLayout
             android:id="@+id/new_article_indicator"
@@ -68,28 +80,28 @@
             tools:visibility="visible"
             android:layout_marginTop="2dp"
             android:padding="2dp"
-            android:layout_below="@id/article_tag_container"
-            android:layout_alignLeft="@id/article_tag_container"
+            android:layout_below="@id/article_img"
+            android:layout_alignLeft="@+id/article_img"
             android:layout_alignParentBottom="true"
-            android:background="@color/new_article_indicator">
+            >
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/new_article"
-                android:textStyle="italic"
+                android:textStyle="italic|bold"
                 android:textAppearance="?android:attr/textAppearanceSmall"
-                android:textColor="@color/whiteText"
+                android:textColor="@color/new_article_indicator"
                 />
         </LinearLayout>
 
-        <LinearLayout
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/article_tag_container"
+            android:layout_below="@+id/article_title_and_cover"
             android:layout_marginRight="24dp"
             android:layout_marginTop="4dp"
             android:gravity="end"
-            android:orientation="horizontal">
+            >
 
             <TextView
                 android:id="@+id/article_text_date"
@@ -99,6 +111,7 @@
                 android:fontFamily="sans-serif"
                 android:textAppearance="@style/AppTheme"
                 android:textColor="@color/text_color_blue"
+                android:layout_alignBottom="@+id/article_favorite_toggle"
                 tools:text="mar 05,2018"/>
 
             <ImageView
@@ -106,11 +119,13 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="14dp"
+                android:layout_marginTop="14dp"
+                android:layout_toRightOf="@id/article_text_date"
                 app:srcCompat="@drawable/ic_favorite_black_24dp"
                 android:textAppearance="?android:textAppearance"/>
 
 
-        </LinearLayout>
+        </RelativeLayout>
 
 
     </RelativeLayout>
